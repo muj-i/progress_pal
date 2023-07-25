@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:progress_pal/ui/pages/update_profile_page.dart';
 
 var myTextStyle =
     const TextStyle(fontWeight: FontWeight.w500, letterSpacing: 0.5);
@@ -15,19 +16,10 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       leading: GestureDetector(
         onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('This is a SnackBar!'),
-            duration: const Duration(
-                seconds: 2), // Duration for which the SnackBar is visible
-            action: SnackBarAction(
-              label: 'Dismiss',
-              onPressed: () {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              },
-            ),
-          ),
-        );
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfilePage()));  
+       
         },
         child: const Column(
           children: [

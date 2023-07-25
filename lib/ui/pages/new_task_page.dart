@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:progress_pal/ui/pages/add_new_task_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 import 'package:progress_pal/ui/widgets/task_list_tile.dart';
@@ -47,7 +48,11 @@ class NewTaskPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddNewTaskPage()));  
+        },
         //mini: true,
         child: const Icon(Icons.add),
       ),
