@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:progress_pal/utils/assets_utils.dart';
+import 'package:progress_pal/ui/utils/assets_utils.dart';
 
 class ScreenBackground extends StatelessWidget {
   final Widget child;
@@ -12,8 +12,10 @@ class ScreenBackground extends StatelessWidget {
       SizedBox(
         width: double.infinity,
         height: double.infinity,
-        child: SvgPicture.asset(AssetUtils.backgroundSVG,fit: BoxFit.cover,),
-        
+        child: SvgPicture.asset(
+          AssetUtils.backgroundSVG,
+          fit: BoxFit.cover,
+        ),
       ),
       SafeArea(child: child),
     ]);

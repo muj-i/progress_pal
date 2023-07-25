@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:progress_pal/pages/login_page.dart';
+import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
-class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen({Key? key}) : super(key: key);
+class ResetPasswordPage extends StatelessWidget {
+  const ResetPasswordPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class ResetPasswordScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: 64,
+                  height: 150,
                 ),
                 Text(
                   'Set Password',
@@ -32,27 +32,27 @@ class ResetPasswordScreen extends StatelessWidget {
                       ),
                 ),
                 const SizedBox(
-                  height: 24,
-                ),
-                const TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'Password',
-                  ),
-                ),
-                const SizedBox(
                   height: 16,
                 ),
                 const TextField(
-                  obscureText: true,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    hintText: 'Confirm Password',
+                    labelText: 'Enter Password',
+                    prefixIcon: Icon(Icons.lock_rounded),
                   ),
                 ),
                 const SizedBox(
-                  height: 16,
+                  height: 12,
+                ),
+                const TextField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    labelText: 'Confirm Password',
+                    prefixIcon: Icon(Icons.lock_rounded),
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
                 ),
                 SizedBox(
                   width: double.infinity,
@@ -61,7 +61,7 @@ class ResetPasswordScreen extends StatelessWidget {
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>  LoginPage()),
+                              builder: (context) => const LoginPage()),
                           (route) => false);
                     },
                     child: const Text('Confirm'),
@@ -74,7 +74,7 @@ class ResetPasswordScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "Have an account?",
+                      "No need to reset password?",
                       style: TextStyle(
                           fontWeight: FontWeight.w500, letterSpacing: 0.5),
                     ),
@@ -83,10 +83,10 @@ class ResetPasswordScreen extends StatelessWidget {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>  LoginPage()),
+                                  builder: (context) => const LoginPage()),
                               (route) => false);
                         },
-                        child: const Text('Sign in')),
+                        child: const Text('Log in')),
                   ],
                 )
               ],

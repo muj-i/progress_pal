@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:progress_pal/pages/splash_screen.dart';
+import 'package:progress_pal/ui/pages/splash_screen.dart';
 
 class ProgressPalApp extends StatelessWidget {
-
   const ProgressPalApp({super.key});
 
   @override
@@ -10,38 +9,37 @@ class ProgressPalApp extends StatelessWidget {
     return MaterialApp(
       title: 'Progress Pal',
       theme: ThemeData(
-        brightness: Brightness.dark,
+        brightness: Brightness.light,
         primarySwatch: Colors.green,
         inputDecorationTheme: InputDecorationTheme(
-          prefixIconColor: Colors.white,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 25,vertical: 8,
+          prefixIconColor: Colors.grey,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 25,
+            vertical: 8,
           ),
-          labelStyle: TextStyle(color: Colors.white),
+          labelStyle: TextStyle(color: Colors.grey[600]),
           filled: true,
-          
-          fillColor: Colors.grey.shade800,
+          fillColor: Colors.white,
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(color: Colors.grey.shade600),
+            borderRadius: BorderRadius.circular(5.0),
+            borderSide: const BorderSide(color: Colors.white),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(color: Colors.grey.shade600),
+            borderRadius: BorderRadius.circular(5.0),
+            borderSide: const BorderSide(color: Colors.white),
           ),
         ),
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           titleLarge: TextStyle(
               fontSize: 24,
-              color: Colors.white,
+              color: Colors.black,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.6),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-shape: RoundedRectangleBorder(
-
-              borderRadius: BorderRadius.circular(10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
             ),
           ),
         ),

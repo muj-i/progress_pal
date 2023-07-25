@@ -4,4 +4,3 @@ import 'package:progress_pal/app.dart';
 void main() {
   runApp(const ProgressPalApp());
 }
-
