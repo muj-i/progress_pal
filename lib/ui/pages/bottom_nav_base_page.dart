@@ -29,7 +29,7 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
           currentIndex: _currentPageIndex,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
-          selectedItemColor: Colors.green,
+          selectedItemColor: Color.fromRGBO(10, 188, 102, 1),
           onTap: (int index) {
             _currentPageIndex = index;
             if (mounted) {

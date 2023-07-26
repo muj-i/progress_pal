@@ -4,6 +4,10 @@ import 'package:progress_pal/ui/pages/update_profile_page.dart';
 var myTextStyle =
     const TextStyle(fontWeight: FontWeight.w500, letterSpacing: 0.5);
 
+var myButtonTextColor =
+    const TextStyle(color: Colors.white);
+
+
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   //final String appBarTitle;
 
@@ -36,6 +40,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   backgroundImage: NetworkImage(
                       'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'),
                 ),
+                
               ],
             ),
           ],
@@ -49,17 +54,18 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           Text(
             'User name',
-            style: TextStyle(fontSize: 14, color: Colors.white),
+            style: TextStyle(fontSize: 16, color: Colors.white),
           ),
           Text(
             'User email',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 12,
+              fontSize: 14,
             ),
           ),
         ],
       ),
+      centerTitle: false,
     );
   }
 

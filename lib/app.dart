@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:progress_pal/ui/pages/splash_screen.dart';
 
+const colorGreen = Color.fromRGBO(33, 191, 115, 1);
+
 class ProgressPalApp extends StatelessWidget {
   const ProgressPalApp({super.key});
 
@@ -10,7 +12,7 @@ class ProgressPalApp extends StatelessWidget {
       title: 'Progress Pal',
       theme: ThemeData(
         brightness: Brightness.light,
-        primarySwatch: Colors.green,
+        primarySwatch: customSwatch,
         inputDecorationTheme: InputDecorationTheme(
           prefixIconColor: Colors.grey,
           contentPadding: const EdgeInsets.symmetric(
@@ -48,3 +50,21 @@ class ProgressPalApp extends StatelessWidget {
     );
   }
 }
+
+Color customColor = Color.fromRGBO(10, 188, 102, 1);
+
+MaterialColor customSwatch = MaterialColor(
+  customColor.value,
+  <int, Color>{
+    50: customColor.withOpacity(0.1),
+    100: customColor.withOpacity(0.2),
+    200: customColor.withOpacity(0.3),
+    300: customColor.withOpacity(0.4),
+    400: customColor.withOpacity(0.5),
+    500: customColor.withOpacity(0.6),
+    600: customColor.withOpacity(0.7),
+    700: customColor.withOpacity(0.8),
+    800: customColor.withOpacity(0.9),
+    900: customColor.withOpacity(1.0),
+  },
+);

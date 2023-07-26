@@ -65,7 +65,7 @@ class AddNewTaskPage extends StatelessWidget {
                     //         builder: (context) => ResetPasswordPage()),
                     //     (route) => false);
                   },
-                  child: const Text('Save Task'),
+                  child: Text('Save Task', style: myButtonTextColor),
                 ),
               ),
               const SizedBox(

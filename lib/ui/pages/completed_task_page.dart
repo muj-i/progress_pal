@@ -36,7 +36,7 @@ class CompletedTaskPage extends StatelessWidget {
                   child: ListView.builder(
                       itemBuilder: (context, index) {
                         return const TaskListTile(
-                          chipBackgroundColor: Colors.green,
+                          chipBackgroundColor: Color.fromRGBO(10, 188, 102, 1),
                         );
                       },
                       itemCount: 10),

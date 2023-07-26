@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
@@ -12,6 +15,19 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  File? _imageFile;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _imageFile = File(pickedFile.path);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(
                 height: 50,
@@ -34,16 +50,34 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(
                 height: 16,
               ),
-              const TextField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Image Placeholder',
-                  prefixIcon: Icon(
-                    FontAwesomeIcons.image,
-                    size: 19,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: GestureDetector(
+                  onTap: () {
+                    _pickImage();
+                  },
+                  child: Container(
+                  height: 100,
+                  width: 100
+                  ,
+                    color: Colors.grey[400],
+                    child: _imageFile == null
+                        ? Icon(Icons.person, size: 60,)
+                        : Image.file(_imageFile!, fit: BoxFit.cover,),
                   ),
                 ),
-              ),const SizedBox(
+              ),
+              // const TextField(
+              //   keyboardType: TextInputType.emailAddress,
+              //   decoration: InputDecoration(
+              //     labelText: 'Image Placeholder',
+              //     prefixIcon: Icon(
+              //       FontAwesomeIcons.image,
+              //       size: 19,
+              //     ),
+              //   ),
+              // ),
+              const SizedBox(
                 height: 16,
               ),
               const TextField(
@@ -121,10 +155,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     //         builder: (context) => ResetPasswordPage()),
                     //     (route) => false);
                   },
-                  child: const Text('Update Information'),
+                  child: Text('Update Information', style: myButtonTextColor),
                 ),
               ),
-              
             ],
           ),
         ),

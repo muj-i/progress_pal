@@ -41,10 +41,25 @@ class TaskListTile extends StatelessWidget {
                 ),
                 const Spacer(),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   SnackBar(
+                    //     content: Text('This is a SnackBar!'),
+                    //     duration: Duration(
+                    //         seconds:
+                    //             2), // Duration for which the SnackBar is visible
+                    //     action: SnackBarAction(
+                    //       label: 'Dismiss',
+                    //       onPressed: () {
+                    //         ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    //       },
+                    //     ),
+                    //   ),
+                    // );
+                  },
                   icon: const Icon(
                     FontAwesomeIcons.penToSquare,
-                    color: Colors.green,
+                    color: Color.fromRGBO(10, 188, 102, 1),
                   ),
                 ),
                 IconButton(

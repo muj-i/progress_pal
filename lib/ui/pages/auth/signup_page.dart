@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
@@ -103,13 +104,13 @@ class _SignupPageState extends State<SignupPage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigator.pushAndRemoveUntil(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => ResetPasswordPage()),
-                    //     (route) => false);
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => ImagePickerExample()),
+                    // );
                   },
-                  child: const Text('Sign Up'),
+                  child: Text('Sign Up', style: myButtonTextColor),
                 ),
               ),
               const SizedBox(

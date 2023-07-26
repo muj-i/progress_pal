@@ -62,7 +62,7 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
                             builder: (context) => const PinVerifyPage()),
                         (route) => false);
                   },
-                  child: const Text('Send OTP'),
+                  child:  Text('Send OTP', style: myButtonTextColor),
                 ),
               ),
               const SizedBox(

@@ -48,13 +48,14 @@ class NewTaskPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Color.fromRGBO(10, 188, 102, 1),
         onPressed: () {
           Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const AddNewTaskPage()));  
         },
         //mini: true,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white,),
       ),
     );
   }

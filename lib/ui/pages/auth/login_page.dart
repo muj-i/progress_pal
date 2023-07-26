@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                             builder: (context) => const BottomNavBasePage()),
                         (route) => false);
                   },
-                  child: const Text('Log In'),
+                  child:  Text('Log In', style: myButtonTextColor),
                 ),
               ),
               const SizedBox(

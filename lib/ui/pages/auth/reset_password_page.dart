@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
+import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
 class ResetPasswordPage extends StatelessWidget {
@@ -64,7 +65,7 @@ class ResetPasswordPage extends StatelessWidget {
                               builder: (context) => const LoginPage()),
                           (route) => false);
                     },
-                    child: const Text('Confirm'),
+                    child: Text('Confirm', style: myButtonTextColor),
                   ),
                 ),
                 const SizedBox(
