@@ -1,6 +1,22 @@
-# progress_pal
 
-A new Flutter project.
+## Progress Pal
+
+
+## Full app view
+
+![Alt Text](assets/screenshots/ss1.png)
+![Alt Text](assets/screenshots/ss2.png)
+![Alt Text](assets/screenshots/ss3.png)
+![Alt Text](assets/screenshots/ss4.png)
+![Alt Text](assets/screenshots/ss5.png)
+![Alt Text](assets/screenshots/ss6.png)
+![Alt Text](assets/screenshots/ss7.png)
+![Alt Text](assets/screenshots/ss8.png)
+![Alt Text](assets/screenshots/ss9.png)
+![Alt Text](assets/screenshots/ss10.png)
+![Alt Text](assets/screenshots/ss11.png)
+
+
 
 ## Getting Started
 
