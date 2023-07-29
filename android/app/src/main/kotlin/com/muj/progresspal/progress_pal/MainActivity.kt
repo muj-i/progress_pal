@@ -1,4 +1,4 @@
-package com.muj.progress_pal.progress_pal
+package com.muj.progresspal.progress_pal
 
 import io.flutter.embedding.android.FlutterActivity
 

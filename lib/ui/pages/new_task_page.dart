@@ -52,7 +52,7 @@ class NewTaskPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color.fromRGBO(181,54,62, 1),
+        backgroundColor: myColor,
         onPressed: () {
           Navigator.push(
               context,

@@ -11,4 +11,4 @@ PRODUCT_NAME = progress_pal
 PRODUCT_BUNDLE_IDENTIFIER = com.muj.progresspal.progressPal
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.muj.progress_pal. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 com.muj.progresspal. All rights reserved.

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
@@ -31,7 +30,14 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  MyAppBar(myIconButton: IconButton(iconSize: 50,onPressed: (){Navigator.pop(context);}, icon: Text("Back")),),
+      appBar: MyAppBar(
+        myIconButton: IconButton(
+            iconSize: 50,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Text("Back", style: myTextStyle,)),
+      ),
       body: ScreenBackground(
           child: SingleChildScrollView(
         child: Padding(
@@ -40,9 +46,6 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 50,
-              ),
               Text(
                 'Update Profile',
                 style: Theme.of(context).textTheme.titleLarge,
@@ -57,13 +60,19 @@ class _ProfilePageState extends State<ProfilePage> {
                     _pickImage();
                   },
                   child: Container(
-                  height: 80,
-                  width: 80
-                  ,
+                    height: 80,
+                    width: 80,
                     color: Colors.white,
                     child: _imageFile == null
-                        ? Icon(Icons.person,color: myColor, size: 60,)
-                        : Image.file(_imageFile!, fit: BoxFit.cover,),
+                        ? Icon(
+                            Icons.person,
+                            color: myColor,
+                            size: 60,
+                          )
+                        : Image.file(
+                            _imageFile!,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
               ),

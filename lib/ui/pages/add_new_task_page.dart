@@ -14,7 +14,7 @@ class AddNewTaskPage extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon:  Text("Back", )),
+            icon:  Text("Back", style: myTextStyle,)),
       ),
       body: ScreenBackground(
           child: SingleChildScrollView(

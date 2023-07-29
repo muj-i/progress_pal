@@ -38,17 +38,18 @@ class ProgressPalApp extends StatelessWidget {
           ),
           errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20.0),
-              borderSide: const BorderSide(color: Colors.black),
+              borderSide: const BorderSide(color: Color.fromARGB(255, 255, 0, 0)),
               // Customize the error border color
             ),
             focusedErrorBorder: OutlineInputBorder(
               
               borderRadius: BorderRadius.circular(20.0),
+              
               borderSide: const BorderSide(
-                style: BorderStyle.none,
+               color: Color.fromARGB(255, 255, 0, 0)
                 ),
             ),
-            errorStyle: TextStyle(color: Colors.black)
+            errorStyle: TextStyle(color: Color.fromARGB(255, 255, 0, 0))
         ),
         textTheme: const TextTheme(
           titleLarge: TextStyle(

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:progress_pal/data/model/network_responce.dart';
+import 'package:progress_pal/data/model/network_response.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
-
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
@@ -40,19 +39,13 @@ class _SignupPageState extends State<SignupPage> {
       "photo": ""
     };
 
-    final NetworkResponce responce =
+    final NetworkResponse responce =
         await NetworkCaller().postRequest(Urls.registration, requestBody);
     _signUpInProgress = false;
     if (mounted) {
       setState(() {});
     }
-    if (responce.isSuccess &&
-        _firstNameController.text.isNotEmpty &&
-        _lastNameController.text.isNotEmpty &&
-        _mobileNumberController.text.isNotEmpty &&
-        
-        _emailController.text.isNotEmpty &&
-        _passeordController.text.isNotEmpty) {
+    if (responce.isSuccess) {
       _firstNameController.clear();
       _lastNameController.clear();
       _mobileNumberController.clear();
@@ -210,7 +203,7 @@ class _SignupPageState extends State<SignupPage> {
                         const Center(child: CircularProgressIndicator()),
                     child: ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
+                        if (!_formKey.currentState!.validate()) {
                           return;
                         }
                         userSignUp();
