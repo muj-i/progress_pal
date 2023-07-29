@@ -31,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar:  MyAppBar(myIconButton: IconButton(iconSize: 50,onPressed: (){Navigator.pop(context);}, icon: Text("Back")),),
       body: ScreenBackground(
           child: SingleChildScrollView(
         child: Padding(
@@ -57,12 +57,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     _pickImage();
                   },
                   child: Container(
-                  height: 100,
-                  width: 100
+                  height: 80,
+                  width: 80
                   ,
-                    color: Colors.grey[400],
+                    color: Colors.white,
                     child: _imageFile == null
-                        ? Icon(Icons.person, size: 60,)
+                        ? Icon(Icons.person,color: myColor, size: 60,)
                         : Image.file(_imageFile!, fit: BoxFit.cover,),
                   ),
                 ),

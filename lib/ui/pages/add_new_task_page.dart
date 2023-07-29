@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
-
 class AddNewTaskPage extends StatelessWidget {
   const AddNewTaskPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar: MyAppBar(
+        myIconButton: IconButton(
+          iconSize: 50,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon:  Text("Back", )),
+      ),
       body: ScreenBackground(
           child: SingleChildScrollView(
         child: Padding(
@@ -34,7 +40,6 @@ class AddNewTaskPage extends StatelessWidget {
                   labelText: 'Tittle',
                   prefixIcon: Icon(
                     Icons.text_fields_rounded,
-                    
                   ),
                 ),
               ),
@@ -42,16 +47,13 @@ class AddNewTaskPage extends StatelessWidget {
                 height: 12,
               ),
               const TextField(
-                 maxLines: 10,
+                maxLines: 10,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: 'Description',
-                  prefixIcon: Icon(
-                    Icons.description_rounded
-                  ),
+                  prefixIcon: Icon(Icons.description_rounded),
                 ),
               ),
-              
               const SizedBox(
                 height: 12,
               ),
@@ -71,13 +73,11 @@ class AddNewTaskPage extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-             
             ],
           ),
         ),
       )),
     );
-  } 
- //sign up option method
-  
+  }
+  //sign up option method
 }

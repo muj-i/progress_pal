@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:progress_pal/ui/pages/update_profile_page.dart';
 
-var myTextStyle =
-    const TextStyle(fontWeight: FontWeight.w500, letterSpacing: 0.5);
+var myTextStyle = const TextStyle(
+    color: Colors.white, fontWeight: FontWeight.w500, letterSpacing: 0.5);
 
-var myButtonTextColor =
-    const TextStyle(color: Colors.white);
+var myTextButtonStyle = const TextStyle(
+    color: Color.fromARGB(255, 10, 29, 66),
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5);
 
+var myButtonTextColor = const TextStyle(color: Colors.white);
+
+var myColor = const Color.fromARGB(255, 10, 29, 66);
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  //final String appBarTitle;
+  
+  final IconButton myIconButton;
 
   const MyAppBar({
     super.key,
+    required this.myIconButton,
   });
 
   @override
@@ -20,10 +27,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       leading: GestureDetector(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfilePage()));  
-       
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ProfilePage()));
         },
         child: const Column(
           children: [
@@ -40,7 +45,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   backgroundImage: NetworkImage(
                       'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'),
                 ),
-                
               ],
             ),
           ],
@@ -66,6 +70,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       centerTitle: false,
+      actions: [myIconButton],
     );
   }
 

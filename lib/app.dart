@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:progress_pal/ui/pages/splash_screen.dart';
+import 'package:progress_pal/ui/widgets/constraints.dart';
 
 const colorGreen = Color.fromRGBO(33, 191, 115, 1);
 
@@ -11,47 +12,67 @@ class ProgressPalApp extends StatelessWidget {
     return MaterialApp(
       title: 'Progress Pal',
       theme: ThemeData(
+        
         brightness: Brightness.light,
         primarySwatch: customSwatch,
         inputDecorationTheme: InputDecorationTheme(
-          prefixIconColor: Colors.grey,
+          prefixIconColor:  myColor,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 25,
             vertical: 8,
           ),
-          labelStyle: TextStyle(color: Colors.grey[600]),
+          
+          hintStyle: TextStyle(color: myColor),
+         //labelStyle: TextStyle(color: Colors.black),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: Colors.grey[50],
+          focusColor: myColor,
+          
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5.0),
-            borderSide: const BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide:  BorderSide(color: Colors.white),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5.0),
-            borderSide: const BorderSide(color: Colors.white),
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide:  BorderSide(color: Colors.white),
           ),
+          errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: const BorderSide(color: Colors.black),
+              // Customize the error border color
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: const BorderSide(
+                style: BorderStyle.none,
+                ),
+            ),
+            errorStyle: TextStyle(color: Colors.black)
         ),
         textTheme: const TextTheme(
           titleLarge: TextStyle(
               fontSize: 24,
-              color: Colors.black,
+              color: Colors.white,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.6),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(20),
             ),
           ),
         ),
+        
       ),
       home: const SplashScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-Color customColor = Color.fromRGBO(10, 188, 102, 1);
+Color customColor = Color.fromARGB(255, 10, 29, 66);
 
 MaterialColor customSwatch = MaterialColor(
   customColor.value,

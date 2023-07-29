@@ -29,7 +29,7 @@ class ResetPasswordPage extends StatelessWidget {
                 Text(
                   'Minimum password should be 8 letters with numbers & symbols',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey,
+                        color: Colors.white,
                       ),
                 ),
                 const SizedBox(
@@ -74,10 +74,9 @@ class ResetPasswordPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                     Text(
                       "No need to reset password?",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500, letterSpacing: 0.5),
+                      style: myTextStyle,
                     ),
                     TextButton(
                         onPressed: () {
@@ -87,7 +86,7 @@ class ResetPasswordPage extends StatelessWidget {
                                   builder: (context) => const LoginPage()),
                               (route) => false);
                         },
-                        child: const Text('Log in')),
+                        child:  Text('Log in', style: myTextButtonStyle,)),
                   ],
                 )
               ],

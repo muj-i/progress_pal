@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
               const TextField(
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
-                  labelText: 'Enter Email',
+                  hintText: 'Enter Email',
                   prefixIcon: Icon(Icons.email_rounded),
                 ),
               ),
@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
               const TextField(
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
-                  labelText: 'Enter Password',
+                  hintText: 'Enter Password',
                   prefixIcon: Icon(Icons.lock_rounded),
                 ),
               ),
@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
           },
           child: Text(
             "Sign Up",
-            style: myTextStyle,
+            style: myTextButtonStyle,
           ),
         )
       ],

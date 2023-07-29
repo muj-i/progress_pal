@@ -37,7 +37,7 @@ class _PinVerifyPageState extends State<PinVerifyPage> {
               Text(
                 'A 6 digit verification pin has been sent to your email address',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey,
+                      color: Colors.white,
                     ),
               ),
               const SizedBox(
@@ -57,7 +57,7 @@ class _PinVerifyPageState extends State<PinVerifyPage> {
                   activeFillColor: Colors.white,
                   inactiveColor: Colors.red[200],
                   inactiveFillColor: Colors.white,
-                  selectedColor: Colors.green,
+                  selectedColor: myColor,
                   selectedFillColor: Colors.white,
                 ),
                 animationDuration: const Duration(milliseconds: 300),
@@ -126,7 +126,7 @@ class _PinVerifyPageState extends State<PinVerifyPage> {
           },
           child: Text(
             "Log In",
-            style: myTextStyle,
+            style: myTextButtonStyle,
           ),
         )
       ],

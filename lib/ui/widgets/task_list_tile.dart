@@ -9,12 +9,14 @@ class TaskListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white70,
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
+        
         title: const Text('Tittle Placeholder'),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

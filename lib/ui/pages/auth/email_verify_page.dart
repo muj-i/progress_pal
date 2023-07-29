@@ -36,7 +36,7 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
               Text(
                 'A 6 digit verification pin will send to your email address',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey,
+                      color: Colors.white,
                     ),
               ),
               const SizedBox(
@@ -93,7 +93,7 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
           },
           child: Text(
             "Log In",
-            style: myTextStyle,
+            style: myTextButtonStyle,
           ),
         )
       ],

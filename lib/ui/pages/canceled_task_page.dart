@@ -10,7 +10,8 @@ class CanceledTaskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar:  MyAppBar(myIconButton: IconButton(onPressed: (){// todo log out
+      }, icon: Icon(Icons.logout_rounded)),),
       body: ScreenBackground(
         child: SafeArea(
           child: Padding(
