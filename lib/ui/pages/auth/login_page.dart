@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:progress_pal/data/model/login_model.dart';
 import 'package:progress_pal/data/model/network_response.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
 import 'package:progress_pal/ui/pages/auth/email_verify_page.dart';
 import 'package:progress_pal/ui/pages/auth/signup_page.dart';
 import 'package:progress_pal/ui/pages/bottom_nav_base_page.dart';
+import 'package:progress_pal/ui/utils/auth_utils.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
-//  todo: mod 12 class 2 -> 27.37 minutes
 
 
 class LoginPage extends StatefulWidget {
@@ -24,13 +25,11 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passeordController = TextEditingController();
 
-bool _logInProgress = false;
+  bool _logInProgress = false;
   Future<void> logIn() async {
-     _logInProgress = true;
-    if (mounted){
-      setState(() {
-        
-      });
+    _logInProgress = true;
+    if (mounted) {
+      setState(() {});
     }
 
     Map<String, dynamic> requestBody = {
@@ -39,13 +38,13 @@ bool _logInProgress = false;
     };
     final NetworkResponse response =
         await NetworkCaller().postRequest(Urls.login, requestBody);
- _logInProgress = false;
-    if (mounted){
-      setState(() {
-        
-      });
+    _logInProgress = false;
+    if (mounted) {
+      setState(() {});
     }
     if (response.isSuccess) {
+      LoginModel model = LoginModel.fromJson(response.body!);
+      AuthUtils.saveUserInfo(model);
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => BottomNavBasePage()),
