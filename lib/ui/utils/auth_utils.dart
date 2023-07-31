@@ -14,10 +14,10 @@ class AuthUtils {
     return LoginModel.fromJson(jsonDecode(value));
   }
 
-  static Future<void> saveUserInfo(LoginModel model) async {
+  static Future<void> saveUserInfo(LoginModel loginModel) async {
     SharedPreferences _sharedPreferences =
         await SharedPreferences.getInstance();
-    await _sharedPreferences.setString('user-data', model.toJson().toString());
+    await _sharedPreferences.setString('user-data', loginModel.toJson().toString());
   }
 
   static Future<void> clearUserInfo() async {

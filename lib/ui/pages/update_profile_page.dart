@@ -30,13 +30,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
-        myIconButton: IconButton(
-            iconSize: 50,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Text("Back", style: myTextStyle,)),
+      appBar: TwoAppBar(
+        tittle: 'Update Profile',
+        style: Theme.of(context).textTheme.titleLarge,
       ),
       body: ScreenBackground(
           child: SingleChildScrollView(
@@ -46,13 +42,6 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                'Update Profile',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
               ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: GestureDetector(

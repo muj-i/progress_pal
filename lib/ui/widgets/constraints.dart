@@ -13,24 +13,45 @@ var myButtonTextColor = const TextStyle(color: Colors.white);
 
 var myColor = const Color.fromARGB(255, 10, 29, 66);
 
-class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  
+class TwoAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String tittle;
+  const TwoAppBar({
+    super.key,
+    required this.tittle,
+    TextStyle? style,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      toolbarHeight: 65,
+      title: Text(tittle),
+      centerTitle: true,
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(65);
+}
+
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final IconButton myIconButton;
 
-  const MyAppBar({
+  const HomeAppBar({
     super.key,
     required this.myIconButton,
   });
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      leading: GestureDetector(
-        onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const ProfilePage()));
-        },
-        child: const Column(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ProfilePage()));
+      },
+      child: AppBar(
+        elevation: 00,
+        leading: const Column(
           children: [
             SizedBox(
               height: 8,
@@ -49,28 +70,28 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ],
         ),
-      ),
-      title: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 8,
-          ),
-          Text(
-            'User name',
-            style: TextStyle(fontSize: 16, color: Colors.white),
-          ),
-          Text(
-            'User email',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 14,
+        title: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 8,
             ),
-          ),
-        ],
+            Text(
+              'User name',
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
+            Text(
+              'User email',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+        centerTitle: false,
+        actions: [myIconButton],
       ),
-      centerTitle: false,
-      actions: [myIconButton],
     );
   }
 

@@ -8,13 +8,9 @@ class AddNewTaskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
-        myIconButton: IconButton(
-          iconSize: 50,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon:  Text("Back", style: myTextStyle,)),
+      appBar: TwoAppBar(
+        tittle: 'Add New Task',
+        style: Theme.of(context).textTheme.titleLarge,
       ),
       body: ScreenBackground(
           child: SingleChildScrollView(
@@ -24,23 +20,10 @@ class AddNewTaskPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 50,
-              ),
-              Text(
-                'Add New Task',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
               const TextField(
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
-                  labelText: 'Tittle',
-                  prefixIcon: Icon(
-                    Icons.text_fields_rounded,
-                  ),
+                  hintText: 'Tittle',
                 ),
               ),
               const SizedBox(
@@ -50,8 +33,7 @@ class AddNewTaskPage extends StatelessWidget {
                 maxLines: 10,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
-                  labelText: 'Description',
-                  prefixIcon: Icon(Icons.description_rounded),
+                  hintText: 'Description',
                 ),
               ),
               const SizedBox(

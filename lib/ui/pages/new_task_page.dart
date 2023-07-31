@@ -11,9 +11,8 @@ class NewTaskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  MyAppBar(myIconButton: IconButton(onPressed: (){// todo log out
-      }, icon: Icon(Icons.logout_rounded))
-      ,),
+      appBar: HomeAppBar(myIconButton: IconButton(onPressed: (){// todo log out
+      }, icon: Icon(Icons.logout_rounded)),),
       body: ScreenBackground(
         child: SafeArea(
           child: Padding(
@@ -37,10 +36,8 @@ class NewTaskPage extends StatelessWidget {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    
                       itemBuilder: (context, index) {
                         return const TaskListTile(
-                          
                           chipBackgroundColor: Colors.cyan,
                         );
                       },
@@ -54,12 +51,14 @@ class NewTaskPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: myColor,
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AddNewTaskPage()));  
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AddNewTaskPage()));
         },
         //mini: true,
-        child: const Icon(Icons.add, color: Colors.white,),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }
