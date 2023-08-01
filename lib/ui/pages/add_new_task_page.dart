@@ -8,7 +8,7 @@ class AddNewTaskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TwoAppBar(
+      appBar: BasicAppBar(
         tittle: 'Add New Task',
         style: Theme.of(context).textTheme.titleLarge,
       ),

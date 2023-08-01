@@ -22,6 +22,11 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
     const CanceledTaskPage(),
     const InProgressTaskPage(),
   ];
+  @override
+  void initState() {
+    super.initState();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,32 +37,31 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 17),
           child: GNav(
-             tabBackgroundColor:
-                   Color.fromARGB(255, 228, 231, 238).withOpacity(0.1),
-                   backgroundColor: myColor,
-                color: Colors.white,
-                iconSize: 24,
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 9),
-                activeColor: Colors.white,
-              // currentIndex: _currentPageIndex,
-              // unselectedItemColor: Colors.grey,
-              // showUnselectedLabels: true,
-              // selectedItemColor: Color.fromRGBO(181,54,62, 1),
-              onTabChange: (int index) {
-                _currentPageIndex = index;
-                if (mounted) {
-                  setState(() {});
-                }
-              },gap: 8,
-              tabs: const [GButton(
-                    icon: FontAwesomeIcons.list, text: "New Task"),
-                GButton(
-                    icon: FontAwesomeIcons.listCheck, text: "Complete"),
-                GButton(
-                    icon: FontAwesomeIcons.ban, text: "Cancel"),
-                GButton(
-                    icon: FontAwesomeIcons.barsProgress,
-                    text: "In Progress"),],),
+            tabBackgroundColor:
+                Color.fromARGB(255, 228, 231, 238).withOpacity(0.1),
+            backgroundColor: myColor,
+            color: Colors.white,
+            iconSize: 24,
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+            activeColor: Colors.white,
+            // currentIndex: _currentPageIndex,
+            // unselectedItemColor: Colors.grey,
+            // showUnselectedLabels: true,
+            // selectedItemColor: Color.fromRGBO(181,54,62, 1),
+            onTabChange: (int index) {
+              _currentPageIndex = index;
+              if (mounted) {
+                setState(() {});
+              }
+            },
+            gap: 8,
+            tabs: const [
+              GButton(icon: FontAwesomeIcons.list, text: "New Task"),
+              GButton(icon: FontAwesomeIcons.listCheck, text: "Complete"),
+              GButton(icon: FontAwesomeIcons.ban, text: "Cancel"),
+              GButton(icon: FontAwesomeIcons.barsProgress, text: "In Progress"),
+            ],
+          ),
         ),
       ),
     );

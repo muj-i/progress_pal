@@ -6,7 +6,7 @@ import 'package:progress_pal/data/utils/urls.dart';
 import 'package:progress_pal/ui/pages/auth/email_verify_page.dart';
 import 'package:progress_pal/ui/pages/auth/signup_page.dart';
 import 'package:progress_pal/ui/pages/bottom_nav_base_page.dart';
-import 'package:progress_pal/ui/utils/auth_utils.dart';
+import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 

@@ -30,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TwoAppBar(
+      appBar: BasicAppBar(
         tittle: 'Update Profile',
         style: Theme.of(context).textTheme.titleLarge,
       ),

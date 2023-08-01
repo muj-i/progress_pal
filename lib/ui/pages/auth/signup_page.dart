@@ -206,7 +206,12 @@ class _SignupPageState extends State<SignupPage> {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         }
-                        userSignUp();
+                        userSignUp().then((value) =>
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginPage()),
+                                (route) => false));
                       },
                       child: Text('Sign Up', style: myButtonTextColor),
                     ),

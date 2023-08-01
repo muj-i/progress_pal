@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:progress_pal/ui/widgets/constraints.dart';
+
+import 'package:progress_pal/ui/widgets/profile_app_bar.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 import 'package:progress_pal/ui/widgets/task_list_tile.dart';
 import 'package:progress_pal/ui/widgets/task_summary_card.dart';
@@ -10,8 +11,7 @@ class CompletedTaskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  HomeAppBar(myIconButton: IconButton(onPressed: (){// todo log out
-      }, icon: Icon(Icons.logout_rounded)),),
+      appBar: ProfileAppBar(),
       body: ScreenBackground(
         child: SafeArea(
           child: Padding(
