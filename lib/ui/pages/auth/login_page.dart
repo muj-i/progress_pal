@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:progress_pal/data/model/login_model.dart';
 import 'package:progress_pal/data/model/network_response.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
+import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/data/utils/urls.dart';
 import 'package:progress_pal/ui/pages/auth/email_verify_page.dart';
 import 'package:progress_pal/ui/pages/auth/signup_page.dart';
 import 'package:progress_pal/ui/pages/bottom_nav_base_page.dart';
-import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
-
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -51,8 +49,8 @@ class _LoginPageState extends State<LoginPage> {
           (route) => false);
     } else {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Incorrect email address or password')));
+        CustomSnackbar.show(
+            context: context, message: 'Incorrect email address or password');
       }
     }
   }

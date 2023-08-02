@@ -1,9 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:progress_pal/data/model/network_response.dart';
+import 'package:progress_pal/data/services/network_caller.dart';
+import 'package:progress_pal/data/utils/urls.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
-class AddNewTaskPage extends StatelessWidget {
-  const AddNewTaskPage({super.key});
+class AddNewTaskPage extends StatefulWidget {
+    final Function() getNewTask;
+  final Function() getSummaryCount;
+  const AddNewTaskPage({super.key,  required this.getNewTask, required this.getSummaryCount});
+
+  @override
+  State<AddNewTaskPage> createState() => _AddNewTaskPageState();
+}
+
+class _AddNewTaskPageState extends State<AddNewTaskPage> {
+  final TextEditingController _tittleEditingController =
+      TextEditingController();
+  final TextEditingController _descriptionEditingController =
+      TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _addNewTaskInProgress = false;
+
+  Future<void> addNewTask() async {
+    _addNewTaskInProgress = true;
+    if (mounted) {
+      setState(() {});
+    }
+    Map<String, dynamic> requestBody = {
+      "title": _tittleEditingController.text.trim(),
+      "description": _descriptionEditingController.text.trim(),
+      "status": "New"
+    };
+    final NetworkResponse response =
+        await NetworkCaller().postRequest(Urls.createTask, requestBody);
+    _addNewTaskInProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
+    if (response.isSuccess) {
+      if (mounted) {
+        CustomSnackbar.show(
+            context: context, message: 'Task successfully added');
+        
+       // widget.onTaskAdded();
+        Navigator.pop(context);
+      }
+    } else {
+      if (mounted) {
+        CustomSnackbar.show(context: context, message: 'Task cannot be added');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,50 +64,67 @@ class AddNewTaskPage extends StatelessWidget {
           child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const TextField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  hintText: 'Tittle',
-                ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              const TextField(
-                maxLines: 10,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  hintText: 'Description',
-                ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Navigator.pushAndRemoveUntil(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => ResetPasswordPage()),
-                    //     (route) => false);
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFormField(
+                  controller: _tittleEditingController,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    hintText: 'Tittle',
+                  ),
+                  validator: (String? value) {
+                    if (value?.isEmpty ?? true) {
+                      return "Task must need a tittle";
+                    }
+                    return null;
                   },
-                  child: Text('Save Task', style: myButtonTextColor),
                 ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-            ],
+                const SizedBox(
+                  height: 12,
+                ),
+                TextField(
+                  controller: _descriptionEditingController,
+                  maxLines: 10,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    hintText: 'Description',
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Visibility(
+                    visible: _addNewTaskInProgress == false,
+                    replacement:
+                        const Center(child: CircularProgressIndicator()),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (!_formKey.currentState!.validate()) {
+                          return;
+                        }
+                        addNewTask().then((value){
+                          widget.getNewTask();
+                          widget.getSummaryCount();
+                        });
+                      },
+                      child: Text('Save Task', style: myButtonTextColor),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+              ],
+            ),
           ),
         ),
       )),
     );
   }
-  //sign up option method
 }

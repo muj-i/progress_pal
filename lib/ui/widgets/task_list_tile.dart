@@ -1,41 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:progress_pal/data/model/tasks_list_model.dart';
 
 class TaskListTile extends StatelessWidget {
   final Color chipBackgroundColor;
+  final TaskData data;
 
-  const TaskListTile({super.key, required this.chipBackgroundColor});
+  const TaskListTile({super.key, required this.chipBackgroundColor, required this.data});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      
       margin: const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.white70,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
-        
-        title: const Text('Tittle Placeholder'),
+        title:  Text(data.title ?? 'No ittle found'),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Subtittle Placeholder'),
+             Text(data.description ?? 'No description found'),
             const SizedBox(
               height: 8,
             ),
-            const Text('Date Placeholder'),
+             Text(data.createdDate ?? 'No added date found'),
             const SizedBox(
               height: 8,
             ),
             Row(
               children: [
                 Chip(
-                  label: const Padding(
+                  label: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 2),
                     child: Text(
-                      'NEW',
+                      data.status ?? 'New',
                       style: TextStyle(fontSize: 10, color: Colors.white),
                     ),
                   ),

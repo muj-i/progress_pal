@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/update_profile_page.dart';
-import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 
 class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -76,12 +76,40 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
         centerTitle: false,
         actions: [
           IconButton(
-              onPressed: () async {
-                await AuthUtils.clearUserInfo();
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                    (route) => false);
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Text(
+                          'Wanna log out?',
+                          style: myTextButtonStyle,
+                        ),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                'Cancel',
+                                style: TextStyle(color: Colors.black),
+                              )),
+                          TextButton(
+                              onPressed: () async {
+                                await AuthUtils.clearUserInfo();
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginPage()),
+                                    (route) => false);
+                              },
+                              child: Text(
+                                'Log out',
+                                style: TextStyle(color: Colors.redAccent),
+                              )),
+                        ],
+                      );
+                    });
               },
               icon: Icon(Icons.logout_rounded))
         ],

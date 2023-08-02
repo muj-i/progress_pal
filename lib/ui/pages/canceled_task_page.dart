@@ -36,9 +36,9 @@ class CanceledTaskPage extends StatelessWidget {
                 Expanded(
                   child: ListView.builder(
                       itemBuilder: (context, index) {
-                        return const TaskListTile(
-                          chipBackgroundColor: Colors.red,
-                        );
+                        // return const TaskListTile(
+                        //   chipBackgroundColor: Colors.red, data: null,
+                        // );
                       },
                       itemCount: 10),
                 ),

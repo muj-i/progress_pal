@@ -35,3 +35,19 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 
+class CustomSnackbar {
+  static void show({
+    required BuildContext context,
+    required String message,
+    
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      
+      SnackBar(
+        content: Text(message),
+        
+      ),
+    );
+  }
+}
+

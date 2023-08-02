@@ -52,13 +52,13 @@ class _SignupPageState extends State<SignupPage> {
       _emailController.clear();
       _passeordController.clear();
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Sign up successful')));
+        CustomSnackbar.show(context: context, message: 'Sign up successful');
+        
       }
     } else {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Sign up failed')));
+        CustomSnackbar.show(context: context, message: 'Sign up failed');
+      
       }
     }
   }
