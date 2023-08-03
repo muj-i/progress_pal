@@ -27,7 +27,7 @@ class NetworkCaller {
         return NetworkResponse(false, response.statusCode, null);
       }
     } catch (e) {
-      log(e.toString());
+      log('Error occurred during GET request: $e');
     }
     return const NetworkResponse(false, -1, null);
   }
@@ -54,7 +54,7 @@ class NetworkCaller {
         return NetworkResponse(false, response.statusCode, null);
       }
     } catch (e) {
-      log(e.toString());
+      log('Error occurred during POST request: $e');
     }
     return const NetworkResponse(false, -1, null);
   }

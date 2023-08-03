@@ -59,7 +59,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
       setState(() {});
     }
     final NetworkResponse response =
-        await NetworkCaller().getRequest(Urls.listTask);
+        await NetworkCaller().getRequest(Urls.newListTasks);
     if (response.isSuccess) {
       _tasksListModel = TasksListModel.fromJson(response.body!);
     } else {
@@ -80,50 +80,51 @@ class _NewTaskPageState extends State<NewTaskPage> {
       appBar: ProfileAppBar(),
       body: ScreenBackground(
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: _getSummaryCountInProgress
-                      ? LinearProgressIndicator()
-                      : Row(
-                          children: [
-                            Expanded(
-                                child: TaskSummaryCard(
-                                    number: 1, tittle: 'tittle')),
-                            Expanded(
-                                child: TaskSummaryCard(
-                                    number: 1, tittle: 'tittle')),
-                            Expanded(
-                                child: TaskSummaryCard(
-                                    number: 1, tittle: 'tittle')),
-                            Expanded(
-                                child: TaskSummaryCard(
-                                    number: 1, tittle: 'tittle'))
-                          ],
-                        ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Expanded(
-                  child: _getNewTasksInProgress
-                      ? Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          itemBuilder: (context, index) {
-                            final reversedIndex = _tasksListModel.data!.length - 1 - index;
-                            return TaskListTile(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                child: _getSummaryCountInProgress
+                    ? LinearProgressIndicator()
+                    : Row(
+                        children: [
+                          Expanded(
+                              child: TaskSummaryCard(
+                                  number: 1, tittle: 'tittle')),
+                          Expanded(
+                              child: TaskSummaryCard(
+                                  number: 1, tittle: 'tittle')),
+                          Expanded(
+                              child: TaskSummaryCard(
+                                  number: 1, tittle: 'tittle')),
+                          Expanded(
+                              child: TaskSummaryCard(
+                                  number: 1, tittle: 'tittle'))
+                        ],
+                      ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Expanded(
+                child: _getNewTasksInProgress
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        itemBuilder: (context, index) {
+                          final reversedIndex =
+                              _tasksListModel.data!.length - 1 - index;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 10),
+                            child: TaskListTile(
                               chipBackgroundColor: Colors.cyan,
                               data: _tasksListModel.data![reversedIndex],
-                            );
-                          },
-                          itemCount: _tasksListModel.data?.length ?? 0,
-                        ),
-                ),
-              ],
-            ),
+                            ),
+                          );
+                        },
+                        itemCount: _tasksListModel.data?.length ?? 0,
+                      ),
+              ),
+            ],
           ),
         ),
       ),

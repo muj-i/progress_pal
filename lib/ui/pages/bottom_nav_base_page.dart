@@ -57,8 +57,8 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
             gap: 8,
             tabs: const [
               GButton(icon: FontAwesomeIcons.list, text: "New Task"),
-              GButton(icon: FontAwesomeIcons.listCheck, text: "Complete"),
-              GButton(icon: FontAwesomeIcons.ban, text: "Cancel"),
+              GButton(icon: FontAwesomeIcons.listCheck, text: "Completed"),
+              GButton(icon: FontAwesomeIcons.ban, text: "Canceled"),
               GButton(icon: FontAwesomeIcons.barsProgress, text: "In Progress"),
             ],
           ),
