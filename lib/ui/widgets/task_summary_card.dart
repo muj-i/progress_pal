@@ -13,13 +13,15 @@ class TaskSummaryCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               '$number',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
-            Text(tittle)
+            Text(tittle,
+                style:
+                    const TextStyle(fontSize: 9, fontWeight: FontWeight.w500)),
           ],
         ),
       ),

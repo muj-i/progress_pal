@@ -61,7 +61,7 @@ class NetworkCaller {
 
   Future<void> backToLogin() async {
     await AuthUtils.clearUserInfo();
-    Navigator.pushAndRemoveUntil(ProgressPalApp.globalKey.currentContext!,
+   ProgressPalApp.navigatorKey.currentState!.pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
   }
 }

@@ -85,24 +85,34 @@ Future<void> getSummaryCount() async {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 6),
+                padding: const EdgeInsets.symmetric(vertical: 2),
                 child: _getSummaryCountInProgress
                     ? LinearProgressIndicator()
-                    : Row(
-                  children: [
-                    Expanded(
-                        child: TaskSummaryCard(number: 1, tittle: 'tittle')),
-                    Expanded(
-                        child: TaskSummaryCard(number: 1, tittle: 'tittle')),
-                    Expanded(
-                        child: TaskSummaryCard(number: 1, tittle: 'tittle')),
-                    Expanded(
-                        child: TaskSummaryCard(number: 1, tittle: 'tittle'))
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 8,
+                    : SizedBox(
+                        height: 80,
+                        width: double.infinity,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final reversedIndex =
+                                _summaryCountModel.data!.length - 1 - index;
+                            return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 4.5),
+                                child: SizedBox(
+                                  width: 85,
+                                  child: TaskSummaryCard(
+                                      tittle: _summaryCountModel
+                                              .data![reversedIndex].sId ??
+                                          'New',
+                                      number: _summaryCountModel
+                                              .data![reversedIndex].sum ??
+                                          0),
+                                ));
+                          },
+                          itemCount: _summaryCountModel.data?.length ?? 0,
+                        ),
+                      ),
               ),
               Expanded(
                 child: _getInProgressTasksInProgress

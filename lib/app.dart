@@ -5,7 +5,7 @@ import 'package:progress_pal/ui/widgets/constraints.dart';
 const colorGreen = Color.fromRGBO(33, 191, 115, 1);
 
 class ProgressPalApp extends StatefulWidget {
-  static GlobalKey<ScaffoldState> globalKey = GlobalKey();
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   const ProgressPalApp({super.key});
 
   @override
@@ -16,7 +16,7 @@ class _ProgressPalAppState extends State<ProgressPalApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      key: ProgressPalApp.globalKey,
+      navigatorKey: ProgressPalApp.navigatorKey,
       title: 'Progress Pal',
       theme: ThemeData(
           brightness: Brightness.light,

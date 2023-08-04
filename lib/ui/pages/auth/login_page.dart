@@ -43,10 +43,11 @@ class _LoginPageState extends State<LoginPage> {
     if (response.isSuccess) {
       LoginModel model = LoginModel.fromJson(response.body!);
       AuthUtils.saveUserInfo(model);
+      if (mounted) {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => BottomNavBasePage()),
-          (route) => false);
+          (route) => false);}
     } else {
       if (mounted) {
         CustomSnackbar.show(
