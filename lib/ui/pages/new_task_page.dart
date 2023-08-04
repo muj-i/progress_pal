@@ -22,6 +22,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
   bool _getSummaryCountInProgress = false, _getNewTasksInProgress = false;
   SummaryCountModel _summaryCountModel = SummaryCountModel();
   TasksListModel _tasksListModel = TasksListModel();
+
   @override
   void initState() {
     super.initState();

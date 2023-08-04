@@ -102,6 +102,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
                                     MaterialPageRoute(
                                         builder: (context) => LoginPage()),
                                     (route) => false);
+                                    
                               },
                               child: Text(
                                 'Log out',
