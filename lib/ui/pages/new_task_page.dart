@@ -25,6 +25,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getSummaryCount();
       getNewTask();
@@ -82,10 +83,8 @@ class _NewTaskPageState extends State<NewTaskPage> {
         child: SafeArea(
           child: Column(
             children: [
-              
               Padding(
-               padding: const EdgeInsets.symmetric(
-                                    vertical: 2),
+                padding: const EdgeInsets.symmetric(vertical: 2),
                 child: _getSummaryCountInProgress
                     ? LinearProgressIndicator()
                     : SizedBox(
@@ -101,7 +100,6 @@ class _NewTaskPageState extends State<NewTaskPage> {
                                     vertical: 5, horizontal: 4.5),
                                 child: SizedBox(
                                   width: 85,
-                                  
                                   child: TaskSummaryCard(
                                       tittle: _summaryCountModel
                                               .data![reversedIndex].sId ??

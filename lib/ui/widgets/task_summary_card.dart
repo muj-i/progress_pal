@@ -17,11 +17,11 @@ class TaskSummaryCard extends StatelessWidget {
           children: [
             Text(
               '$number',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             Text(tittle,
                 style:
-                    const TextStyle(fontSize: 9, fontWeight: FontWeight.w500)),
+                    const TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
           ],
         ),
       ),

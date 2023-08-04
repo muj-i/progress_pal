@@ -24,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passeordController = TextEditingController();
 
   bool _logInProgress = false;
+  
   Future<void> logIn() async {
     _logInProgress = true;
     if (mounted) {

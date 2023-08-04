@@ -67,15 +67,4 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
     );
   }
 }
-  // bottomNavigationBar: Container(
-  //       color: const Color.fromARGB(255, 10, 29, 66).withAlpha(1000),
-  //       child: Padding(
-  //         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 17),
-  //         child: GNav(
-  //           
-  //          
-  //           
-  //           
-  //         ),
-  //       ),
-  //     ),
+  
