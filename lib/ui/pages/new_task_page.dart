@@ -76,6 +76,19 @@ class _NewTaskPageState extends State<NewTaskPage> {
     }
   }
 
+  Future<void> deleteTask(String taskId) async {
+    final NetworkResponse response =
+        await NetworkCaller().getRequest(Urls.deleteListTasks(taskId));
+    if (response.isSuccess) {
+      getNewTask();
+    } else {
+      if (mounted) {
+        CustomSnackbar.show(
+            context: context, message: 'Tasks cannot be deleted');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,6 +140,11 @@ class _NewTaskPageState extends State<NewTaskPage> {
                             child: TaskListTile(
                               chipBackgroundColor: Colors.cyan,
                               data: _tasksListModel.data![reversedIndex],
+                              onDeletePress: () {
+
+                                deleteTask(_tasksListModel.data![index].sId!);
+                              },
+                              onEditPress: () {},
                             ),
                           );
                         },

@@ -33,8 +33,8 @@ class NetworkCaller {
   }
 
   //post request
-  Future<NetworkResponse> postRequest(
-      String url, Map<String, dynamic> body) async {
+  Future<NetworkResponse> postRequest(String url, Map<String, dynamic> body,
+      {bool isLogin = false}) async {
     try {
       Response response = await post(Uri.parse(url),
           headers: {
@@ -49,7 +49,9 @@ class NetworkCaller {
         return NetworkResponse(
             true, response.statusCode, jsonDecode(response.body));
       } else if (response.statusCode == 401) {
-        backToLogin();
+        if (isLogin) {
+          backToLogin();
+        }
       } else {
         return NetworkResponse(false, response.statusCode, null);
       }
@@ -61,7 +63,7 @@ class NetworkCaller {
 
   Future<void> backToLogin() async {
     await AuthUtils.clearUserInfo();
-   ProgressPalApp.navigatorKey.currentState!.pushAndRemoveUntil(
+    ProgressPalApp.navigatorKey.currentState!.pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
   }
 }

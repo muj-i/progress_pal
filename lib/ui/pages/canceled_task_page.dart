@@ -124,7 +124,7 @@ Future<void> getSummaryCount() async {
                           padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 10),
                           child: TaskListTile(
                             chipBackgroundColor: Colors.red,
-                            data: _tasksListModel.data![reversedIndex],
+                            data: _tasksListModel.data![reversedIndex], onEditPress: () {  }, onDeletePress: () {  },
                           ),
                         );
                       },

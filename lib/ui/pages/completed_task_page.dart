@@ -125,7 +125,7 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
                                 vertical: 4, horizontal: 10),
                             child: TaskListTile(
                               chipBackgroundColor: Colors.green.shade600,
-                              data: _tasksListModel.data![reversedIndex],
+                              data: _tasksListModel.data![reversedIndex], onEditPress: () {  }, onDeletePress: () {  },
                             ),
                           );
                         },

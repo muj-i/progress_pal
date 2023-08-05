@@ -5,7 +5,6 @@ import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
-
 import 'package:progress_pal/ui/widgets/profile_app_bar.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 import 'package:progress_pal/ui/widgets/task_list_tile.dart';
@@ -19,11 +18,12 @@ class InProgressTaskPage extends StatefulWidget {
 }
 
 class _InProgressTaskPageState extends State<InProgressTaskPage> {
-   bool _getSummaryCountInProgress = false, _getInProgressTasksInProgress = false;
+  bool _getSummaryCountInProgress = false,
+      _getInProgressTasksInProgress = false;
   SummaryCountModel _summaryCountModel = SummaryCountModel();
   TasksListModel _tasksListModel = TasksListModel();
-  
-@override
+
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -31,7 +31,8 @@ class _InProgressTaskPageState extends State<InProgressTaskPage> {
       getInProgressTask();
     });
   }
-Future<void> getSummaryCount() async {
+
+  Future<void> getSummaryCount() async {
     _getSummaryCountInProgress = true;
     if (mounted) {
       setState(() {});
@@ -52,14 +53,14 @@ Future<void> getSummaryCount() async {
     }
   }
 
-   Future<void> getInProgressTask() async {
+  Future<void> getInProgressTask() async {
     _getInProgressTasksInProgress = true;
 
     if (mounted) {
       setState(() {});
     }
     final NetworkResponse response =
-        await NetworkCaller().getRequest(Urls.progressListTasks);
+        await NetworkCaller().getRequest(Urls.inProgressListTasks);
     if (response.isSuccess) {
       _tasksListModel = TasksListModel.fromJson(response.body!);
     } else {
@@ -73,8 +74,6 @@ Future<void> getSummaryCount() async {
       setState(() {});
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -116,21 +115,24 @@ Future<void> getSummaryCount() async {
               ),
               Expanded(
                 child: _getInProgressTasksInProgress
-                  ? Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                      itemBuilder: (context, index) {
-                        final reversedIndex =
-                            _tasksListModel.data!.length - 1 - index;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 10),
-                          child: TaskListTile(
-                            chipBackgroundColor: Colors.purple,
-                            data: _tasksListModel.data![reversedIndex],
-                          ),
-                        );
-                      },
-                      itemCount: _tasksListModel.data?.length ?? 0,
-                    ),
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        itemBuilder: (context, index) {
+                          final reversedIndex =
+                              _tasksListModel.data!.length - 1 - index;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 10),
+                            child: TaskListTile(
+                              chipBackgroundColor: Colors.purple,
+                              data: _tasksListModel.data![reversedIndex],
+                              onEditPress: () {},
+                              onDeletePress: () {},
+                            ),
+                          );
+                        },
+                        itemCount: _tasksListModel.data?.length ?? 0,
+                      ),
               ),
             ],
           ),

@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
+import 'package:progress_pal/ui/widgets/constraints.dart';
 
 class TaskListTile extends StatelessWidget {
+  final VoidCallback onDeletePress, onEditPress;
   final Color chipBackgroundColor;
   final TaskData data;
 
-  const TaskListTile({super.key, required this.chipBackgroundColor, required this.data});
+  const TaskListTile(
+      {super.key,
+      required this.chipBackgroundColor,
+      required this.data,
+      required this.onDeletePress,
+      required this.onEditPress});
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +24,15 @@ class TaskListTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
-        title:  Text(data.title ?? 'No ittle found'),
+        title: Text(data.title ?? 'No ittle found'),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Text(data.description ?? 'No description found'),
+            Text(data.description ?? 'No description found'),
             const SizedBox(
               height: 8,
             ),
-             Text(data.createdDate ?? 'No added date found'),
+            Text(data.createdDate ?? 'No added date found'),
             const SizedBox(
               height: 8,
             ),
@@ -43,32 +50,17 @@ class TaskListTile extends StatelessWidget {
                 ),
                 const Spacer(),
                 IconButton(
-                  onPressed: () {
-                    // ScaffoldMessenger.of(context).showSnackBar(
-                    //   SnackBar(
-                    //     content: Text('This is a SnackBar!'),
-                    //     duration: Duration(
-                    //         seconds:
-                    //             2), // Duration for which the SnackBar is visible
-                    //     action: SnackBarAction(
-                    //       label: 'Dismiss',
-                    //       onPressed: () {
-                    //         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    //       },
-                    //     ),
-                    //   ),
-                    // );
-                  },
-                  icon: const Icon(
+                  onPressed: onEditPress,
+                  icon:  Icon(
                     FontAwesomeIcons.penToSquare,
-                    color: Color.fromRGBO(10, 188, 102, 1),
+                    color: myColor,
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: onDeletePress,
                   icon: Icon(
                     FontAwesomeIcons.trash,
-                    color: Colors.redAccent[200],
+                    color: myColor,
                   ),
                 )
               ],
