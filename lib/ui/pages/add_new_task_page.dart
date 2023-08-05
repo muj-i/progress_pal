@@ -6,9 +6,10 @@ import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
 class AddNewTaskPage extends StatefulWidget {
-    final Function() getNewTask;
+  final Function() getNewTask;
   final Function() getSummaryCount;
-  const AddNewTaskPage({super.key,  required this.getNewTask, required this.getSummaryCount});
+  const AddNewTaskPage(
+      {super.key, required this.getNewTask, required this.getSummaryCount});
 
   @override
   State<AddNewTaskPage> createState() => _AddNewTaskPageState();
@@ -42,8 +43,8 @@ class _AddNewTaskPageState extends State<AddNewTaskPage> {
       if (mounted) {
         CustomSnackbar.show(
             context: context, message: 'Task successfully added');
-        
-       // widget.onTaskAdded();
+
+        // widget.onTaskAdded();
         Navigator.pop(context);
       }
     } else {
@@ -108,7 +109,7 @@ class _AddNewTaskPageState extends State<AddNewTaskPage> {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         }
-                        addNewTask().then((value){
+                        addNewTask().then((value) {
                           widget.getNewTask();
                           widget.getSummaryCount();
                         });

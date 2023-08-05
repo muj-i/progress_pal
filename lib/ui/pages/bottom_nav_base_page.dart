@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:progress_pal/ui/pages/canceled_task_page.dart';
+import 'package:progress_pal/ui/pages/cancelled_task_page.dart';
 import 'package:progress_pal/ui/pages/completed_task_page.dart';
 import 'package:progress_pal/ui/pages/inprogress_task_page.dart';
 import 'package:progress_pal/ui/pages/new_task_page.dart';
@@ -18,9 +18,9 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
   int _currentPageIndex = 0;
   final List<Widget> _pages = [
     const NewTaskPage(),
-    const CompletedTaskPage(),
-    const CanceledTaskPage(),
     const InProgressTaskPage(),
+    const CompletedTaskPage(),
+    const CancelledTaskPage(),
   ];
   @override
   void initState() {
@@ -57,9 +57,9 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
             gap: 8,
             tabs: const [
               GButton(icon: FontAwesomeIcons.list, text: "New Task"),
-              GButton(icon: FontAwesomeIcons.listCheck, text: "Completed"),
-              GButton(icon: FontAwesomeIcons.ban, text: "Canceled"),
               GButton(icon: FontAwesomeIcons.barsProgress, text: "In Progress"),
+              GButton(icon: FontAwesomeIcons.listCheck, text: "Completed"),
+              GButton(icon: FontAwesomeIcons.ban, text: "Cancelled"),
             ],
           ),
         ),
@@ -67,4 +67,3 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
     );
   }
 }
-  

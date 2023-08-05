@@ -4,7 +4,10 @@ import 'package:progress_pal/data/model/summary_count_model.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
+import 'package:progress_pal/ui/pages/update_task.dart';
+import 'package:progress_pal/ui/pages/update_task_status.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
+import 'package:progress_pal/ui/widgets/dialog_box.dart';
 import 'package:progress_pal/ui/widgets/profile_app_bar.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 import 'package:progress_pal/ui/widgets/task_list_tile.dart';
@@ -74,6 +77,42 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
     }
   }
 
+  Future<void> deleteTask(String taskId) async {
+    final NetworkResponse response =
+        await NetworkCaller().getRequest(Urls.deleteListTasks(taskId));
+    if (response.isSuccess) {
+      final TaskData taskToDelete = _tasksListModel.data!.firstWhere(
+        (task) => task.sId == taskId,
+        orElse: () => TaskData(category: 'Default'),
+      );
+      final String category = taskToDelete.status ?? 'Default';
+
+      _tasksListModel.data!.removeWhere((element) => element.sId == taskId);
+
+      // Update the summary count
+      final Map<String, int> categoryCount = {};
+      _tasksListModel.data!.forEach((task) {
+        final category = task.status ?? 'Default';
+        categoryCount[category] = (categoryCount[category] ?? 0) + 1;
+      });
+
+      _summaryCountModel.data!.forEach((countModel) {
+        if (countModel.sId == category) {
+          countModel.sum = categoryCount[category] ?? 0;
+        }
+      });
+
+      if (mounted) {
+        setState(() {});
+      }
+    } else {
+      if (mounted) {
+        CustomSnackbar.show(
+            context: context, message: 'Tasks cannot be deleted');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,13 +121,12 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
         child: SafeArea(
           child: Column(
             children: [
-              
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: _getSummaryCountInProgress
                     ? LinearProgressIndicator()
                     : SizedBox(
-                        height: 80,
+                        height: 86,
                         width: double.infinity,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -99,7 +137,7 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 4.5),
                                 child: SizedBox(
-                                  width: 85,
+                                  width: 93,
                                   child: TaskSummaryCard(
                                       tittle: _summaryCountModel
                                               .data![reversedIndex].sId ??
@@ -125,7 +163,36 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
                                 vertical: 4, horizontal: 10),
                             child: TaskListTile(
                               chipBackgroundColor: Colors.green.shade600,
-                              data: _tasksListModel.data![reversedIndex], onEditPress: () {  }, onDeletePress: () {  },
+                              data: _tasksListModel.data![reversedIndex],
+                              onDeletePress: () {
+                                DialogBox.show(
+                                  context: context,
+                                  contentMessage: 'Wanna delete the task?',
+                                  leftButtonText: 'Cancel',
+                                  rightButtonText: 'Delete',
+                                  onLeftButtonPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  onRightButtonPressed: () {
+                                    deleteTask(_tasksListModel
+                                        .data![reversedIndex].sId!);
+                                    Navigator.pop(context);
+                                    if (mounted) {
+                                      CustomSnackbar.show(
+                                          context: context,
+                                          message: 'Task successfully deleted');
+                                    }
+                                  },
+                                );
+                              },
+                              onEditPress: () {
+                                showEditBottomSheet(
+                                    _tasksListModel.data![reversedIndex]);
+                              },
+                              onStatusChipPress: () {
+                                showStatusUpdateBottomSheet(
+                                    _tasksListModel.data![reversedIndex]);
+                              },
                             ),
                           );
                         },
@@ -137,5 +204,35 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
         ),
       ),
     );
+  }
+
+  void showEditBottomSheet(TaskData task) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return UpdateTaskBottomSheet(
+          task: task,
+          onUpdate: () {
+            getCompleteTask();
+          },
+        );
+      },
+    );
+  }
+
+  void showStatusUpdateBottomSheet(TaskData task) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (context) {
+          return UpdateTaskStatusBottomSheet(
+            task: task,
+            onUpdate: () {
+              getCompleteTask();
+              getSummaryCount();
+            },
+          );
+        });
   }
 }

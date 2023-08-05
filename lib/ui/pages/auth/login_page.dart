@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passeordController = TextEditingController();
 
   bool _logInProgress = false;
-  
+
   Future<void> logIn() async {
     _logInProgress = true;
     if (mounted) {
@@ -45,10 +45,11 @@ class _LoginPageState extends State<LoginPage> {
       LoginModel model = LoginModel.fromJson(response.body!);
       AuthUtils.saveUserInfo(model);
       if (mounted) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => BottomNavBasePage()),
-          (route) => false);}
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => BottomNavBasePage()),
+            (route) => false);
+      }
     } else {
       if (mounted) {
         CustomSnackbar.show(

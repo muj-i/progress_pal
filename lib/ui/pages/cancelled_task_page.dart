@@ -4,7 +4,6 @@ import 'package:progress_pal/data/model/summary_count_model.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
-import 'package:progress_pal/ui/pages/add_new_task_page.dart';
 import 'package:progress_pal/ui/pages/update_task.dart';
 import 'package:progress_pal/ui/pages/update_task_status.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
@@ -14,25 +13,24 @@ import 'package:progress_pal/ui/widgets/sceen_background.dart';
 import 'package:progress_pal/ui/widgets/task_list_tile.dart';
 import 'package:progress_pal/ui/widgets/task_summary_card.dart';
 
-class NewTaskPage extends StatefulWidget {
-  const NewTaskPage({super.key});
+class CancelledTaskPage extends StatefulWidget {
+  const CancelledTaskPage({super.key});
 
   @override
-  State<NewTaskPage> createState() => _NewTaskPageState();
+  State<CancelledTaskPage> createState() => _CancelledTaskPageState();
 }
 
-class _NewTaskPageState extends State<NewTaskPage> {
-  bool _getSummaryCountInProgress = false, _getNewTasksInProgress = false;
+class _CancelledTaskPageState extends State<CancelledTaskPage> {
+  bool _getSummaryCountInProgress = false, _getCancelTasksInProgress = false;
   SummaryCountModel _summaryCountModel = SummaryCountModel();
   TasksListModel _tasksListModel = TasksListModel();
 
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getSummaryCount();
-      getNewTask();
+      getCancelTask();
     });
   }
 
@@ -57,14 +55,14 @@ class _NewTaskPageState extends State<NewTaskPage> {
     }
   }
 
-  Future<void> getNewTask() async {
-    _getNewTasksInProgress = true;
+  Future<void> getCancelTask() async {
+    _getCancelTasksInProgress = true;
 
     if (mounted) {
       setState(() {});
     }
     final NetworkResponse response =
-        await NetworkCaller().getRequest(Urls.newListTasks);
+        await NetworkCaller().getRequest(Urls.cancelListTasks);
     if (response.isSuccess) {
       _tasksListModel = TasksListModel.fromJson(response.body!);
     } else {
@@ -73,7 +71,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
             context: context, message: 'Tasks cannot be loaded');
       }
     }
-    _getNewTasksInProgress = false;
+    _getCancelTasksInProgress = false;
     if (mounted) {
       setState(() {});
     }
@@ -121,7 +119,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
       body: ScreenBackground(
         child: RefreshIndicator(
           onRefresh: () async {
-            getNewTask();
+            getCancelTask();
           },
           child: SafeArea(
             child: Column(
@@ -157,7 +155,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
                         ),
                 ),
                 Expanded(
-                  child: _getNewTasksInProgress
+                  child: _getCancelTasksInProgress
                       ? Center(child: CircularProgressIndicator())
                       : ListView.builder(
                           itemBuilder: (context, index) {
@@ -167,8 +165,12 @@ class _NewTaskPageState extends State<NewTaskPage> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 4, horizontal: 10),
                               child: TaskListTile(
-                                chipBackgroundColor: Colors.cyan,
+                                chipBackgroundColor: Colors.red,
                                 data: _tasksListModel.data![reversedIndex],
+                                onEditPress: () {
+                                  showEditBottomSheet(
+                                      _tasksListModel.data![reversedIndex]);
+                                },
                                 onDeletePress: () {
                                   DialogBox.show(
                                     context: context,
@@ -191,10 +193,6 @@ class _NewTaskPageState extends State<NewTaskPage> {
                                     },
                                   );
                                 },
-                                onEditPress: () {
-                                  showEditBottomSheet(
-                                      _tasksListModel.data![reversedIndex]);
-                                },
                                 onStatusChipPress: () {
                                   showStatusUpdateBottomSheet(
                                       _tasksListModel.data![reversedIndex]);
@@ -210,22 +208,6 @@ class _NewTaskPageState extends State<NewTaskPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: myColor,
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AddNewTaskPage(
-                      getNewTask: getNewTask,
-                      getSummaryCount: getSummaryCount)));
-        },
-        //mini: true,
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
     );
   }
 
@@ -237,7 +219,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
         return UpdateTaskBottomSheet(
           task: task,
           onUpdate: () {
-            getNewTask();
+            getCancelTask();
           },
         );
       },
@@ -252,7 +234,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
           return UpdateTaskStatusBottomSheet(
             task: task,
             onUpdate: () {
-              getNewTask();
+              getCancelTask();
               getSummaryCount();
             },
           );

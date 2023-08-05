@@ -74,7 +74,7 @@ class ResetPasswordPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                     Text(
+                    Text(
                       "No need to reset password?",
                       style: myTextStyle,
                     ),
@@ -86,7 +86,10 @@ class ResetPasswordPage extends StatelessWidget {
                                   builder: (context) => const LoginPage()),
                               (route) => false);
                         },
-                        child:  Text('Log in', style: myTextButtonStyle,)),
+                        child: Text(
+                          'Log in',
+                          style: myTextButtonStyle,
+                        )),
                   ],
                 )
               ],

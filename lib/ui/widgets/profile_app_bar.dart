@@ -3,6 +3,7 @@ import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/update_profile_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
+import 'package:progress_pal/ui/widgets/dialog_box.dart';
 
 class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ProfileAppBar({
@@ -77,39 +78,20 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
         actions: [
           IconButton(
               onPressed: () {
-                showDialog(
+                DialogBox.show(
                     context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: Text(
-                          'Wanna log out?',
-                          style: myTextButtonStyle,
-                        ),
-                        actions: [
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                'Cancel',
-                                style: TextStyle(color: Colors.black),
-                              )),
-                          TextButton(
-                              onPressed: () async {
-                                await AuthUtils.clearUserInfo();
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LoginPage()),
-                                    (route) => false);
-                                    
-                              },
-                              child: Text(
-                                'Log out',
-                                style: TextStyle(color: Colors.redAccent),
-                              )),
-                        ],
-                      );
+                    contentMessage: 'Wanna log out?',
+                    leftButtonText: 'Cancel',
+                    rightButtonText: 'Log out',
+                    onLeftButtonPressed: () {
+                      Navigator.pop(context);
+                    },
+                    onRightButtonPressed: () async {
+                      await AuthUtils.clearUserInfo();
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          (route) => false);
                     });
               },
               icon: Icon(Icons.logout_rounded))

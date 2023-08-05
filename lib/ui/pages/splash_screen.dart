@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/bottom_nav_base_page.dart';
 import 'package:progress_pal/ui/utils/assets_utils.dart';
-import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
 class SplashScreen extends StatefulWidget {

@@ -95,7 +95,7 @@ class _PinVerifyPageState extends State<PinVerifyPage> {
                             builder: (context) => const ResetPasswordPage()),
                         (route) => false);
                   },
-                  child:  Text('Verify', style: myButtonTextColor),
+                  child: Text('Verify', style: myButtonTextColor),
                 ),
               ),
               const SizedBox(

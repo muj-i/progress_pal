@@ -6,7 +6,7 @@ import 'package:progress_pal/app.dart';
 // ! todo: mod 12 class 4 -> 24.00 minutes.
 // * need to fix update information
 // * need to fix forgot page
-// * need to fix the edit and delete button 
+
 // todo: fix the previous user task loaded at the begining of login
 
 void main() {

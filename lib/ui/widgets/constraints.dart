@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 var myTextStyle = const TextStyle(
     color: Colors.white, fontWeight: FontWeight.w500, letterSpacing: 0.5);
 
@@ -34,20 +33,15 @@ class BasicAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(65);
 }
 
-
 class CustomSnackbar {
   static void show({
     required BuildContext context,
     required String message,
-    
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
-      
       SnackBar(
         content: Text(message),
-        
       ),
     );
   }
 }
-

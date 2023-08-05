@@ -4,7 +4,7 @@ import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 
 class TaskListTile extends StatelessWidget {
-  final VoidCallback onDeletePress, onEditPress;
+  final VoidCallback onDeletePress, onEditPress, onStatusChipPress;
   final Color chipBackgroundColor;
   final TaskData data;
 
@@ -13,7 +13,8 @@ class TaskListTile extends StatelessWidget {
       required this.chipBackgroundColor,
       required this.data,
       required this.onDeletePress,
-      required this.onEditPress});
+      required this.onEditPress,
+      required this.onStatusChipPress});
 
   @override
   Widget build(BuildContext context) {
@@ -32,26 +33,30 @@ class TaskListTile extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            Text(data.createdDate ?? 'No added date found'),
+            Text('Created Date: ${data.createdDate ?? 'No added date found'}'),
             const SizedBox(
               height: 8,
             ),
             Row(
               children: [
-                Chip(
-                  label: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-                    child: Text(
-                      data.status ?? 'New',
-                      style: TextStyle(fontSize: 10, color: Colors.white),
+                GestureDetector(
+                  onTap: onStatusChipPress,
+                  child: Chip(
+                    label: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+                      child: Text(
+                        data.status ?? 'New',
+                        style: TextStyle(fontSize: 10, color: Colors.white),
+                      ),
                     ),
+                    backgroundColor: chipBackgroundColor,
                   ),
-                  backgroundColor: chipBackgroundColor,
                 ),
                 const Spacer(),
                 IconButton(
                   onPressed: onEditPress,
-                  icon:  Icon(
+                  icon: Icon(
                     FontAwesomeIcons.penToSquare,
                     color: myColor,
                   ),

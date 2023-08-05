@@ -7,7 +7,6 @@ import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
 class ProfilePage extends StatefulWidget {
-  
   const ProfilePage({super.key});
 
   @override

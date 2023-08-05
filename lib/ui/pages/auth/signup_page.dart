@@ -53,12 +53,10 @@ class _SignupPageState extends State<SignupPage> {
       _passeordController.clear();
       if (mounted) {
         CustomSnackbar.show(context: context, message: 'Sign up successful');
-        
       }
     } else {
       if (mounted) {
         CustomSnackbar.show(context: context, message: 'Sign up failed');
-      
       }
     }
   }
