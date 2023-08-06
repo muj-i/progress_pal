@@ -5,10 +5,31 @@ import 'package:progress_pal/ui/pages/update_profile_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/dialog_box.dart';
 
-class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
+class ProfileAppBar extends StatefulWidget implements PreferredSizeWidget {
   const ProfileAppBar({
     super.key,
   });
+
+  @override
+  State<ProfileAppBar> createState() => _ProfileAppBarState();
+
+  @override
+  @override
+  Size get preferredSize => const Size.fromHeight(65);
+}
+
+class _ProfileAppBarState extends State<ProfileAppBar> {
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserInfo();
+  }
+
+  Future<void> _fetchUserInfo() async {
+    // Fetch the latest user information from SharedPreferences
+    AuthUtils.userInfo = await AuthUtils.getUserInfo();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +120,4 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(65);
 }

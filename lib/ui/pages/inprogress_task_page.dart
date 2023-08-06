@@ -163,7 +163,7 @@ class _InProgressTaskPageState extends State<InProgressTaskPage> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 4, horizontal: 10),
                             child: TaskListTile(
-                              chipBackgroundColor: Colors.purple,
+                              chipBackgroundColor: myColor,
                               data: _tasksListModel.data![reversedIndex],
                               onDeletePress: () {
                                 DialogBox.show(

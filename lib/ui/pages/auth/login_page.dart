@@ -35,14 +35,14 @@ class _LoginPageState extends State<LoginPage> {
       "email": _emailController.text.trim(),
       "password": _passeordController.text
     };
-    final NetworkResponse response =
+    final NetworkResponse responce =
         await NetworkCaller().postRequest(Urls.login, requestBody);
     _logInProgress = false;
     if (mounted) {
       setState(() {});
     }
-    if (response.isSuccess) {
-      LoginModel model = LoginModel.fromJson(response.body!);
+    if (responce.isSuccess) {
+      LoginModel model = LoginModel.fromJson(responce.body!);
       AuthUtils.saveUserInfo(model);
       if (mounted) {
         Navigator.pushAndRemoveUntil(
