@@ -14,22 +14,21 @@ class ProfileAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<ProfileAppBar> createState() => _ProfileAppBarState();
 
   @override
-  @override
   Size get preferredSize => const Size.fromHeight(65);
 }
 
 class _ProfileAppBarState extends State<ProfileAppBar> {
-  @override
-  void initState() {
-    super.initState();
-    _fetchUserInfo();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _fetchUserInfo();
+  // }
 
-  Future<void> _fetchUserInfo() async {
-    // Fetch the latest user information from SharedPreferences
-    AuthUtils.userInfo = await AuthUtils.getUserInfo();
-    setState(() {});
-  }
+  // Future<void> _fetchUserInfo() async {
+  //   // Fetch the latest user information from SharedPreferences
+  //   AuthUtils.userInfo = await AuthUtils.getUserInfo();
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -98,24 +97,28 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
         centerTitle: false,
         actions: [
           IconButton(
-              onPressed: () {
-                DialogBox.show(
-                    context: context,
-                    contentMessage: 'Wanna log out?',
-                    leftButtonText: 'Cancel',
-                    rightButtonText: 'Log out',
-                    onLeftButtonPressed: () {
-                      Navigator.pop(context);
-                    },
-                    onRightButtonPressed: () async {
-                      await AuthUtils.clearUserInfo();
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                          (route) => false);
-                    });
-              },
-              icon: Icon(Icons.logout_rounded))
+            onPressed: () {
+              DialogBox.show(
+                context: context,
+                contentMessage: 'Wanna log out?',
+                leftButtonText: 'Cancel',
+                rightButtonText: 'Log out',
+                onLeftButtonPressed: () {
+                  Navigator.pop(context);
+                },
+                onRightButtonPressed: () async {
+                  await AuthUtils.clearUserInfo();
+
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                      (route) => false);
+                },
+              );
+            },
+            icon: Icon(Icons.logout_rounded),
+          ),
         ],
       ),
     );

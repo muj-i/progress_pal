@@ -22,7 +22,7 @@ class NewTaskPage extends StatefulWidget {
 }
 
 class _NewTaskPageState extends State<NewTaskPage> {
-  bool _getSummaryCountInProgress = false, _getNewTasksInProgress = false;
+  bool _getSummaryCountInProgress = false, _getNewTasksInProgress = false,  _delayInProgress = false;
   SummaryCountModel _summaryCountModel = SummaryCountModel();
   TasksListModel _tasksListModel = TasksListModel();
 
@@ -30,19 +30,42 @@ class _NewTaskPageState extends State<NewTaskPage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getSummaryCount();
-      getNewTask();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_)  {
+      _startDelay();
+    
+     });
   }
+
+Future<void> _startDelay() async {
+  setState(() {
+    _delayInProgress = true;
+  });
+
+  await Future.delayed(Duration(milliseconds: 50));
+
+  setState(() {
+    _delayInProgress = false;
+  });
+
+
+   getSummaryCount();
+   getNewTask();
+}
+
 
   Future<void> getSummaryCount() async {
     _getSummaryCountInProgress = true;
     if (mounted) {
       setState(() {});
     }
+
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.summaryCardCount);
+
+    _getSummaryCountInProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
     if (response.isSuccess) {
       _summaryCountModel = SummaryCountModel.fromJson(response.body!);
     } else {
@@ -50,10 +73,6 @@ class _NewTaskPageState extends State<NewTaskPage> {
         CustomSnackbar.show(
             context: context, message: 'Summary data cannot be loaded');
       }
-    }
-    _getSummaryCountInProgress = false;
-    if (mounted) {
-      setState(() {});
     }
   }
 
@@ -65,6 +84,10 @@ class _NewTaskPageState extends State<NewTaskPage> {
     }
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.newListTasks);
+    _getNewTasksInProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
     if (response.isSuccess) {
       _tasksListModel = TasksListModel.fromJson(response.body!);
     } else {
@@ -72,10 +95,6 @@ class _NewTaskPageState extends State<NewTaskPage> {
         CustomSnackbar.show(
             context: context, message: 'Tasks cannot be loaded');
       }
-    }
-    _getNewTasksInProgress = false;
-    if (mounted) {
-      setState(() {});
     }
   }
 
@@ -125,7 +144,9 @@ class _NewTaskPageState extends State<NewTaskPage> {
             getSummaryCount();
           },
           child: SafeArea(
-            child: Column(
+            child: _delayInProgress
+                      ? Center(child: RefreshProgressIndicator())
+                      :Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
@@ -159,7 +180,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
                 ),
                 Expanded(
                   child: _getNewTasksInProgress
-                      ? Center(child: CircularProgressIndicator())
+                      ? Center(child: RefreshProgressIndicator())
                       : ListView.builder(
                           itemBuilder: (context, index) {
                             final reversedIndex =

@@ -41,6 +41,10 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
     }
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.summaryCardCount);
+        _getSummaryCountInProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
     if (response.isSuccess) {
       _summaryCountModel = SummaryCountModel.fromJson(response.body!);
     } else {
@@ -49,10 +53,7 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
             context: context, message: 'Summary data cannot be loaded');
       }
     }
-    _getSummaryCountInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
+    
   }
 
   Future<void> getCancelTask() async {
@@ -157,7 +158,7 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
                 ),
                 Expanded(
                   child: _getCancelTasksInProgress
-                      ? Center(child: CircularProgressIndicator())
+                      ? Center(child: RefreshProgressIndicator())
                       : ListView.builder(
                           itemBuilder: (context, index) {
                             final reversedIndex =

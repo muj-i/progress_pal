@@ -52,6 +52,9 @@ class _LoginPageState extends State<LoginPage> {
             MaterialPageRoute(builder: (context) => BottomNavBasePage()),
             (route) => false);
       }
+      setState(() {
+        
+      });
     } else {
       if (mounted) {
 

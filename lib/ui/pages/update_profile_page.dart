@@ -33,10 +33,10 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    _firstNameController.text = userSharedperfData?.firstName ?? '';
-    _lastNameController.text = userSharedperfData?.lastName ?? '';
-    _mobileNumberController.text = userSharedperfData?.mobile ?? '';
-    _emailController.text = userSharedperfData?.email ?? '';
+    _firstNameController.text = userSharedperfData.firstName ?? '';
+    _lastNameController.text = userSharedperfData.lastName ?? '';
+    _mobileNumberController.text = userSharedperfData.mobile ?? '';
+    _emailController.text = userSharedperfData.email ?? '';
   }
 
   Future<void> profileUpdate() async {
@@ -235,7 +235,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 TextFormField(
                   controller: _passeordController,
                   keyboardType: TextInputType.text,
-                  obscureText: true,
+                  
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                       hintText: 'Password',
@@ -270,6 +270,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       ? Center(child: CircularProgressIndicator())
                       : ElevatedButton(
                           onPressed: () {
+                            if (!_formKey.currentState!.validate()) {
+                          return;
+                        }
                             profileUpdate();
                           },
                           child: Text('Update Information',

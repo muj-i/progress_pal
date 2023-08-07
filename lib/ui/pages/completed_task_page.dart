@@ -63,6 +63,10 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
     }
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.completeListTasks);
+        _getCompleteTasksInProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
     if (response.isSuccess) {
       _tasksListModel = TasksListModel.fromJson(response.body!);
     } else {
@@ -71,10 +75,7 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
             context: context, message: 'Tasks cannot be loaded');
       }
     }
-    _getCompleteTasksInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
+    
   }
 
   Future<void> deleteTask(String taskId) async {
@@ -158,7 +159,7 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
                 ),
                 Expanded(
                   child: _getCompleteTasksInProgress
-                      ? Center(child: CircularProgressIndicator())
+                      ? Center(child: RefreshProgressIndicator())
                       : ListView.builder(
                           itemBuilder: (context, index) {
                             final reversedIndex =
