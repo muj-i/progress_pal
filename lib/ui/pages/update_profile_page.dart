@@ -27,99 +27,55 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passeordController = TextEditingController();
-
-  bool _updateProfileInProgress = false;
-
-  String? _previousFirstName;
-  String? _previousLastName;
-  String? _previousMobileNumber;
-  String? _previousEmail;
+  UserData userSharedperfData = AuthUtils.userInfo.data!;
+  bool _profileUpdateInProgress = false;
 
   @override
   void initState() {
     super.initState();
-    _fetchPreviousData();
+    _firstNameController.text = userSharedperfData?.firstName ?? '';
+    _lastNameController.text = userSharedperfData?.lastName ?? '';
+    _mobileNumberController.text = userSharedperfData?.mobile ?? '';
+    _emailController.text = userSharedperfData?.email ?? '';
   }
 
-  Future<void> _fetchPreviousData() async {
-    LoginModel? user = await AuthUtils.getUserInfo();
-    if (user.data != null) {
-      _previousFirstName = user.data!.firstName;
-      _previousLastName = user.data!.lastName;
-      _previousMobileNumber = user.data!.mobile;
-      _previousEmail = user.data!.email;
-
-      _firstNameController.text = _previousFirstName ?? '';
-      _lastNameController.text = _previousLastName ?? '';
-      _mobileNumberController.text = _previousMobileNumber ?? '';
-      _emailController.text = _previousEmail ?? '';
-    }
-  }
-
-  Future<void> _onUpdatePressed() async {
-    if (_firstNameController.text.isEmpty ||
-        _lastNameController.text.isEmpty ||
-        _mobileNumberController.text.isEmpty ||
-        _emailController.text.isEmpty ||
-        _passeordController.text.isEmpty) {
-      CustomSnackbar.show(
-          context: context, message: 'Please fill all the fields');
-      return;
-    }
-    setState(() {
-      _updateProfileInProgress = true;
-    });
-    await userUpdateProfile();
-
-    setState(() {
-      _updateProfileInProgress = false;
-    });
-  }
-
-  Future<void> userUpdateProfile() async {
-    _updateProfileInProgress = true;
+  Future<void> profileUpdate() async {
+    _profileUpdateInProgress = true;
     if (mounted) {
       setState(() {});
     }
-
-    Map<String, dynamic> requestBody = {
+    final Map<String, dynamic> requestBody = {
       "firstName": _firstNameController.text.trim(),
       "lastName": _lastNameController.text.trim(),
       "mobile": _mobileNumberController.text.trim(),
-      "email": _emailController.text.trim(),
-      "password": _passeordController.text,
       "photo": ""
     };
 
+    if (_passeordController.text.isNotEmpty) {
+      requestBody["password"] = _passeordController.text;
+    }
+
     final NetworkResponse response =
         await NetworkCaller().postRequest(Urls.profileUpdate, requestBody);
-
-    _updateProfileInProgress = false;
+    _profileUpdateInProgress = false;
     if (mounted) {
       setState(() {});
     }
     if (response.isSuccess) {
-      //SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      LoginModel updatedModel = LoginModel.fromJson(response.body!);
-      updatedModel.token = AuthUtils.userInfo.token;
-
-      AuthUtils.saveUserInfo(updatedModel);
-      AuthUtils.userInfo = updatedModel;
-      setState(() {
-        _previousFirstName = updatedModel.data?.firstName;
-        _previousLastName = updatedModel.data?.lastName;
-        _previousMobileNumber = updatedModel.data?.mobile;
-        _previousEmail = updatedModel.data?.email;
-      });
-
+      userSharedperfData.firstName = _firstNameController.text.trim();
+      userSharedperfData.lastName = _lastNameController.text.trim();
+      userSharedperfData.mobile = _mobileNumberController.text.trim();
+      AuthUtils.updateUserInfo(userSharedperfData);
+      _passeordController.clear();
       if (mounted) {
         CustomSnackbar.show(
-            context: context, message: 'Profile update successful');
+            context: context, message: 'Profile updated successfully');
       }
+      Navigator.pop(context);
     } else {
       if (mounted) {
-        CustomSnackbar.show(context: context, message: 'Profile update failed');
+        CustomSnackbar.show(
+            context: context, message: 'Profile updated failed');
       }
     }
   }
@@ -247,15 +203,25 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 TextFormField(
                   controller: _emailController,
+                  readOnly: true,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    hintText: 'Email Address',
-                    prefixIcon: Icon(
-                      Icons.email_rounded,
-                      size: 22,
-                    ),
-                  ),
+                  decoration: InputDecoration(
+                      hintText: 'Email Address',
+                      prefixIcon: Icon(
+                        Icons.email_rounded,
+                        size: 22,
+                      ),
+                      suffixIcon: GestureDetector(
+                          onTap: () {
+                            CustomSnackbar.show(
+                                context: context,
+                                message: "Email can't be changed");
+                          },
+                          child: Icon(
+                            FontAwesomeIcons.circleExclamation,
+                            size: 20,
+                          ))),
                   validator: (String? value) {
                     if (value?.isEmpty ?? true) {
                       return "Enter your valid email address";
@@ -271,13 +237,23 @@ class _ProfilePageState extends State<ProfilePage> {
                   keyboardType: TextInputType.text,
                   obscureText: true,
                   textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(
-                    hintText: 'Password',
-                    prefixIcon: Icon(
-                      Icons.lock_rounded,
-                      size: 22,
-                    ),
-                  ),
+                  decoration: InputDecoration(
+                      hintText: 'Password',
+                      prefixIcon: Icon(
+                        Icons.lock_rounded,
+                        size: 22,
+                      ),
+                      suffixIcon: GestureDetector(
+                          onTap: () {
+                            CustomSnackbar.show(
+                                context: context,
+                                message:
+                                    "If you don't want to change your password,\nKeep the password field empty.");
+                          },
+                          child: Icon(
+                            FontAwesomeIcons.circleExclamation,
+                            size: 20,
+                          ))),
                   validator: (String? value) {
                     if ((value?.isEmpty ?? true) || value!.length <= 5) {
                       return "Enter password more than 6 letter";
@@ -290,13 +266,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed:
-                        _updateProfileInProgress ? null : _onUpdatePressed,
-                    child: _updateProfileInProgress
-                        ? CircularProgressIndicator() // Show the circular progress indicator
-                        : Text('Update Information', style: myButtonTextColor),
-                  ),
+                  child: _profileUpdateInProgress
+                      ? Center(child: CircularProgressIndicator())
+                      : ElevatedButton(
+                          onPressed: () {
+                            profileUpdate();
+                          },
+                          child: Text('Update Information',
+                              style: myButtonTextColor),
+                        ),
                 ),
               ],
             ),
@@ -304,5 +282,5 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       )),
     );
-  } //sign up option method
+  }
 }

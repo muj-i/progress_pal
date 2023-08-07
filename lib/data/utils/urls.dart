@@ -14,5 +14,5 @@ class Urls {
   static String deleteListTasks(String id) => "$_baseUrl/deleteTask/$id";
   static String updateTasksStatus(String id, String status) =>
       "$_baseUrl/updateTaskStatus/$id/$status";
-  static String updateListTasks(String id) => "$_baseUrl/updateTask/$id";
+  static String updateListTasks(String id) => "$_baseUrl/noUrlProvidedInApi/$id";
 }

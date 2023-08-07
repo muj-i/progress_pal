@@ -25,6 +25,8 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _logInProgress = false;
 
+ 
+
   Future<void> logIn() async {
     _logInProgress = true;
     if (mounted) {
@@ -52,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } else {
       if (mounted) {
+
         CustomSnackbar.show(
             context: context, message: 'Incorrect email address or password');
       }
@@ -104,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 TextFormField(
                   controller: _passeordController,
+                  obscureText: true,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
                   decoration: const InputDecoration(

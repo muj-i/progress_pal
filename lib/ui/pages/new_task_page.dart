@@ -122,6 +122,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
         child: RefreshIndicator(
           onRefresh: () async {
             getNewTask();
+            getSummaryCount();
           },
           child: SafeArea(
             child: Column(

@@ -120,6 +120,7 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
         child: RefreshIndicator(
           onRefresh: () async {
             getCancelTask();
+            getSummaryCount();
           },
           child: SafeArea(
             child: Column(

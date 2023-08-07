@@ -61,7 +61,7 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
         customDialogBox.show(
             context: context,
             contentMessage:
-                'Task update failed!\nCurrent Task update API not available',
+                'Task update failed!\nCurrently Task update API is not available',
             buttonText: 'Close',
             onButtonPressed: () {
               Navigator.pop(context);

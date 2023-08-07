@@ -118,88 +118,95 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
     return Scaffold(
       appBar: ProfileAppBar(),
       body: ScreenBackground(
-        child: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: _getSummaryCountInProgress
-                    ? LinearProgressIndicator()
-                    : SizedBox(
-                        height: 86,
-                        width: double.infinity,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            getCompleteTask();
+            getSummaryCount();
+          },
+          child: SafeArea(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: _getSummaryCountInProgress
+                      ? LinearProgressIndicator()
+                      : SizedBox(
+                          height: 86,
+                          width: double.infinity,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              final reversedIndex =
+                                  _summaryCountModel.data!.length - 1 - index;
+                              return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 4.5),
+                                  child: SizedBox(
+                                    width: 93,
+                                    child: TaskSummaryCard(
+                                        tittle: _summaryCountModel
+                                                .data![reversedIndex].sId ??
+                                            'New',
+                                        number: _summaryCountModel
+                                                .data![reversedIndex].sum ??
+                                            0),
+                                  ));
+                            },
+                            itemCount: _summaryCountModel.data?.length ?? 0,
+                          ),
+                        ),
+                ),
+                Expanded(
+                  child: _getCompleteTasksInProgress
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.builder(
                           itemBuilder: (context, index) {
                             final reversedIndex =
-                                _summaryCountModel.data!.length - 1 - index;
+                                _tasksListModel.data!.length - 1 - index;
                             return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 4.5),
-                                child: SizedBox(
-                                  width: 93,
-                                  child: TaskSummaryCard(
-                                      tittle: _summaryCountModel
-                                              .data![reversedIndex].sId ??
-                                          'New',
-                                      number: _summaryCountModel
-                                              .data![reversedIndex].sum ??
-                                          0),
-                                ));
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 10),
+                              child: TaskListTile(
+                                chipBackgroundColor: Colors.green.shade600,
+                                data: _tasksListModel.data![reversedIndex],
+                                onDeletePress: () {
+                                  DialogBox.show(
+                                    context: context,
+                                    contentMessage: 'Wanna delete the task?',
+                                    leftButtonText: 'Cancel',
+                                    rightButtonText: 'Delete',
+                                    onLeftButtonPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    onRightButtonPressed: () {
+                                      deleteTask(_tasksListModel
+                                          .data![reversedIndex].sId!);
+                                      Navigator.pop(context);
+                                      if (mounted) {
+                                        CustomSnackbar.show(
+                                            context: context,
+                                            message:
+                                                'Task successfully deleted');
+                                      }
+                                    },
+                                  );
+                                },
+                                onEditPress: () {
+                                  showEditBottomSheet(
+                                      _tasksListModel.data![reversedIndex]);
+                                },
+                                onStatusChipPress: () {
+                                  showStatusUpdateBottomSheet(
+                                      _tasksListModel.data![reversedIndex]);
+                                },
+                              ),
+                            );
                           },
-                          itemCount: _summaryCountModel.data?.length ?? 0,
+                          itemCount: _tasksListModel.data?.length ?? 0,
                         ),
-                      ),
-              ),
-              Expanded(
-                child: _getCompleteTasksInProgress
-                    ? Center(child: CircularProgressIndicator())
-                    : ListView.builder(
-                        itemBuilder: (context, index) {
-                          final reversedIndex =
-                              _tasksListModel.data!.length - 1 - index;
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 10),
-                            child: TaskListTile(
-                              chipBackgroundColor: Colors.green.shade600,
-                              data: _tasksListModel.data![reversedIndex],
-                              onDeletePress: () {
-                                DialogBox.show(
-                                  context: context,
-                                  contentMessage: 'Wanna delete the task?',
-                                  leftButtonText: 'Cancel',
-                                  rightButtonText: 'Delete',
-                                  onLeftButtonPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  onRightButtonPressed: () {
-                                    deleteTask(_tasksListModel
-                                        .data![reversedIndex].sId!);
-                                    Navigator.pop(context);
-                                    if (mounted) {
-                                      CustomSnackbar.show(
-                                          context: context,
-                                          message: 'Task successfully deleted');
-                                    }
-                                  },
-                                );
-                              },
-                              onEditPress: () {
-                                showEditBottomSheet(
-                                    _tasksListModel.data![reversedIndex]);
-                              },
-                              onStatusChipPress: () {
-                                showStatusUpdateBottomSheet(
-                                    _tasksListModel.data![reversedIndex]);
-                              },
-                            ),
-                          );
-                        },
-                        itemCount: _tasksListModel.data?.length ?? 0,
-                      ),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
