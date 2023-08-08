@@ -26,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passeordController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   UserData userSharedperfData = AuthUtils.userInfo.data!;
   bool _profileUpdateInProgress = false;
 
@@ -51,8 +51,16 @@ class _ProfilePageState extends State<ProfilePage> {
       "photo": ""
     };
 
-    if (_passeordController.text.isNotEmpty) {
-      requestBody["password"] = _passeordController.text;
+    if (_passwordController.text.isNotEmpty) {
+      if (_passwordController.text.length <= 5) {
+      if (mounted) {
+        CustomSnackbar.show(
+            context: context, message: 'Password should be more than 6 letters');
+      }
+      return;
+    }
+
+      requestBody["password"] = _passwordController.text;
     }
 
     final NetworkResponse response =
@@ -66,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
       userSharedperfData.lastName = _lastNameController.text.trim();
       userSharedperfData.mobile = _mobileNumberController.text.trim();
       AuthUtils.updateUserInfo(userSharedperfData);
-      _passeordController.clear();
+      _passwordController.clear();
       if (mounted) {
         CustomSnackbar.show(
             context: context, message: 'Profile updated successfully');
@@ -233,9 +241,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 12,
                 ),
                 TextFormField(
-                  controller: _passeordController,
+                  controller: _passwordController,
                   keyboardType: TextInputType.text,
-                  
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
                       hintText: 'Password',
@@ -255,7 +262,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             size: 20,
                           ))),
                   validator: (String? value) {
-                    if ((value?.isEmpty ?? true) || value!.length <= 5) {
+                    if (value!.isNotEmpty && value.length <= 5) {
                       return "Enter password more than 6 letter";
                     }
                     return null;
@@ -271,8 +278,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       : ElevatedButton(
                           onPressed: () {
                             if (!_formKey.currentState!.validate()) {
-                          return;
-                        }
+                              return;
+                            }
                             profileUpdate();
                           },
                           child: Text('Update Information',

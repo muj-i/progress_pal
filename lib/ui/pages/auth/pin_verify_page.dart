@@ -6,7 +6,8 @@ import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
 class PinVerifyPage extends StatefulWidget {
-  const PinVerifyPage({super.key});
+  final String email;
+  const PinVerifyPage({super.key, required this.email});
 
   @override
   State<PinVerifyPage> createState() => _PinVerifyPageState();

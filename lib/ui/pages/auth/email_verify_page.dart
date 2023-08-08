@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:progress_pal/data/model/network_response.dart';
+import 'package:progress_pal/data/services/network_caller.dart';
+import 'package:progress_pal/data/utils/urls.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/auth/pin_verify_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
@@ -12,6 +15,39 @@ class EmailVerifyPage extends StatefulWidget {
 }
 
 class _EmailVerifyPageState extends State<EmailVerifyPage> {
+  bool _emailVerificationInProgress = false;
+  final TextEditingController _emailController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Future<void> sendOtpToEmail() async {
+    _emailVerificationInProgress = true;
+    if (mounted) {
+      setState(() {});
+    }
+    final NetworkResponse response = await NetworkCaller()
+        .getRequest(Urls.sendOtpToEmail(_emailController.text.trim()));
+    _emailVerificationInProgress = false;
+    if (mounted) {
+      setState(() {});
+    }
+    if (response.isSuccess) {
+      if (mounted) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => PinVerifyPage(
+              email: _emailController.text.trim(),
+            ),
+          ),
+        );
+      }
+    } else {
+      if (mounted) {
+        CustomSnackbar.show(
+            context: context, message: "Email verification failed");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,57 +55,74 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
           child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 150,
-              ),
-              Text(
-                'Your Email Here',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                'A 6 digit verification pin will send to your email address',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 150,
+                ),
+                Text(
+                  'Your Email Here',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  'A 6 digit verification pin will send to your email address',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.white,
+                      ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    hintText: 'Email Address',
+                    prefixIcon: Icon(
+                      Icons.email_rounded,
+                      size: 22,
                     ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const TextField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Enter Email',
-                  prefixIcon: Icon(Icons.email_rounded),
-                ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const PinVerifyPage()),
-                        (route) => false);
+                  ),
+                  validator: (String? value) {
+                    if (value?.isEmpty ?? true) {
+                      return "Enter your valid email address";
+                    }
+                    return null;
                   },
-                  child: Text('Send OTP', style: myButtonTextColor),
                 ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              signUpOption()
-            ],
+                const SizedBox(
+                  height: 12,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Visibility(
+                    visible: _emailVerificationInProgress == false,
+                    replacement: Center(child: CircularProgressIndicator()),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (!_formKey.currentState!.validate()) {
+                          return;
+                        }
+                        sendOtpToEmail();
+                      },
+                      child: Text('Send OTP', style: myButtonTextColor),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                signUpOption()
+              ],
+            ),
           ),
         ),
       )),
