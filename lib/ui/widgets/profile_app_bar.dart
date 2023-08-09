@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:progress_pal/data/utils/auth_utils.dart';
+import 'package:progress_pal/ui/pages/about_page.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/update/update_profile_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
@@ -84,6 +85,15 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
         ),
         centerTitle: false,
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AboutPage()),
+              );
+            },
+            icon: Icon(Icons.error_outline_rounded),
+          ),
           IconButton(
             onPressed: () {
               DialogBox.show(
