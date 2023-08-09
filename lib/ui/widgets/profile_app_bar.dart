@@ -98,7 +98,7 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
             onPressed: () {
               DialogBox.show(
                 context: context,
-                contentMessage: 'Wanna log out?',
+                contentMessage: 'Do you want to log out?',
                 leftButtonText: 'Cancel',
                 rightButtonText: 'Log out',
                 onLeftButtonPressed: () {

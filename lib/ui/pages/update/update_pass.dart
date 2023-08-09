@@ -62,7 +62,7 @@ class _UpdatePasswordBottomSheetState extends State<UpdatePasswordBottomSheet> {
                   Row(
                     children: [
                       Text(
-                        'Update Password',
+                        'Change Password',
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const Spacer(),
@@ -96,7 +96,7 @@ class _UpdatePasswordBottomSheetState extends State<UpdatePasswordBottomSheet> {
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
-                      hintText: 'Password',
+                      hintText: 'New Password',
                       prefixIcon: Icon(
                         Icons.lock_rounded,
                         size: 22,
@@ -182,7 +182,7 @@ class _UpdatePasswordBottomSheetState extends State<UpdatePasswordBottomSheet> {
                           _passwordUpdate();
                         },
                         child:
-                            Text('Update Password', style: myButtonTextColor),
+                            Text('Confirm Change Password', style: myButtonTextColor),
                       ),
                     ),
                   ),

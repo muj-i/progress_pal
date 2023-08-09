@@ -94,7 +94,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
-                      hintText: 'Password',
+                      hintText: 'New Password',
                       prefixIcon: Icon(
                         Icons.lock_rounded,
                         size: 22,

@@ -181,7 +181,7 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
                                 onDeletePress: () {
                                   DialogBox.show(
                                     context: context,
-                                    contentMessage: 'Wanna delete the task?',
+                                    contentMessage: 'Do you want to delete the task?',
                                     leftButtonText: 'Cancel',
                                     rightButtonText: 'Delete',
                                     onLeftButtonPressed: () {

@@ -232,23 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(
                   height: 12,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        showUpdatePasswordBottomSheet();
-                      },
-                      child: Text(
-                        'Update Password?',
-                        style: myTextStyle,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
+                
                 SizedBox(
                   width: double.infinity,
                   child: _profileUpdateInProgress
@@ -263,6 +247,15 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Text('Update Information',
                               style: myButtonTextColor),
                         ),
+                ),
+                SizedBox(
+                  width:  double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showUpdatePasswordBottomSheet();
+                    },
+                    child: Text('Change Password', style: myButtonTextColor),
+                  ),
                 ),
               ],
             ),

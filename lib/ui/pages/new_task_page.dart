@@ -209,7 +209,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
                                         DialogBox.show(
                                           context: context,
                                           contentMessage:
-                                              'Wanna delete the task?',
+                                              'Do you want to delete the task?',
                                           leftButtonText: 'Cancel',
                                           rightButtonText: 'Delete',
                                           onLeftButtonPressed: () {
