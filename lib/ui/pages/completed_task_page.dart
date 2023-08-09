@@ -4,8 +4,8 @@ import 'package:progress_pal/data/model/summary_count_model.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
-import 'package:progress_pal/ui/pages/update_task.dart';
-import 'package:progress_pal/ui/pages/update_task_status.dart';
+import 'package:progress_pal/ui/pages/update/update_task.dart';
+import 'package:progress_pal/ui/pages/update/update_task_status.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/dialog_box.dart';
 import 'package:progress_pal/ui/widgets/profile_app_bar.dart';
@@ -24,6 +24,14 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
   bool _getSummaryCountInProgress = false, _getCompleteTasksInProgress = false;
   SummaryCountModel _summaryCountModel = SummaryCountModel();
   TasksListModel _tasksListModel = TasksListModel();
+
+  void sortSummaryData() {
+    _summaryCountModel.data?.sort((a, b) {
+      final aId = a.sId ?? '';
+      final bId = b.sId ?? '';
+      return aId.compareTo(bId);
+    });
+  }
 
   @override
   void initState() {
@@ -63,7 +71,7 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
     }
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.completeListTasks);
-        _getCompleteTasksInProgress = false;
+    _getCompleteTasksInProgress = false;
     if (mounted) {
       setState(() {});
     }
@@ -75,7 +83,6 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
             context: context, message: 'Tasks cannot be loaded');
       }
     }
-    
   }
 
   Future<void> deleteTask(String taskId) async {
@@ -116,6 +123,7 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    sortSummaryData();
     return Scaffold(
       appBar: ProfileAppBar(),
       body: ScreenBackground(
@@ -222,6 +230,9 @@ class _CompletedTaskPageState extends State<CompletedTaskPage> {
         return UpdateTaskBottomSheet(
           task: task,
           onUpdate: () {
+            getCompleteTask();
+          },
+          onTaskAdded: () {
             getCompleteTask();
           },
         );

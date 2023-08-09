@@ -16,12 +16,14 @@ class BottomNavBasePage extends StatefulWidget {
 
 class _BottomNavBasePageState extends State<BottomNavBasePage> {
   int _currentPageIndex = 0;
+
   final List<Widget> _pages = [
     const NewTaskPage(),
     const InProgressTaskPage(),
     const CompletedTaskPage(),
     const CancelledTaskPage(),
   ];
+  
   @override
   void initState() {
     super.initState();
@@ -44,10 +46,6 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
             iconSize: 24,
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 9),
             activeColor: Colors.white,
-            // currentIndex: _currentPageIndex,
-            // unselectedItemColor: Colors.grey,
-            // showUnselectedLabels: true,
-            // selectedItemColor: Color.fromRGBO(181,54,62, 1),
             onTabChange: (int index) {
               _currentPageIndex = index;
               if (mounted) {

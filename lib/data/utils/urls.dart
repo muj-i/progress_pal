@@ -14,7 +14,12 @@ class Urls {
   static String deleteListTasks(String id) => "$_baseUrl/deleteTask/$id";
   static String updateTasksStatus(String id, String status) =>
       "$_baseUrl/updateTaskStatus/$id/$status";
-  static String updateListTasks(String id) => "$_baseUrl/noUrlProvidedInApi/$id";
-static String sendOtpToEmail(String email) => "$_baseUrl/RecoverVerifyEmail/$email";
-
+  //! update task api not available
+  // static String updateListTasks(String id) =>
+  //     "$_baseUrl/noUrlProvidedInApi/$id";
+  static String sendOtpToEmail(String email) =>
+      "$_baseUrl/RecoverVerifyEmail/$email";
+  static String verifyOtpToEmail(String email, otp) =>
+      "$_baseUrl/RecoverVerifyOTP/$email/$otp";
+  static String resetPassword = "$_baseUrl/RecoverResetPass";
 }

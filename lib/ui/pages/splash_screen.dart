@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigateToLoginPage() {
-    Future.delayed(const Duration(seconds: 1)).then(
+    Future.delayed(const Duration(seconds: 2)).then(
       (_) async {
         final bool isLoggedIn = await AuthUtils.checkIfUserLoggedIn();
 

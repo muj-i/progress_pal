@@ -21,9 +21,9 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passeordController = TextEditingController();
+  final TextEditingController _passWordController = TextEditingController();
+  bool _obscurePassword = true, _signUpInProgress = false;
 
-  bool _signUpInProgress = false;
   Future<void> userSignUp() async {
     _signUpInProgress = true;
     if (mounted) {
@@ -35,7 +35,7 @@ class _SignupPageState extends State<SignupPage> {
       "lastName": _lastNameController.text.trim(),
       "mobile": _mobileNumberController.text.trim(),
       "email": _emailController.text.trim(),
-      "password": _passeordController.text,
+      "password": _passWordController.text,
       "photo": ""
     };
 
@@ -50,7 +50,7 @@ class _SignupPageState extends State<SignupPage> {
       _lastNameController.clear();
       _mobileNumberController.clear();
       _emailController.clear();
-      _passeordController.clear();
+      _passWordController.clear();
       if (mounted) {
         CustomSnackbar.show(context: context, message: 'Sign up successful');
       }
@@ -143,7 +143,11 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   validator: (String? value) {
                     if ((value?.isEmpty ?? true) || value!.length < 11) {
-                      return "Enter your valid mobile number";
+                      return "Enter your 11 digit mobile number";
+                    }
+                    final RegExp mobileRegex = RegExp(r'^01[0-9]{9}$');
+                    if (!mobileRegex.hasMatch(value)) {
+                      return "Enter a valid mobile number";
                     }
                     return null;
                   },
@@ -164,7 +168,11 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   validator: (String? value) {
                     if (value?.isEmpty ?? true) {
-                      return "Enter your valid email address";
+                      return "Enter your email address";
+                    }
+                    if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
+                        .hasMatch(value!)) {
+                      return "Enter a valid email address";
                     }
                     return null;
                   },
@@ -173,20 +181,41 @@ class _SignupPageState extends State<SignupPage> {
                   height: 12,
                 ),
                 TextFormField(
-                  controller: _passeordController,
+                  controller: _passWordController,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
                     hintText: 'Password',
                     prefixIcon: Icon(
                       Icons.lock_rounded,
                       size: 22,
                     ),
+                    suffixIcon: IconButton(
+                      color: myColor,
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
                   ),
                   validator: (String? value) {
-                    if ((value?.isEmpty ?? true) || value!.length <= 5) {
-                      return "Enter password more than 6 letter";
+                    if ((value?.isEmpty ?? true) || value!.length <= 7) {
+                      return "Minimum password length should be 8";
                     }
+                    final RegExp passwordRegex = RegExp(
+                        r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+
+                    if (!passwordRegex.hasMatch(value)) {
+                      return "Password should contain \nletters, numbers, and symbols.";
+                    }
+
                     return null;
                   },
                 ),

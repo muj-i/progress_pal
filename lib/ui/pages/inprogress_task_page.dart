@@ -4,8 +4,8 @@ import 'package:progress_pal/data/model/summary_count_model.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
-import 'package:progress_pal/ui/pages/update_task.dart';
-import 'package:progress_pal/ui/pages/update_task_status.dart';
+import 'package:progress_pal/ui/pages/update/update_task.dart';
+import 'package:progress_pal/ui/pages/update/update_task_status.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/dialog_box.dart';
 import 'package:progress_pal/ui/widgets/profile_app_bar.dart';
@@ -25,6 +25,14 @@ class _InProgressTaskPageState extends State<InProgressTaskPage> {
       _getInProgressTasksInProgress = false;
   SummaryCountModel _summaryCountModel = SummaryCountModel();
   TasksListModel _tasksListModel = TasksListModel();
+
+  void sortSummaryData() {
+    _summaryCountModel.data?.sort((a, b) {
+      final aId = a.sId ?? '';
+      final bId = b.sId ?? '';
+      return aId.compareTo(bId);
+    });
+  }
 
   @override
   void initState() {
@@ -64,7 +72,7 @@ class _InProgressTaskPageState extends State<InProgressTaskPage> {
     }
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.inProgressListTasks);
-        _getInProgressTasksInProgress = false;
+    _getInProgressTasksInProgress = false;
     if (mounted) {
       setState(() {});
     }
@@ -76,7 +84,6 @@ class _InProgressTaskPageState extends State<InProgressTaskPage> {
             context: context, message: 'Tasks cannot be loaded');
       }
     }
-    
   }
 
   Future<void> deleteTask(String taskId) async {
@@ -117,6 +124,7 @@ class _InProgressTaskPageState extends State<InProgressTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    sortSummaryData();
     return Scaffold(
       appBar: ProfileAppBar(),
       body: ScreenBackground(
@@ -223,6 +231,9 @@ class _InProgressTaskPageState extends State<InProgressTaskPage> {
         return UpdateTaskBottomSheet(
           task: task,
           onUpdate: () {
+            getInProgressTask();
+          },
+          onTaskAdded: () {
             getInProgressTask();
           },
         );

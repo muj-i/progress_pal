@@ -9,6 +9,7 @@ import 'package:progress_pal/data/model/network_response.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/data/utils/urls.dart';
+import 'package:progress_pal/ui/pages/update/update_pass.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
@@ -20,15 +21,14 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  File? _imageFile;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  UserData userSharedperfData = AuthUtils.userInfo.data!;
+  File? _imageFile;
   bool _profileUpdateInProgress = false;
+  UserData userSharedperfData = AuthUtils.userInfo.data!;
 
   @override
   void initState() {
@@ -51,18 +51,6 @@ class _ProfilePageState extends State<ProfilePage> {
       "photo": ""
     };
 
-    if (_passwordController.text.isNotEmpty) {
-      if (_passwordController.text.length <= 5) {
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: 'Password should be more than 6 letters');
-      }
-      return;
-    }
-
-      requestBody["password"] = _passwordController.text;
-    }
-
     final NetworkResponse response =
         await NetworkCaller().postRequest(Urls.profileUpdate, requestBody);
     _profileUpdateInProgress = false;
@@ -74,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
       userSharedperfData.lastName = _lastNameController.text.trim();
       userSharedperfData.mobile = _mobileNumberController.text.trim();
       AuthUtils.updateUserInfo(userSharedperfData);
-      _passwordController.clear();
+
       if (mounted) {
         CustomSnackbar.show(
             context: context, message: 'Profile updated successfully');
@@ -201,7 +189,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   validator: (String? value) {
                     if ((value?.isEmpty ?? true) || value!.length < 11) {
-                      return "Enter your valid mobile number";
+                      return "Enter your 11 digit mobile number";
+                    }
+                    final RegExp mobileRegex = RegExp(r'^01[0-9]{9}$');
+                    if (!mobileRegex.hasMatch(value)) {
+                      return "Enter a valid mobile number";
                     }
                     return null;
                   },
@@ -240,36 +232,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(
                   height: 12,
                 ),
-                TextFormField(
-                  controller: _passwordController,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(
-                      hintText: 'Password',
-                      prefixIcon: Icon(
-                        Icons.lock_rounded,
-                        size: 22,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showUpdatePasswordBottomSheet();
+                      },
+                      child: Text(
+                        'Update Password?',
+                        style: myTextStyle,
                       ),
-                      suffixIcon: GestureDetector(
-                          onTap: () {
-                            CustomSnackbar.show(
-                                context: context,
-                                message:
-                                    "If you don't want to change your password,\nKeep the password field empty.");
-                          },
-                          child: Icon(
-                            FontAwesomeIcons.circleExclamation,
-                            size: 20,
-                          ))),
-                  validator: (String? value) {
-                    if (value!.isNotEmpty && value.length <= 5) {
-                      return "Enter password more than 6 letter";
-                    }
-                    return null;
-                  },
+                    ),
+                  ],
                 ),
                 const SizedBox(
-                  height: 12,
+                  height: 8,
                 ),
                 SizedBox(
                   width: double.infinity,
@@ -292,5 +270,18 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       )),
     );
+  }
+
+  void showUpdatePasswordBottomSheet() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: UpdatePasswordBottomSheet(),
+          );
+        });
   }
 }

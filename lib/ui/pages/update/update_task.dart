@@ -3,27 +3,29 @@ import 'package:progress_pal/data/model/network_response.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
-import 'package:progress_pal/ui/widgets/dialog_box.dart';
+import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
 class UpdateTaskBottomSheet extends StatefulWidget {
   final TaskData task;
   final VoidCallback onUpdate;
-
+  final VoidCallback onTaskAdded;
   const UpdateTaskBottomSheet(
-      {super.key, required this.task, required this.onUpdate});
+      {super.key,
+      required this.task,
+      required this.onUpdate,
+      required this.onTaskAdded});
 
   @override
   State<UpdateTaskBottomSheet> createState() => _UpdateTaskSheetState();
 }
 
 class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
-  late TextEditingController _tittleController;
-
-  late TextEditingController _descriptionController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  bool _updateTaskInProgress = false;
+  late TextEditingController _tittleController;
+  late TextEditingController _descriptionController;
+  bool _updateTaskInProgress = false, _addNewTaskInProgress = false;
+  TasksListModel _tasksListModel = TasksListModel();
 
   @override
   void initState() {
@@ -33,39 +35,90 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
     super.initState();
   }
 
-  Future<void> updateTask(String taskId) async {
-    _updateTaskInProgress = true;
+  /**
+  // ! this method will work when the update task api is available
+  // Future<void> updateTask(String taskId) async {
+  //   _updateTaskInProgress = true;
+  //   if (mounted) {
+  //     setState(() {});
+  //   }
+  //   Map<String, dynamic> requestBody = {
+  //     "title": _tittleController.text.trim(),
+  //     "description": _descriptionController.text.trim(),
+  //   };
+  //   final NetworkResponse response = await NetworkCaller()
+  //       .postRequest(Urls.updateListTasks(taskId), requestBody);
+  //   _updateTaskInProgress = false;
+  //   if (mounted) {
+  //     setState(() {});
+  //   }
+  //   if (response.isSuccess) {
+  //     _tittleController.clear();
+  //     _descriptionController.clear();
+  //     if (mounted) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //           const SnackBar(content: Text('Task updated successfully')));
+  //     }
+  //     widget.onUpdate();
+  //   } else {
+  //     if (mounted) {
+  //       customDialogBox.show(
+  //           context: context,
+  //           contentMessage:
+  //               'Task update failed!\nCurrently Task update API is not available',
+  //           buttonText: 'Close',
+  //           onButtonPressed: () {
+  //             Navigator.pop(context);
+  //           });
+  //     }
+  //   }
+  // }
+  */
+  Future<void> deleteTask(String taskId) async {
+    final NetworkResponse response =
+        await NetworkCaller().getRequest(Urls.deleteListTasks(taskId));
+    if (response.isSuccess) {
+      _tasksListModel.data?.removeWhere((element) => element.sId == taskId);
+
+      if (mounted) {
+        setState(() {});
+      }
+    } else {
+      if (mounted) {
+        CustomSnackbar.show(
+            context: context, message: 'Tasks cannot be deleted');
+      }
+    }
+  }
+
+  Future<void> addNewTask() async {
+    _addNewTaskInProgress = true;
     if (mounted) {
       setState(() {});
     }
     Map<String, dynamic> requestBody = {
       "title": _tittleController.text.trim(),
       "description": _descriptionController.text.trim(),
+      "status": widget.task.status
     };
-    final NetworkResponse response = await NetworkCaller()
-        .postRequest(Urls.updateListTasks(taskId), requestBody);
-    _updateTaskInProgress = false;
+    final NetworkResponse response =
+        await NetworkCaller().postRequest(Urls.createTask, requestBody);
+    _addNewTaskInProgress = false;
     if (mounted) {
       setState(() {});
     }
     if (response.isSuccess) {
-      _tittleController.clear();
-      _descriptionController.clear();
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Task updated successfully')));
+        CustomSnackbar.show(
+            context: context, message: 'Task successfully updated');
+
+        widget.onTaskAdded();
+        Navigator.pop(context);
       }
-      widget.onUpdate();
     } else {
       if (mounted) {
-        customDialogBox.show(
-            context: context,
-            contentMessage:
-                'Task update failed!\nCurrently Task update API is not available',
-            buttonText: 'Close',
-            onButtonPressed: () {
-              Navigator.pop(context);
-            });
+        CustomSnackbar.show(
+            context: context, message: 'Task cannot be updated');
       }
     }
   }
@@ -145,11 +198,19 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
                         replacement: const Center(
                           child: CircularProgressIndicator(),
                         ),
-                        child: ElevatedButton(
-                            onPressed: () {
-                              updateTask(widget.task.sId!);
-                            },
-                            child: const Text('Update')),
+                        child: Visibility(
+                          visible: _addNewTaskInProgress == false,
+                          replacement:
+                              Center(child: const CircularProgressIndicator()),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                deleteTask(widget.task.sId!);
+                                addNewTask();
+                                // ! this method will work when the update task api is available
+                                // updateTask(widget.task.sId!);
+                              },
+                              child: const Text('Update')),
+                        ),
                       ),
                     ),
                   ],

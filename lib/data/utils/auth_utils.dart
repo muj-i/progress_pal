@@ -34,7 +34,6 @@ class AuthUtils {
     SharedPreferences _sharedPreferences =
         await SharedPreferences.getInstance();
     await _sharedPreferences.clear();
-    
   }
 
   static Future<bool> checkIfUserLoggedIn() async {

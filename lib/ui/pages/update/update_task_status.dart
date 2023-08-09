@@ -66,14 +66,29 @@ class _UpdateTaskStatusBottomSheetState
       child: ScreenBackground(
         child: Column(
           children: [
-            const Padding(
+            Padding(
                 padding: EdgeInsets.all(16),
-                child: Text(
-                  'Update Status',
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                child: Row(
+                  children: [
+                    Text(
+                      'Update Status',
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      icon: Icon(
+                        Icons.close_rounded,
+                        size: 32,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
                 )),
             Expanded(
               child: ListView.builder(

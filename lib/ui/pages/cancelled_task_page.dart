@@ -4,8 +4,8 @@ import 'package:progress_pal/data/model/summary_count_model.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
-import 'package:progress_pal/ui/pages/update_task.dart';
-import 'package:progress_pal/ui/pages/update_task_status.dart';
+import 'package:progress_pal/ui/pages/update/update_task.dart';
+import 'package:progress_pal/ui/pages/update/update_task_status.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/dialog_box.dart';
 import 'package:progress_pal/ui/widgets/profile_app_bar.dart';
@@ -25,6 +25,14 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
   SummaryCountModel _summaryCountModel = SummaryCountModel();
   TasksListModel _tasksListModel = TasksListModel();
 
+  void sortSummaryData() {
+    _summaryCountModel.data?.sort((a, b) {
+      final aId = a.sId ?? '';
+      final bId = b.sId ?? '';
+      return aId.compareTo(bId);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -41,7 +49,7 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
     }
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.summaryCardCount);
-        _getSummaryCountInProgress = false;
+    _getSummaryCountInProgress = false;
     if (mounted) {
       setState(() {});
     }
@@ -53,7 +61,6 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
             context: context, message: 'Summary data cannot be loaded');
       }
     }
-    
   }
 
   Future<void> getCancelTask() async {
@@ -115,6 +122,7 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    sortSummaryData();
     return Scaffold(
       appBar: ProfileAppBar(),
       body: ScreenBackground(
@@ -221,6 +229,9 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
         return UpdateTaskBottomSheet(
           task: task,
           onUpdate: () {
+            getCancelTask();
+          },
+          onTaskAdded: () {
             getCancelTask();
           },
         );

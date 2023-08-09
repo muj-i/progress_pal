@@ -2,41 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:progress_pal/data/model/network_response.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
-import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
-class ResetPasswordPage extends StatefulWidget {
-  final String email, otp;
-  const ResetPasswordPage({Key? key, required this.email, required this.otp})
-      : super(key: key);
+class UpdatePasswordBottomSheet extends StatefulWidget {
+  const UpdatePasswordBottomSheet({Key? key}) : super(key: key);
 
   @override
-  State<ResetPasswordPage> createState() => _ResetPasswordPageState();
+  State<UpdatePasswordBottomSheet> createState() =>
+      _UpdatePasswordBottomSheetState();
 }
 
-class _ResetPasswordPageState extends State<ResetPasswordPage> {
+class _UpdatePasswordBottomSheetState extends State<UpdatePasswordBottomSheet> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passWordController = TextEditingController();
   final TextEditingController _confirmPasseordController =
       TextEditingController();
-  bool _passwordResetInProgress = false, _obscurePassword = true;
+  bool _passwordUpdateInProgress = false, _obscurePassword = true;
 
-  Future<void> _passwordReset() async {
-    _passwordResetInProgress = true;
+  Future<void> _passwordUpdate() async {
+    _passwordUpdateInProgress = true;
     if (mounted) {
       setState(() {});
     }
-    Map<String, dynamic> requestBody = {
-      "email": widget.email,
-      "OTP": widget.otp,
-      "password": _passWordController.text
-    };
+    Map<String, dynamic> requestBody = {"password": _passWordController.text};
 
     final NetworkResponse response =
-        await NetworkCaller().postRequest(Urls.resetPassword, requestBody);
+        await NetworkCaller().postRequest(Urls.profileUpdate, requestBody);
 
-    _passwordResetInProgress = false;
+    _passwordUpdateInProgress = false;
     if (mounted) {
       setState(() {});
     }
@@ -44,23 +38,19 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     if (response.isSuccess) {
       if (mounted) {
         CustomSnackbar.show(
-            context: context, message: "Password reset successful.");
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LoginPage(),
-            ),
-            (route) => false);
+            context: context, message: "Password update successful.");
+        Navigator.pop(context);
       }
     } else {
-      CustomSnackbar.show(context: context, message: "Password reset failed.");
+      CustomSnackbar.show(context: context, message: "Password update failed.");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ScreenBackground(
+    return SizedBox(
+      height: 370,
+      child: ScreenBackground(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(24.0),
@@ -69,12 +59,24 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 150,
-                  ),
-                  Text(
-                    'Set Password',
-                    style: Theme.of(context).textTheme.titleLarge,
+                  Row(
+                    children: [
+                      Text(
+                        'Update Password',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        icon: Icon(
+                          Icons.close_rounded,
+                          size: 32,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
                   ),
                   const SizedBox(
                     height: 4,
@@ -169,7 +171,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   SizedBox(
                     width: double.infinity,
                     child: Visibility(
-                      visible: _passwordResetInProgress == false,
+                      visible: _passwordUpdateInProgress == false,
                       replacement:
                           Center(child: const CircularProgressIndicator()),
                       child: ElevatedButton(
@@ -177,37 +179,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           if (!_formKey.currentState!.validate()) {
                             return;
                           }
-                          _passwordReset();
+                          _passwordUpdate();
                         },
-                        child: Text('Confirm Reset Password',
-                            style: myButtonTextColor),
+                        child:
+                            Text('Update Password', style: myButtonTextColor),
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "No need to reset password?",
-                        style: myTextStyle,
-                      ),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginPage()),
-                                (route) => false);
-                          },
-                          child: Text(
-                            'Log in',
-                            style: myTextButtonStyle,
-                          )),
-                    ],
-                  )
                 ],
               ),
             ),

@@ -16,11 +16,11 @@ class AddNewTaskPage extends StatefulWidget {
 }
 
 class _AddNewTaskPageState extends State<AddNewTaskPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _tittleEditingController =
       TextEditingController();
   final TextEditingController _descriptionEditingController =
       TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _addNewTaskInProgress = false;
 
   Future<void> addNewTask() async {

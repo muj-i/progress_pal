@@ -16,9 +16,11 @@ class NetworkCaller {
         Uri.parse(url),
         headers: {"token": AuthUtils.userInfo.token.toString()},
       );
+      final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
       log(response.statusCode.toString());
       log(response.body);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 &&
+          decodedResponse['status'] == 'success') {
         return NetworkResponse(
             true, response.statusCode, jsonDecode(response.body));
       } else if (response.statusCode == 401) {
@@ -66,6 +68,7 @@ class NetworkCaller {
     await AuthUtils.clearUserInfo();
     Navigator.pushAndRemoveUntil(
         ProgressPalApp.navigatorKey.currentContext!,
-        MaterialPageRoute(builder: (context) => const LoginPage()), (route) => false);
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+        (route) => false);
   }
 }

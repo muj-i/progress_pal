@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
-import 'package:progress_pal/ui/pages/update_profile_page.dart';
+import 'package:progress_pal/ui/pages/update/update_profile_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/dialog_box.dart';
 
@@ -18,18 +18,6 @@ class ProfileAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _ProfileAppBarState extends State<ProfileAppBar> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _fetchUserInfo();
-  // }
-
-  // Future<void> _fetchUserInfo() async {
-  //   // Fetch the latest user information from SharedPreferences
-  //   AuthUtils.userInfo = await AuthUtils.getUserInfo();
-  //   setState(() {});
-  // }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

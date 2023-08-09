@@ -15,9 +15,9 @@ class EmailVerifyPage extends StatefulWidget {
 }
 
 class _EmailVerifyPageState extends State<EmailVerifyPage> {
-  bool _emailVerificationInProgress = false;
-  final TextEditingController _emailController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  bool _emailVerificationInProgress = false;
 
   Future<void> sendOtpToEmail() async {
     _emailVerificationInProgress = true;
@@ -93,7 +93,11 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
                   ),
                   validator: (String? value) {
                     if (value?.isEmpty ?? true) {
-                      return "Enter your valid email address";
+                      return "Enter your email address";
+                    }
+                    if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
+                        .hasMatch(value!)) {
+                      return "Enter a valid email address";
                     }
                     return null;
                   },

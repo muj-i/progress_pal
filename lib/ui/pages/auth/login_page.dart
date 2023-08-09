@@ -19,13 +19,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passeordController = TextEditingController();
-
-  bool _logInProgress = false;
-
- 
+  final TextEditingController _passWordController = TextEditingController();
+  bool _obscurePassword = true, _logInProgress = false;
 
   Future<void> logIn() async {
     _logInProgress = true;
@@ -35,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
     Map<String, dynamic> requestBody = {
       "email": _emailController.text.trim(),
-      "password": _passeordController.text
+      "password": _passWordController.text
     };
     final NetworkResponse responce =
         await NetworkCaller().postRequest(Urls.login, requestBody);
@@ -52,12 +48,9 @@ class _LoginPageState extends State<LoginPage> {
             MaterialPageRoute(builder: (context) => BottomNavBasePage()),
             (route) => false);
       }
-      setState(() {
-        
-      });
+      setState(() {});
     } else {
       if (mounted) {
-
         CustomSnackbar.show(
             context: context, message: 'Incorrect email address or password');
       }
@@ -100,7 +93,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   validator: (String? value) {
                     if (value?.isEmpty ?? true) {
-                      return "Enter your valid email address";
+                      return "Enter your email address";
+                    }
+                    if (!RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$')
+                        .hasMatch(value!)) {
+                      return "Enter a valid email address";
                     }
                     return null;
                   },
@@ -109,15 +106,28 @@ class _LoginPageState extends State<LoginPage> {
                   height: 12,
                 ),
                 TextFormField(
-                  controller: _passeordController,
-                  obscureText: true,
+                  controller: _passWordController,
+                  obscureText: _obscurePassword,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     hintText: 'Password',
                     prefixIcon: Icon(
                       Icons.lock_rounded,
                       size: 22,
+                    ),
+                    suffixIcon: IconButton(
+                      color: myColor,
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
                     ),
                   ),
                   validator: (String? value) {
