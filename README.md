@@ -1,8 +1,5 @@
 
 ## Progress Pal
-
-
-## Full app view
 ![Alt Text](assets/screenshots/ss0.png)
 ![Alt Text](assets/screenshots/ss1.png)
 ![Alt Text](assets/screenshots/ss2.png)
