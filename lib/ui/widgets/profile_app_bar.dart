@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/ui/pages/about_page.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
@@ -104,12 +105,14 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                 },
                 onRightButtonPressed: () async {
                   await AuthUtils.clearUserInfo();
+
                   if (mounted) {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginPage()),
-                        (route) => false);
+                    Get.off(const LoginPage());
+                    //   Navigator.pushAndRemoveUntil(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) => const LoginPage()),
+                    //       (route) => false);
                   }
                 },
               );

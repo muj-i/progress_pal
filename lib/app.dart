@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:progress_pal/ui/pages/splash_screen.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 
@@ -15,7 +16,7 @@ class ProgressPalApp extends StatefulWidget {
 class _ProgressPalAppState extends State<ProgressPalApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       navigatorKey: ProgressPalApp.navigatorKey,
       title: 'Progress Pal',
       theme: ThemeData(
