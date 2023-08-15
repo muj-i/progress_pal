@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:progress_pal/data/model/login_model.dart';
-import 'package:progress_pal/data/model/network_response.dart';
-import 'package:progress_pal/data/services/network_caller.dart';
-import 'package:progress_pal/data/utils/auth_utils.dart';
-import 'package:progress_pal/data/utils/urls.dart';
+import 'package:get/get.dart';
+import 'package:progress_pal/ui/getx_state_manager/login_controller.dart';
 import 'package:progress_pal/ui/pages/auth/email_verify_page.dart';
 import 'package:progress_pal/ui/pages/auth/signup_page.dart';
 import 'package:progress_pal/ui/pages/bottom_nav_base_page.dart';
@@ -21,41 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passWordController = TextEditingController();
-  bool _obscurePassword = true, _logInProgress = false;
-
-  Future<void> logIn() async {
-    _logInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-
-    Map<String, dynamic> requestBody = {
-      "email": _emailController.text.trim(),
-      "password": _passWordController.text
-    };
-    final NetworkResponse responce =
-        await NetworkCaller().postRequest(Urls.login, requestBody);
-    _logInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (responce.isSuccess) {
-      LoginModel model = LoginModel.fromJson(responce.body!);
-      AuthUtils.saveUserInfo(model);
-      if (mounted) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const BottomNavBasePage()),
-            (route) => false);
-      }
-      setState(() {});
-    } else {
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: 'Incorrect email address or password');
-      }
-    }
-  }
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -140,23 +103,44 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 12,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Visibility(
-                    visible: _logInProgress == false,
-                    replacement:
-                        const Center(child: CircularProgressIndicator()),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (!_formKey.currentState!.validate()) {
-                          return;
-                        }
-                        logIn();
-                      },
-                      child: Text('Log In', style: myButtonTextColor),
+                GetBuilder<LoginController>(builder: (loginController) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: Visibility(
+                      visible: loginController.logInProgress == false,
+                      replacement:
+                          const Center(child: CircularProgressIndicator()),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
+                          loginController
+                              .logIn(_emailController.text.trim(),
+                                  _passWordController.text)
+                              .then((logIn) {
+                            if (logIn == true) {
+                              CustomGetxSnackbar.showSnackbar(
+                                  title: 'Log in successful',
+                                  message: "Welcome to Progress Pal",
+                                  iconData: Icons.error_rounded,
+                                  iconColor: Colors.green);
+                              Get.offAll(const BottomNavBasePage());
+                            } else {
+                              CustomGetxSnackbar.showSnackbar(
+                                  title: "Log in failed",
+                                  message:
+                                      'Please try again with registered email & password',
+                                  iconData: Icons.error_rounded,
+                                  iconColor: Colors.red);
+                            }
+                          });
+                        },
+                        child: Text('Log In', style: myButtonTextColor),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
                 const SizedBox(
                   height: 20,
                 ),
@@ -203,10 +187,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         TextButton(
           onPressed: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const SignupPage()),
-                (route) => false);
+            Get.offAll(const SignupPage());
           },
           child: Text(
             "Sign Up",

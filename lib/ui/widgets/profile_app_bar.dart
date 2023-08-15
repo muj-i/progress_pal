@@ -24,8 +24,7 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ProfilePage()));
+        Get.to(const ProfilePage());
       },
       child: AppBar(
         elevation: 00,
@@ -86,9 +85,8 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AboutPage()),
+              Get.to(
+                const AboutPage(),
               );
             },
             icon: const Icon(Icons.error_outline_rounded),
@@ -101,18 +99,15 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                 leftButtonText: 'Cancel',
                 rightButtonText: 'Log out',
                 onLeftButtonPressed: () {
+                  
                   Navigator.pop(context);
                 },
                 onRightButtonPressed: () async {
                   await AuthUtils.clearUserInfo();
 
                   if (mounted) {
-                    Get.off(const LoginPage());
-                    //   Navigator.pushAndRemoveUntil(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) => const LoginPage()),
-                    //       (route) => false);
+                    Get.offAll(const LoginPage());
+                    
                   }
                 },
               );

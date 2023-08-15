@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:progress_pal/data/model/network_response.dart';
-import 'package:progress_pal/data/services/network_caller.dart';
-import 'package:progress_pal/data/utils/urls.dart';
+import 'package:progress_pal/ui/getx_state_manager/pin_verify_controller.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/auth/reset_password_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
@@ -19,39 +18,6 @@ class PinVerifyPage extends StatefulWidget {
 class _PinVerifyPageState extends State<PinVerifyPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _otpController = TextEditingController();
-  bool _otpVerificationInProgress = false;
-
-  Future<void> _verifyOTP() async {
-    _otpVerificationInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-    final NetworkResponse response = await NetworkCaller()
-        .getRequest(Urls.verifyOtpToEmail(widget.email, _otpController.text));
-
-    _otpVerificationInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-
-    if (response.isSuccess) {
-      if (mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ResetPasswordPage(
-              email: widget.email,
-              otp: _otpController.text,
-            ),
-          ),
-        );
-      }
-    } else {
-      if (mounted) {
-        CustomSnackbar.show(context: context, message: "Wrong OTP entered.");
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,21 +78,9 @@ class _PinVerifyPageState extends State<PinVerifyPage> {
                   animationDuration: const Duration(milliseconds: 300),
                   backgroundColor: Colors.transparent,
                   enableActiveFill: true,
-                  //errorAnimationController: errorController,
-                  //controller: textEditingController,
-                  onCompleted: (v) {
-                    // print("Completed");
-                  },
-                  onChanged: (value) {
-                    // print(value);
-                    // setState(() {
-                    //  // currentText = value;
-                    // });
-                  },
+                  onCompleted: (v) {},
+                  onChanged: (value) {},
                   beforeTextPaste: (text) {
-                    // print("Allowing to paste $text");
-                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
                     return false;
                   },
                   appContext: context,
@@ -135,22 +89,40 @@ class _PinVerifyPageState extends State<PinVerifyPage> {
               const SizedBox(
                 height: 12,
               ),
-              SizedBox(
-                width: double.infinity,
-                child: Visibility(
-                  visible: _otpVerificationInProgress == false,
-                  replacement: const Center(child: CircularProgressIndicator()),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (!_formKey.currentState!.validate()) {
-                        return;
-                      }
-                      _verifyOTP();
-                    },
-                    child: Text('Verify', style: myButtonTextColor),
+              GetBuilder<PinVerifyController>(builder: (pinVerifyController) {
+                return SizedBox(
+                  width: double.infinity,
+                  child: Visibility(
+                    visible:
+                        pinVerifyController.otpVerificationInProgress == false,
+                    replacement:
+                        const Center(child: CircularProgressIndicator()),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (!_formKey.currentState!.validate()) {
+                          return;
+                        }
+                        pinVerifyController
+                            .verifyOTP(widget.email, _otpController.text)
+                            .then((otpVerifiy) {
+                          if (otpVerifiy == true) {
+                            Get.to(ResetPasswordPage(
+                                email: widget.email, otp: _otpController.text));
+                          } else {
+                            CustomGetxSnackbar.showSnackbar(
+                                title: "OTP verification failed",
+                                message:
+                                    'Please try again with the OTP sent to your email',
+                                iconData: Icons.error_rounded,
+                                iconColor: Colors.red);
+                          }
+                        });
+                      },
+                      child: Text('Verify', style: myButtonTextColor),
+                    ),
                   ),
-                ),
-              ),
+                );
+              }),
               const SizedBox(
                 height: 16,
               ),
@@ -172,10 +144,7 @@ class _PinVerifyPageState extends State<PinVerifyPage> {
         ),
         TextButton(
           onPressed: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-                (route) => false);
+            Get.offAll(const LoginPage());
           },
           child: Text(
             "Log In",

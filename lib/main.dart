@@ -4,40 +4,41 @@ import 'package:progress_pal/app.dart';
 void main() {
   runApp(const ProgressPalApp());
 }
+//? mod 13 class 3 1 hour
+//! GetX integration
 
-//* GetX implementation
+//// GetX - email_verify_page
+//// GetX - login_page
+//// GetX - pin_verify_page
+//// GetX - reset_password_page
+///// GetX - signup_page
 
-//! const - email_verify_page
-//! const - login_page
-//! const - pin_verify_page
-//! const - reset_password_page
-//! const - signup_page
+//! GetX - update page unable to fetch new data from cache after updating
+//! GetX - update_profile_image
+//* GetX - update_password_page
+//* GetX - update_task_page
+//* GetX - update_task_status
 
-//! const - update_profile_page
-//! const - update_password_page
-//! const - update_task_page
-//! const - update_task_status
+//// GetX - about_page
+//* GetX - add"_new_task
+//* GetX - bottomnav_page
+//* GetX - cancelled_task
+//* GetX - completed_task
+//* GetX - inprogress_task
+//* GetX - new_task
+//// GetX - splash_page
 
-//! const - about_page
-//! const - add"_new_task
-//! const - bottomnav_page
-//! const - cancelled_task
-//! const - completed_task
-//! const - inprogress_task
-//! const - new_task
-//! const - splash_page
+//// GetX - asset utils
 
-//! const - asset utils
+//// GetX - constraints
+//// GetX - dialog
+//// GetX - profile
+//// GetX - screen background
+//// GetX - task list tile
+//// GetX - task summary
 
-//! const - constraints
-//! const - dialog
-//! const - profile
-//! const - screen background
-//! const - task list tile
-//! const - task summary
-
-//! const - APP
-//! const - MAIN
+//// GetX - APP
+//// GetX - MAIN
 
 
 

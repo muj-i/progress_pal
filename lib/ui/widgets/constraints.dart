@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 var myTextStyle = const TextStyle(
     color: Colors.white, fontWeight: FontWeight.w500, letterSpacing: 0.5);
@@ -41,6 +42,28 @@ class CustomSnackbar {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
+      ),
+    );
+  }
+}
+class CustomGetxSnackbar {
+  static void showSnackbar({
+    required String title,
+    required String message,
+    required IconData iconData,
+    required Color iconColor,
+  }) {
+    Get.snackbar(
+      title,
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      backgroundColor: Colors.white,
+      borderRadius: 10,
+      animationDuration: const Duration(milliseconds: 400),
+      icon: Icon(
+        iconData,
+        color: iconColor,
       ),
     );
   }

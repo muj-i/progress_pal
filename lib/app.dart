@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
+import 'package:progress_pal/ui/getx_state_manager/email_verify_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/login_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/pin_verify_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/reset_password_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/signup_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/update_profile_controller.dart';
 import 'package:progress_pal/ui/pages/splash_screen.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 
@@ -19,6 +25,7 @@ class _ProgressPalAppState extends State<ProgressPalApp> {
     return GetMaterialApp(
       navigatorKey: ProgressPalApp.navigatorKey,
       title: 'Progress Pal',
+      initialBinding: ControllerBinding(),
       theme: ThemeData(
           brightness: Brightness.light,
           primarySwatch: customSwatch,
@@ -29,7 +36,7 @@ class _ProgressPalAppState extends State<ProgressPalApp> {
                 vertical: 8,
               ),
               hintStyle: TextStyle(color: myColor),
-              //labelStyle: TextStyle(color: Colors.black),
+              
               filled: true,
               fillColor: Colors.grey[50],
               focusColor: myColor,
@@ -75,6 +82,18 @@ class _ProgressPalAppState extends State<ProgressPalApp> {
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
+  }
+}
+
+class ControllerBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.put(LoginController());
+    Get.put(SignupController());
+    Get.put(EmailVerifyController());
+    Get.put(PinVerifyController());
+    Get.put(ResetPasswordController());
+    Get.put(UpdateProfileController());
   }
 }
 

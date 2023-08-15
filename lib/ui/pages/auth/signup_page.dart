@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:progress_pal/data/model/network_response.dart';
-import 'package:progress_pal/data/services/network_caller.dart';
-import 'package:progress_pal/data/utils/urls.dart';
+import 'package:get/get.dart';
+import 'package:progress_pal/ui/getx_state_manager/signup_controller.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
+import 'package:progress_pal/ui/pages/bottom_nav_base_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
@@ -22,44 +22,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passWordController = TextEditingController();
-  bool _obscurePassword = true, _signUpInProgress = false;
-
-  Future<void> userSignUp() async {
-    _signUpInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-
-    Map<String, dynamic> requestBody = {
-      "firstName": _firstNameController.text.trim(),
-      "lastName": _lastNameController.text.trim(),
-      "mobile": _mobileNumberController.text.trim(),
-      "email": _emailController.text.trim(),
-      "password": _passWordController.text,
-      "photo": ""
-    };
-
-    final NetworkResponse responce =
-        await NetworkCaller().postRequest(Urls.registration, requestBody);
-    _signUpInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (responce.isSuccess) {
-      _firstNameController.clear();
-      _lastNameController.clear();
-      _mobileNumberController.clear();
-      _emailController.clear();
-      _passWordController.clear();
-      if (mounted) {
-        CustomSnackbar.show(context: context, message: 'Sign up successful');
-      }
-    } else {
-      if (mounted) {
-        CustomSnackbar.show(context: context, message: 'Sign up failed');
-      }
-    }
-  }
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -222,28 +185,48 @@ class _SignupPageState extends State<SignupPage> {
                 const SizedBox(
                   height: 12,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Visibility(
-                    visible: _signUpInProgress == false,
-                    replacement:
-                        const Center(child: CircularProgressIndicator()),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (!_formKey.currentState!.validate()) {
-                          return;
-                        }
-                        userSignUp().then((value) =>
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginPage()),
-                                (route) => false));
-                      },
-                      child: Text('Sign Up', style: myButtonTextColor),
+                GetBuilder<SignupController>(builder: (signupController) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: Visibility(
+                      visible: signupController.signUpInProgress == false,
+                      replacement:
+                          const Center(child: CircularProgressIndicator()),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
+                          signupController
+                              .userSignUp(
+                                  _firstNameController.text.trim(),
+                                  _lastNameController.text.trim(),
+                                  _mobileNumberController.text.trim(),
+                                  _emailController.text.trim(),
+                                  _passWordController.text,
+                                  '')
+                              .then((signUp) {
+                            if (signUp == true) {
+                              CustomGetxSnackbar.showSnackbar(
+                                  title: "Sign up successful",
+                                  message: 'Navigating to home page',
+                                  iconData: Icons.error_rounded,
+                                  iconColor: Colors.green);
+                              Get.offAll(const BottomNavBasePage());
+                            } else {
+                              CustomGetxSnackbar.showSnackbar(
+                                  title: "Sign up failed",
+                                  message: 'Please try again',
+                                  iconData: Icons.error_rounded,
+                                  iconColor: Colors.red);
+                            }
+                          });
+                        },
+                        child: Text('Sign Up', style: myButtonTextColor),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
                 const SizedBox(
                   height: 8,
                 ),
@@ -266,10 +249,7 @@ class _SignupPageState extends State<SignupPage> {
         ),
         TextButton(
           onPressed: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-                (route) => false);
+            Get.offAll(const LoginPage());
           },
           child: Text(
             "Log in",

@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_pal/data/model/login_model.dart';
-import 'package:progress_pal/data/model/network_response.dart';
-import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/auth_utils.dart';
-import 'package:progress_pal/data/utils/urls.dart';
+import 'package:progress_pal/ui/getx_state_manager/update_profile_controller.dart';
 import 'package:progress_pal/ui/pages/update/update_pass.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
@@ -27,56 +26,18 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   File? _imageFile;
-  bool _profileUpdateInProgress = false;
   UserData userSharedperfData = AuthUtils.userInfo.data!;
 
   @override
   void initState() {
     super.initState();
+    
     _firstNameController.text = userSharedperfData.firstName ?? '';
     _lastNameController.text = userSharedperfData.lastName ?? '';
     _mobileNumberController.text = userSharedperfData.mobile ?? '';
     _emailController.text = userSharedperfData.email ?? '';
   }
 
-  Future<void> profileUpdate() async {
-    _profileUpdateInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-    final Map<String, dynamic> requestBody = {
-      "firstName": _firstNameController.text.trim(),
-      "lastName": _lastNameController.text.trim(),
-      "mobile": _mobileNumberController.text.trim(),
-      "photo": ""
-    };
-
-    final NetworkResponse response =
-        await NetworkCaller().postRequest(Urls.profileUpdate, requestBody);
-    _profileUpdateInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (response.isSuccess) {
-      userSharedperfData.firstName = _firstNameController.text.trim();
-      userSharedperfData.lastName = _lastNameController.text.trim();
-      userSharedperfData.mobile = _mobileNumberController.text.trim();
-      AuthUtils.updateUserInfo(userSharedperfData);
-
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: 'Profile updated successfully');
-      }
-      if (mounted) {
-        Navigator.pop(context);
-      }
-    } else {
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: 'Profile updated failed');
-      }
-    }
-  }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -179,8 +140,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly, // Only allow digits
-                    LengthLimitingTextInputFormatter(11), // Limit the length
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(11),
                   ],
                   decoration: const InputDecoration(
                     hintText: 'Mobile Number',
@@ -234,21 +195,48 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(
                   height: 12,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: _profileUpdateInProgress
-                      ? const Center(child: CircularProgressIndicator())
-                      : ElevatedButton(
-                          onPressed: () {
-                            if (!_formKey.currentState!.validate()) {
-                              return;
-                            }
-                            profileUpdate();
-                          },
-                          child: Text('Update Information',
-                              style: myButtonTextColor),
-                        ),
-                ),
+                GetBuilder<UpdateProfileController>(
+                    builder: (updateProfileController) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: updateProfileController.profileUpdateInProgress
+                        ? const Center(child: CircularProgressIndicator())
+                        : ElevatedButton(
+                            onPressed: () {
+                              if (!_formKey.currentState!.validate()) {
+                                return;
+                              }
+
+                              updateProfileController
+                                  .profileUpdate(
+                                      _firstNameController.text.trim(),
+                                      _lastNameController.text.trim(),
+                                      _mobileNumberController.text.trim(),
+                                      '')
+                                  .then((updateProfile) {
+                                if (updateProfile == true) {
+                                  CustomGetxSnackbar.showSnackbar(
+                                      title: 'Profile updated successful',
+                                      message: "Navigate to home page",
+                                      iconData: Icons.error_rounded,
+                                      iconColor: Colors.green);
+                                  if (mounted) {
+                                    Navigator.pop(context);
+                                  } else {
+                                    CustomGetxSnackbar.showSnackbar(
+                                        title: "Profile updated failed",
+                                        message: 'Please try again',
+                                        iconData: Icons.error_rounded,
+                                        iconColor: Colors.red);
+                                  }
+                                }
+                              });
+                            },
+                            child: Text('Update Information',
+                                style: myButtonTextColor),
+                          ),
+                  );
+                }),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(

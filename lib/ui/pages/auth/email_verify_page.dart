@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:progress_pal/data/model/network_response.dart';
-import 'package:progress_pal/data/services/network_caller.dart';
-import 'package:progress_pal/data/utils/urls.dart';
+import 'package:get/get.dart';
+import 'package:progress_pal/ui/getx_state_manager/email_verify_controller.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/auth/pin_verify_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
@@ -17,36 +16,6 @@ class EmailVerifyPage extends StatefulWidget {
 class _EmailVerifyPageState extends State<EmailVerifyPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
-  bool _emailVerificationInProgress = false;
-
-  Future<void> sendOtpToEmail() async {
-    _emailVerificationInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-    final NetworkResponse response = await NetworkCaller()
-        .getRequest(Urls.sendOtpToEmail(_emailController.text.trim()));
-    _emailVerificationInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (response.isSuccess) {
-      if (mounted) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => PinVerifyPage(
-              email: _emailController.text.trim(),
-            ),
-          ),
-        );
-      }
-    } else {
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: "Email verification failed");
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,23 +74,45 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
                 const SizedBox(
                   height: 12,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Visibility(
-                    visible: _emailVerificationInProgress == false,
-                    replacement:
-                        const Center(child: CircularProgressIndicator()),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (!_formKey.currentState!.validate()) {
-                          return;
-                        }
-                        sendOtpToEmail();
-                      },
-                      child: Text('Send OTP', style: myButtonTextColor),
+                GetBuilder<EmailVerifyController>(
+                    builder: (emailVerifyController) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: Visibility(
+                      visible:
+                          emailVerifyController.emailVerificationInProgress ==
+                              false,
+                      replacement:
+                          const Center(child: CircularProgressIndicator()),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
+                          emailVerifyController
+                              .sendOtpToEmail(
+                            _emailController.text.trim(),
+                          )
+                              .then((emailVerify) {
+                            if (emailVerify == true) {
+                              Get.offAll(PinVerifyPage(
+                                email: _emailController.text.trim(),
+                              ));
+                            } else {
+                              CustomGetxSnackbar.showSnackbar(
+                                  title: "Email verify failed",
+                                  message:
+                                      'Please try again with a registered email',
+                                  iconData: Icons.error_rounded,
+                                  iconColor: Colors.red);
+                            }
+                          });
+                        },
+                        child: Text('Send OTP', style: myButtonTextColor),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
                 const SizedBox(
                   height: 16,
                 ),
@@ -144,10 +135,7 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
         ),
         TextButton(
           onPressed: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-                (route) => false);
+            Get.offAll(const LoginPage());
           },
           child: Text(
             "Log In",
