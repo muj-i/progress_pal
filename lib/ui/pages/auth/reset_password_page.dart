@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:progress_pal/ui/getx_state_manager/reset_password_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/auth_controller/reset_password_controller.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';

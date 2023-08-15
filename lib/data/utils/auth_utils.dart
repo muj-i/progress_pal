@@ -1,43 +1,48 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:progress_pal/data/model/login_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthUtils {
   AuthUtils._();
-  static LoginModel userInfo = LoginModel();
+  static Rx<LoginModel> userInfo = Rx(LoginModel());
 
   static Future<LoginModel> getUserInfo() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String value = sharedPreferences.getString('user-data')!;
-    return LoginModel.fromJson(jsonDecode(value));
+    final box = GetStorage();
+    final value = box.read('user-data');
+    userInfo(LoginModel.fromJson(jsonDecode(value)));
+    return userInfo.value;
   }
 
   static Future<void> saveUserInfo(LoginModel loginModel) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setString(
-        'user-data', jsonEncode(loginModel.toJson()));
-    userInfo = loginModel;
+    final box = GetStorage();
+    await box.write('user-data', jsonEncode(loginModel.toJson()));
+    userInfo(loginModel);
   }
 
   static Future<void> updateUserInfo(UserData userData) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    userInfo.data = userData;
-    await sharedPreferences.setString(
-        'user-data', jsonEncode(userInfo.toJson()));
+    final box = GetStorage();
+    userInfo.update((val) {
+      val!.data = userData;
+    });
+    await box.write('user-data', jsonEncode(userInfo.value.toJson()));
   }
 
   static Future<void> clearUserInfo() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.clear();
+    final box = GetStorage();
+    await box.remove('user-data');
+    userInfo(LoginModel());
   }
 
+  static RxBool isLoggedIn = RxBool(false);
+
   static Future<bool> checkIfUserLoggedIn() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    bool isLogin = sharedPreferences.containsKey('user-data');
-    if (isLogin) {
-      userInfo = await getUserInfo();
+    final box = GetStorage();
+    isLoggedIn.value = box.hasData('user-data');
+    if (isLoggedIn.value) {
+      await getUserInfo(); // Update userInfo
     }
-    return isLogin;
+    return isLoggedIn.value;
   }
 }

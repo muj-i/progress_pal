@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:progress_pal/ui/getx_state_manager/login_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/auth_controller/login_controller.dart';
 import 'package:progress_pal/ui/pages/auth/email_verify_page.dart';
 import 'package:progress_pal/ui/pages/auth/signup_page.dart';
 import 'package:progress_pal/ui/pages/bottom_nav_base_page.dart';

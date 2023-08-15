@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_pal/data/model/login_model.dart';
 import 'package:progress_pal/data/utils/auth_utils.dart';
-import 'package:progress_pal/ui/getx_state_manager/update_profile_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/update_controller/update_profile_controller.dart';
 import 'package:progress_pal/ui/pages/update/update_pass.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
@@ -26,18 +26,19 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   File? _imageFile;
-  UserData userSharedperfData = AuthUtils.userInfo.data!;
+  UpdateProfileController updateProfileController =
+      Get.put(UpdateProfileController());
+
+  UserData userSharedperfData = AuthUtils.userInfo.value.data!;
 
   @override
   void initState() {
     super.initState();
-    
     _firstNameController.text = userSharedperfData.firstName ?? '';
     _lastNameController.text = userSharedperfData.lastName ?? '';
     _mobileNumberController.text = userSharedperfData.mobile ?? '';
     _emailController.text = userSharedperfData.email ?? '';
   }
-
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -215,19 +216,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                       '')
                                   .then((updateProfile) {
                                 if (updateProfile == true) {
-                                  CustomGetxSnackbar.showSnackbar(
-                                      title: 'Profile updated successful',
-                                      message: "Navigate to home page",
-                                      iconData: Icons.error_rounded,
-                                      iconColor: Colors.green);
+                                  CustomSnackbar.show(
+                                      context: context,
+                                      message: 'Profile updated successful');
+                                  Get.back();
+                                  setState(() {});
                                   if (mounted) {
-                                    Navigator.pop(context);
+                                    Get.back();
                                   } else {
-                                    CustomGetxSnackbar.showSnackbar(
-                                        title: "Profile updated failed",
-                                        message: 'Please try again',
-                                        iconData: Icons.error_rounded,
-                                        iconColor: Colors.red);
+                                    CustomSnackbar.show(
+                                      context: context,
+                                      message: "Profile updated failed",
+                                    );
                                   }
                                 }
                               });

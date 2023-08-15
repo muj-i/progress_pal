@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:progress_pal/data/model/network_response.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
@@ -114,7 +115,7 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
             context: context, message: 'Task successfully updated');
 
         widget.onTaskAdded();
-        Navigator.pop(context);
+        Get.back();
       }
     } else {
       if (mounted) {
@@ -157,7 +158,7 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            Navigator.pop(context);
+                            Get.back();
                           },
                         )
                       ],

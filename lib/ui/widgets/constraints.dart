@@ -46,6 +46,7 @@ class CustomSnackbar {
     );
   }
 }
+
 class CustomGetxSnackbar {
   static void showSnackbar({
     required String title,

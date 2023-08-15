@@ -42,9 +42,9 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                   radius: 23,
                   backgroundColor: Colors.white,
                   child: ClipOval(
-                    child: AuthUtils.userInfo.data?.photo != null
+                    child: AuthUtils.userInfo.value.data?.photo != null
                         ? Image.network(
-                            AuthUtils.userInfo.data!.photo!,
+                            AuthUtils.userInfo.value.data!.photo!,
                             errorBuilder: (context, error, stackTrace) {
                               return Icon(
                                 Icons.person,
@@ -69,11 +69,11 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
               height: 8,
             ),
             Text(
-              '${AuthUtils.userInfo.data?.firstName ?? 'No name found'} ${AuthUtils.userInfo.data?.lastName ?? ''}',
+              '${AuthUtils.userInfo.value.data?.firstName ?? 'No name found'} ${AuthUtils.userInfo.value.data?.lastName ?? ''}',
               style: const TextStyle(fontSize: 16, color: Colors.white),
             ),
             Text(
-              AuthUtils.userInfo.data?.email ?? 'No email found',
+              AuthUtils.userInfo.value.data?.email ?? 'No email found',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
@@ -99,15 +99,13 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                 leftButtonText: 'Cancel',
                 rightButtonText: 'Log out',
                 onLeftButtonPressed: () {
-                  
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 onRightButtonPressed: () async {
                   await AuthUtils.clearUserInfo();
 
                   if (mounted) {
                     Get.offAll(const LoginPage());
-                    
                   }
                 },
               );

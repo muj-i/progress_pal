@@ -8,7 +8,7 @@ import 'package:progress_pal/data/utils/urls.dart';
 class UpdateProfileController extends GetxController {
   bool _profileUpdateInProgress = false;
   bool get profileUpdateInProgress => _profileUpdateInProgress;
-  UserData? userSharedperfData = AuthUtils.userInfo.data;
+  UserData? userSharedperfData = AuthUtils.userInfo.value.data;
 
   Future<bool> profileUpdate(String firstName, lastName, mobile, photo) async {
     _profileUpdateInProgress = true;

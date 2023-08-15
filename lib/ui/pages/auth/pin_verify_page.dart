@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:progress_pal/ui/getx_state_manager/pin_verify_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/auth_controller/pin_verify_controller.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/auth/reset_password_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';

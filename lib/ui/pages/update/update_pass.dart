@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:progress_pal/ui/getx_state_manager/update_pass_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/update_controller/update_pass_controller.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
@@ -18,7 +18,6 @@ class _UpdatePasswordBottomSheetState extends State<UpdatePasswordBottomSheet> {
   final TextEditingController _confirmPasseordController =
       TextEditingController();
   bool _obscurePassword = true;
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +46,7 @@ class _UpdatePasswordBottomSheetState extends State<UpdatePasswordBottomSheet> {
                           color: Colors.white,
                         ),
                         onPressed: () {
-                          Navigator.pop(context);
+                          Get.back();
                         },
                       )
                     ],
@@ -166,17 +165,15 @@ class _UpdatePasswordBottomSheetState extends State<UpdatePasswordBottomSheet> {
                                     message: "Navigate to home page",
                                     iconData: Icons.error_rounded,
                                     iconColor: Colors.green);
-                                Navigator.pop(context);
-                              }else {
-                              CustomGetxSnackbar.showSnackbar(
-                                  title: 'Password update failed',
-                                  message:
-                                      'Please try again',
-                                  iconData: Icons.error_rounded,
-                                  iconColor: Colors.red);
-                            }
+                                Get.back();
+                              } else {
+                                CustomGetxSnackbar.showSnackbar(
+                                    title: 'Password update failed',
+                                    message: 'Please try again',
+                                    iconData: Icons.error_rounded,
+                                    iconColor: Colors.red);
+                              }
                             });
-                            
                           },
                           child: Text('Confirm Change Password',
                               style: myButtonTextColor),

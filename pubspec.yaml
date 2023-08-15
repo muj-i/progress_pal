@@ -44,6 +44,7 @@ dependencies:
   shared_preferences: ^2.2.0
   flutter_launcher_icons: ^0.13.1 #icon generate command: flutter pub run flutter_launcher_icons
   get: ^4.6.5
+  get_storage: ^2.1.1
 
 flutter_launcher_icons:
   android: true

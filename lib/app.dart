@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:progress_pal/ui/getx_state_manager/email_verify_controller.dart';
-import 'package:progress_pal/ui/getx_state_manager/login_controller.dart';
-import 'package:progress_pal/ui/getx_state_manager/pin_verify_controller.dart';
-import 'package:progress_pal/ui/getx_state_manager/reset_password_controller.dart';
-import 'package:progress_pal/ui/getx_state_manager/signup_controller.dart';
-import 'package:progress_pal/ui/getx_state_manager/summary_count_controller.dart';
-import 'package:progress_pal/ui/getx_state_manager/update_pass_controller.dart';
-import 'package:progress_pal/ui/getx_state_manager/update_profile_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/controller_bindings/controller_bindings.dart';
 import 'package:progress_pal/ui/pages/splash_screen.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 
@@ -38,7 +31,6 @@ class _ProgressPalAppState extends State<ProgressPalApp> {
                 vertical: 8,
               ),
               hintStyle: TextStyle(color: myColor),
-              
               filled: true,
               fillColor: Colors.grey[50],
               focusColor: myColor,
@@ -87,19 +79,25 @@ class _ProgressPalAppState extends State<ProgressPalApp> {
   }
 }
 
-class ControllerBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.put(LoginController());
-    Get.put(SignupController());
-    Get.put(EmailVerifyController());
-    Get.put(PinVerifyController());
-    Get.put(ResetPasswordController());
-    Get.put(UpdateProfileController());
-    Get.put(UpdatePassController());
-    Get.put(SummaryCountController());
-  }
-}
+// class ControllerBinding extends Bindings {
+//   @override
+//   void dependencies() {
+//     Get.put(LoginController());
+//     Get.put(SignupController());
+//     Get.put(EmailVerifyController());
+//     Get.put(PinVerifyController());
+//     Get.put(ResetPasswordController());
+//     Get.put(UpdateProfileController());
+//     Get.put(UpdatePassController());
+//     Get.put(SummaryCountController());
+//     //Get.put(DeleteTaskController());
+//     Get.put(GetNewTaskController());
+//     Get.put(GetInprogressTaskController());
+//     Get.put(GetCompletedTaskController());
+//     Get.put(GetCancelledTaskController());
+//     Get.put(AddNewTaskController());
+//   }
+// }
 
 Color customColor = const Color.fromARGB(255, 10, 29, 66);
 

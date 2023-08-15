@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:progress_pal/data/model/network_response.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
@@ -49,7 +50,7 @@ class _UpdateTaskStatusBottomSheetState
     if (response.isSuccess) {
       widget.onUpdate();
       if (mounted) {
-        Navigator.pop(context);
+        Get.back();
       }
     } else {
       if (mounted) {
@@ -85,7 +86,7 @@ class _UpdateTaskStatusBottomSheetState
                         color: Colors.white,
                       ),
                       onPressed: () {
-                        Navigator.pop(context);
+                        Get.back();
                       },
                     )
                   ],
@@ -129,7 +130,7 @@ class _UpdateTaskStatusBottomSheetState
                   child: ElevatedButton(
                     onPressed: () {
                       updateTask(widget.task.sId!, _selectedTask);
-                      Navigator.pop(context);
+                      Get.back();
                     },
                     child: const Text('Update Task Status'),
                   ),

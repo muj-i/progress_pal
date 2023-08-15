@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:progress_pal/ui/getx_state_manager/signup_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/auth_controller/signup_controller.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/bottom_nav_base_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';

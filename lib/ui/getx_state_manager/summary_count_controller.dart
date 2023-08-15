@@ -9,7 +9,15 @@ class SummaryCountController extends GetxController {
   SummaryCountModel summaryCountModel = SummaryCountModel();
   bool get getSummaryCountInProgress => _getSummaryCountInProgress;
   SummaryCountModel get getSummaryCountModel => summaryCountModel;
-  
+
+  void sortSummaryData() {
+    getSummaryCountModel.data?.sort((a, b) {
+      final aId = a.sId ?? '';
+      final bId = b.sId ?? '';
+      return aId.compareTo(bId);
+    });
+  }
+
   Future<bool> getSummaryCount() async {
     _getSummaryCountInProgress = true;
     update();
