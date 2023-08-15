@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:progress_pal/data/model/network_response.dart';
-import 'package:progress_pal/data/model/summary_count_model.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
+import 'package:progress_pal/ui/getx_state_manager/summary_count_controller.dart';
 import 'package:progress_pal/ui/pages/add_new_task_page.dart';
 import 'package:progress_pal/ui/pages/update/update_task.dart';
 import 'package:progress_pal/ui/pages/update/update_task_status.dart';
@@ -22,14 +23,14 @@ class NewTaskPage extends StatefulWidget {
 }
 
 class _NewTaskPageState extends State<NewTaskPage> {
-  bool _getSummaryCountInProgress = false,
-      _getNewTasksInProgress = false,
-      _delayInProgress = false;
-  SummaryCountModel _summaryCountModel = SummaryCountModel();
+  bool _getNewTasksInProgress = false, _delayInProgress = false;
+  //final SummaryCountModel _summaryCountModel = SummaryCountModel();
   TasksListModel _tasksListModel = TasksListModel();
+  final SummaryCountController _summaryCountController =
+      Get.find<SummaryCountController>();
 
   void sortSummaryData() {
-    _summaryCountModel.data?.sort((a, b) {
+    _summaryCountController.getSummaryCountModel.data?.sort((a, b) {
       final aId = a.sId ?? '';
       final bId = b.sId ?? '';
       return aId.compareTo(bId);
@@ -56,31 +57,9 @@ class _NewTaskPageState extends State<NewTaskPage> {
       _delayInProgress = false;
     });
 
-    getSummaryCount();
+    _summaryCountController.getSummaryCount();
     getNewTask();
-  }
-
-  Future<void> getSummaryCount() async {
-    _getSummaryCountInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-
-    final NetworkResponse response =
-        await NetworkCaller().getRequest(Urls.summaryCardCount);
-
-    _getSummaryCountInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (response.isSuccess) {
-      _summaryCountModel = SummaryCountModel.fromJson(response.body!);
-    } else {
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: 'Summary data cannot be loaded');
-      }
-    }
+    const ProfileAppBar();
   }
 
   Future<void> getNewTask() async {
@@ -123,7 +102,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
         categoryCount[category] = (categoryCount[category] ?? 0) + 1;
       }
 
-      for (var countModel in _summaryCountModel.data!) {
+      for (var countModel in _summaryCountController.getSummaryCountModel.data!) {
         if (countModel.sId == category) {
           countModel.sum = categoryCount[category] ?? 0;
         }
@@ -149,47 +128,52 @@ class _NewTaskPageState extends State<NewTaskPage> {
         child: RefreshIndicator(
           onRefresh: () async {
             getNewTask();
-            getSummaryCount();
+           _summaryCountController. getSummaryCount();
           },
           child: SafeArea(
             child: _delayInProgress
                 ? const Center(child: RefreshProgressIndicator())
                 : Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2),
-                        child: _getSummaryCountInProgress
-                            ? const LinearProgressIndicator()
-                            : SizedBox(
-                                height: 86,
-                                width: double.infinity,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) {
-                                    final reversedIndex =
-                                        _summaryCountModel.data!.length -
-                                            1 -
-                                            index;
-                                    return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 5, horizontal: 4.5),
-                                        child: SizedBox(
-                                          width: 93,
-                                          child: TaskSummaryCard(
-                                              tittle: _summaryCountModel
-                                                      .data![reversedIndex]
-                                                      .sId ??
-                                                  'New',
-                                              number: _summaryCountModel
-                                                      .data![reversedIndex]
-                                                      .sum ??
-                                                  0),
-                                        ));
-                                  },
-                                  itemCount:
-                                      _summaryCountModel.data?.length ?? 0,
-                                ),
-                              ),
+                      GetBuilder<SummaryCountController>(
+                        
+                        builder: (summaryCountController) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2),
+                            child: summaryCountController.getSummaryCountInProgress
+                                ? const LinearProgressIndicator()
+                                : SizedBox(
+                                    height: 86,
+                                    width: double.infinity,
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (context, index) {
+                                        final reversedIndex =
+                                            _summaryCountController.getSummaryCountModel.data!.length -
+                                                1 -
+                                                index;
+                                        return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 4.5),
+                                            child: SizedBox(
+                                              width: 93,
+                                              child: TaskSummaryCard(
+                                                  tittle: _summaryCountController.getSummaryCountModel
+                                                          .data![reversedIndex]
+                                                          .sId ??
+                                                      'New',
+                                                  number: _summaryCountController.getSummaryCountModel
+                                                          .data![reversedIndex]
+                                                          .sum ??
+                                                      0),
+                                            ));
+                                      },
+                                      itemCount:
+                                          _summaryCountController.getSummaryCountModel.data?.length ?? 0,
+                                    ),
+                                  ),
+                          );
+                        }
                       ),
                       Expanded(
                         child: _getNewTasksInProgress
@@ -256,7 +240,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
               MaterialPageRoute(
                   builder: (context) => AddNewTaskPage(
                       getNewTask: getNewTask,
-                      getSummaryCount: getSummaryCount)));
+                      getSummaryCount:  _summaryCountController.getSummaryCount)));
         },
         //mini: true,
         child: const Icon(
@@ -294,7 +278,7 @@ class _NewTaskPageState extends State<NewTaskPage> {
             task: task,
             onUpdate: () {
               getNewTask();
-              getSummaryCount();
+              _summaryCountController.getSummaryCount();
             },
           );
         });

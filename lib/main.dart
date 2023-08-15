@@ -15,7 +15,7 @@ void main() {
 
 //! GetX - update page unable to fetch new data from cache after updating
 //! GetX - update_profile_image
-//* GetX - update_password_page
+//// GetX - update_password_page
 //* GetX - update_task_page
 //* GetX - update_task_status
 
@@ -23,9 +23,13 @@ void main() {
 //* GetX - add"_new_task
 //* GetX - bottomnav_page
 //* GetX - cancelled_task
+//* GetX - cancelled_task page summary count
 //* GetX - completed_task
+//* GetX - completed_task page summary count
 //* GetX - inprogress_task
-//* GetX - new_task
+//* GetX - inprogress_task page summary count
+//* GetX - new_task page new task
+//// GetX - new_task page summary count
 //// GetX - splash_page
 
 //// GetX - asset utils

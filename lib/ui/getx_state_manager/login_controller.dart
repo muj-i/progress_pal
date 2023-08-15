@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+ import 'package:get/get.dart';
 import 'package:progress_pal/data/model/login_model.dart';
 import 'package:progress_pal/data/model/network_response.dart';
 import 'package:progress_pal/data/services/network_caller.dart';

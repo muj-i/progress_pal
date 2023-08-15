@@ -5,6 +5,8 @@ import 'package:progress_pal/ui/getx_state_manager/login_controller.dart';
 import 'package:progress_pal/ui/getx_state_manager/pin_verify_controller.dart';
 import 'package:progress_pal/ui/getx_state_manager/reset_password_controller.dart';
 import 'package:progress_pal/ui/getx_state_manager/signup_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/summary_count_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/update_pass_controller.dart';
 import 'package:progress_pal/ui/getx_state_manager/update_profile_controller.dart';
 import 'package:progress_pal/ui/pages/splash_screen.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
@@ -94,6 +96,8 @@ class ControllerBinding extends Bindings {
     Get.put(PinVerifyController());
     Get.put(ResetPasswordController());
     Get.put(UpdateProfileController());
+    Get.put(UpdatePassController());
+    Get.put(SummaryCountController());
   }
 }
 
