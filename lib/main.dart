@@ -7,12 +7,13 @@ void main() async {
   runApp(const ProgressPalApp());
 }
 
-//! GetX integration
+//? GetX integration
 
-//! GetX - update_profile_image
+//* GetX - update_profile_image
 
-//* GetX - update_task_status
-//* GetX - delete task
+//!! GetX - update_task_status
+//!! GetX - delete task
+//!! Less API hits
 
 
 
