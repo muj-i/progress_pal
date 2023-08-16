@@ -22,25 +22,25 @@ class ProfileAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _ProfileAppBarState extends State<ProfileAppBar> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Get.to(const ProfilePage());
-      },
-      child: AppBar(
-        elevation: 00,
-        leading: Column(
-          children: [
-            const SizedBox(
-              height: 8,
-            ),
-            Row(
-              children: [
-                const SizedBox(
-                  width: 10,
-                ),
-                CircleAvatar(
-                  radius: 23,
-                  backgroundColor: Colors.white,
+    return AppBar(
+      elevation: 00,
+      leading: Column(
+        children: [
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              CircleAvatar(
+                radius: 23,
+                backgroundColor: Colors.white,
+                child: GestureDetector(
+                  onTap: () {
+                    Get.to(const ProfilePage());
+                  },
                   child: ClipOval(
                     child: AuthUtils.userInfo.value.data?.photo != null
                         ? Image.network(
@@ -58,11 +58,16 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                           ),
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
-        title: Column(
+              ),
+            ],
+          ),
+        ],
+      ),
+      title: GestureDetector(
+        onTap: () {
+          setState(() {});
+        },
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
@@ -81,39 +86,39 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
             ),
           ],
         ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Get.to(
-                const AboutPage(),
-              );
-            },
-            icon: const Icon(Icons.error_outline_rounded),
-          ),
-          IconButton(
-            onPressed: () {
-              DialogBox.show(
-                context: context,
-                contentMessage: 'Do you want to log out?',
-                leftButtonText: 'Cancel',
-                rightButtonText: 'Log out',
-                onLeftButtonPressed: () {
-                  Get.back();
-                },
-                onRightButtonPressed: () async {
-                  await AuthUtils.clearUserInfo();
-
-                  if (mounted) {
-                    Get.offAll(const LoginPage());
-                  }
-                },
-              );
-            },
-            icon: const Icon(Icons.logout_rounded),
-          ),
-        ],
       ),
+      centerTitle: false,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Get.to(
+              const AboutPage(),
+            );
+          },
+          icon: const Icon(Icons.error_outline_rounded),
+        ),
+        IconButton(
+          onPressed: () {
+            DialogBox.show(
+              context: context,
+              contentMessage: 'Do you want to log out?',
+              leftButtonText: 'Cancel',
+              rightButtonText: 'Log out',
+              onLeftButtonPressed: () {
+                Get.back();
+              },
+              onRightButtonPressed: () async {
+                await AuthUtils.clearUserInfo();
+
+                if (mounted) {
+                  Get.offAll(() => const LoginPage());
+                }
+              },
+            );
+          },
+          icon: const Icon(Icons.logout_rounded),
+        ),
+      ],
     );
   }
 }

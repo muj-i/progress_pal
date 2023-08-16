@@ -9,10 +9,8 @@ void main() async {
 
 //! GetX integration
 
-//! GetX - update page unable to fetch new data from cache after updating
 //! GetX - update_profile_image
 
-//* GetX - update_task_page
 //* GetX - update_task_status
 //* GetX - delete task
 

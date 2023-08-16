@@ -23,10 +23,14 @@ class AuthUtils {
 
   static Future<void> updateUserInfo(UserData userData) async {
     final box = GetStorage();
-    userInfo.update((val) {
-      val!.data = userData;
-    });
-    await box.write('user-data', jsonEncode(userInfo.value.toJson()));
+    final updatedData = {
+      if (userData.firstName != null) 'firstName': userData.firstName,
+      if (userData.lastName != null) 'lastName': userData.lastName,
+      if (userData.mobile != null) 'mobile': userData.mobile,
+      if (userData.email != null) 'email': userData.email, // Retain the email
+    };
+    userInfo.value.data = userData; // Update the user data
+    await box.write('user-data', jsonEncode(updatedData));
   }
 
   static Future<void> clearUserInfo() async {

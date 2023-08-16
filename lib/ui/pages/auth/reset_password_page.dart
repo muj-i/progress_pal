@@ -155,7 +155,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                     message: 'Log in with your new password',
                                     iconData: Icons.error_rounded,
                                     iconColor: Colors.green);
-                                Get.offAll(const LoginPage());
+                                Get.offAll(() => const LoginPage());
                               } else {
                                 CustomGetxSnackbar.showSnackbar(
                                     title: "Password reset failed",
@@ -183,7 +183,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       ),
                       TextButton(
                           onPressed: () {
-                            Get.offAll(const LoginPage());
+                            Get.offAll(() => const LoginPage());
                           },
                           child: Text(
                             'Log in',

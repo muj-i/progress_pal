@@ -144,7 +144,7 @@ class _PinVerifyPageState extends State<PinVerifyPage> {
         ),
         TextButton(
           onPressed: () {
-            Get.offAll(const LoginPage());
+            Get.offAll(() => const LoginPage());
           },
           child: Text(
             "Log In",

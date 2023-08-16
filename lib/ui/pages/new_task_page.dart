@@ -24,7 +24,7 @@ class NewTaskPage extends StatefulWidget {
 }
 
 class _NewTaskPageState extends State<NewTaskPage> {
-  bool _delayInProgress = false;
+  final bool _delayInProgress = false;
 
   final SummaryCountController _summaryCountController =
       Get.find<SummaryCountController>();
@@ -36,24 +36,9 @@ class _NewTaskPageState extends State<NewTaskPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _startDelay();
+      _summaryCountController.getSummaryCount();
+      _getNewTaskController.getNewTask();
     });
-  }
-
-  Future<void> _startDelay() async {
-    setState(() {
-      _delayInProgress = true;
-    });
-
-    await Future.delayed(const Duration(seconds: 1));
-
-    setState(() {
-      _delayInProgress = false;
-    });
-
-    _summaryCountController.getSummaryCount();
-    _getNewTaskController.getNewTask();
-    const ProfileAppBar();
   }
 
   Future<void> deleteTask(String taskId) async {

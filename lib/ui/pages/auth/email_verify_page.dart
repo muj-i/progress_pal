@@ -95,9 +95,9 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
                           )
                               .then((emailVerify) {
                             if (emailVerify == true) {
-                              Get.offAll(PinVerifyPage(
-                                email: _emailController.text.trim(),
-                              ));
+                              Get.offAll(() => PinVerifyPage(
+                                    email: _emailController.text.trim(),
+                                  ));
                             } else {
                               CustomGetxSnackbar.showSnackbar(
                                   title: "Email verify failed",
@@ -135,7 +135,7 @@ class _EmailVerifyPageState extends State<EmailVerifyPage> {
         ),
         TextButton(
           onPressed: () {
-            Get.offAll(const LoginPage());
+            Get.offAll(() => const LoginPage());
           },
           child: Text(
             "Log In",

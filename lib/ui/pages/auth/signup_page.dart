@@ -212,7 +212,7 @@ class _SignupPageState extends State<SignupPage> {
                                   message: 'Navigating to home page',
                                   iconData: Icons.error_rounded,
                                   iconColor: Colors.green);
-                              Get.offAll(const BottomNavBasePage());
+                              Get.offAll(() => const BottomNavBasePage());
                             } else {
                               CustomGetxSnackbar.showSnackbar(
                                   title: "Sign up failed",
@@ -249,7 +249,7 @@ class _SignupPageState extends State<SignupPage> {
         ),
         TextButton(
           onPressed: () {
-            Get.offAll(const LoginPage());
+            Get.offAll(() => const LoginPage());
           },
           child: Text(
             "Log in",

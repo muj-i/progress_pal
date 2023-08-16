@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                   message: "Welcome to Progress Pal",
                                   iconData: Icons.error_rounded,
                                   iconColor: Colors.green);
-                              Get.offAll(const BottomNavBasePage());
+                              Get.offAll(() => const BottomNavBasePage());
                             } else {
                               CustomGetxSnackbar.showSnackbar(
                                   title: "Log in failed",
@@ -187,7 +187,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         TextButton(
           onPressed: () {
-            Get.offAll(const SignupPage());
+            Get.offAll(() => const SignupPage());
           },
           child: Text(
             "Sign Up",

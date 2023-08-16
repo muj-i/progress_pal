@@ -213,14 +213,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                       _firstNameController.text.trim(),
                                       _lastNameController.text.trim(),
                                       _mobileNumberController.text.trim(),
-                                      '')
+                                      userSharedperfData.email)
                                   .then((updateProfile) {
                                 if (updateProfile == true) {
+                                  AuthUtils.updateUserInfo(UserData(
+                                    firstName: _firstNameController.text.trim(),
+                                    lastName: _lastNameController.text.trim(),
+                                    mobile: _mobileNumberController.text.trim(),
+                                    email: userSharedperfData.email,
+                                  ));
+                                  setState(() {});
                                   CustomSnackbar.show(
                                       context: context,
                                       message: 'Profile updated successful');
                                   Get.back();
-                                  setState(() {});
+
                                   if (mounted) {
                                     Get.back();
                                   } else {
