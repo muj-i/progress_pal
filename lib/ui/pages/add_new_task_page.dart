@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:progress_pal/data/model/network_response.dart';
-import 'package:progress_pal/data/services/network_caller.dart';
-import 'package:progress_pal/data/utils/urls.dart';
+import 'package:get/get.dart';
+import 'package:progress_pal/ui/getx_state_manager/add_new_task_controller.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
@@ -21,38 +20,6 @@ class _AddNewTaskPageState extends State<AddNewTaskPage> {
       TextEditingController();
   final TextEditingController _descriptionEditingController =
       TextEditingController();
-  bool _addNewTaskInProgress = false;
-
-  Future<void> addNewTask() async {
-    _addNewTaskInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-    Map<String, dynamic> requestBody = {
-      "title": _tittleEditingController.text.trim(),
-      "description": _descriptionEditingController.text.trim(),
-      "status": "New"
-    };
-    final NetworkResponse response =
-        await NetworkCaller().postRequest(Urls.createTask, requestBody);
-    _addNewTaskInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (response.isSuccess) {
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: 'Task successfully added');
-
-        // widget.onTaskAdded();
-        Navigator.pop(context);
-      }
-    } else {
-      if (mounted) {
-        CustomSnackbar.show(context: context, message: 'Task cannot be added');
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +41,7 @@ class _AddNewTaskPageState extends State<AddNewTaskPage> {
                 TextFormField(
                   controller: _tittleEditingController,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Tittle',
                   ),
                   validator: (String? value) {
@@ -91,33 +58,50 @@ class _AddNewTaskPageState extends State<AddNewTaskPage> {
                   controller: _descriptionEditingController,
                   maxLines: 10,
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Description',
                   ),
                 ),
                 const SizedBox(
                   height: 12,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: Visibility(
-                    visible: _addNewTaskInProgress == false,
-                    replacement:
-                        const Center(child: CircularProgressIndicator()),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (!_formKey.currentState!.validate()) {
-                          return;
-                        }
-                        addNewTask().then((value) {
-                          widget.getNewTask();
-                          widget.getSummaryCount();
-                        });
-                      },
-                      child: Text('Save Task', style: myButtonTextColor),
+                GetBuilder<AddNewTaskController>(
+                    builder: (addNewTaskController) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: Visibility(
+                      visible:
+                          addNewTaskController.addNewTaskInProgress == false,
+                      replacement:
+                          const Center(child: CircularProgressIndicator()),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (!_formKey.currentState!.validate()) {
+                            return;
+                          }
+                          addNewTaskController
+                              .addNewTask(_tittleEditingController.text.trim(),
+                                  _descriptionEditingController.text.trim())
+                              .then((addedTask) {
+                            if (addedTask == true) {
+                              CustomSnackbar.show(
+                                  context: context,
+                                  message: 'Task added successful');
+                              Get.back();
+                              widget.getNewTask();
+                              widget.getSummaryCount();
+                            } else {
+                              CustomSnackbar.show(
+                                  context: context,
+                                  message: 'Task added failed');
+                            }
+                          });
+                        },
+                        child: Text('Save Task', style: myButtonTextColor),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
                 const SizedBox(
                   height: 8,
                 ),

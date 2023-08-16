@@ -14,7 +14,7 @@ class NetworkCaller {
     try {
       Response response = await get(
         Uri.parse(url),
-        headers: {"token": AuthUtils.userInfo.token.toString()},
+        headers: {"token": AuthUtils.userInfo.value.token.toString()},
       );
       final Map<String, dynamic> decodedResponse = jsonDecode(response.body);
       log(response.statusCode.toString());
@@ -42,7 +42,7 @@ class NetworkCaller {
       Response response = await post(Uri.parse(url),
           headers: {
             "Content-Type": "application/json",
-            "token": AuthUtils.userInfo.token.toString()
+            "token": AuthUtils.userInfo.value.token.toString()
           },
           body: jsonEncode(body));
 

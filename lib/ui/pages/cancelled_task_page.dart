@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:progress_pal/data/model/network_response.dart';
-import 'package:progress_pal/data/model/summary_count_model.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
+import 'package:progress_pal/ui/getx_state_manager/get_cancelled_task_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/summary_count_controller.dart';
 import 'package:progress_pal/ui/pages/update/update_task.dart';
 import 'package:progress_pal/ui/pages/update/update_task_status.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
@@ -21,93 +23,46 @@ class CancelledTaskPage extends StatefulWidget {
 }
 
 class _CancelledTaskPageState extends State<CancelledTaskPage> {
-  bool _getSummaryCountInProgress = false, _getCancelTasksInProgress = false;
-  SummaryCountModel _summaryCountModel = SummaryCountModel();
-  TasksListModel _tasksListModel = TasksListModel();
-
-  void sortSummaryData() {
-    _summaryCountModel.data?.sort((a, b) {
-      final aId = a.sId ?? '';
-      final bId = b.sId ?? '';
-      return aId.compareTo(bId);
-    });
-  }
+  final SummaryCountController _summaryCountController =
+      Get.find<SummaryCountController>();
+  final GetCancelledTaskController _getCancelledTaskController =
+      Get.find<GetCancelledTaskController>();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getSummaryCount();
-      getCancelTask();
+      _summaryCountController.getSummaryCount();
+      _getCancelledTaskController.getCancelledTask();
     });
-  }
-
-  Future<void> getSummaryCount() async {
-    _getSummaryCountInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-    final NetworkResponse response =
-        await NetworkCaller().getRequest(Urls.summaryCardCount);
-    _getSummaryCountInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (response.isSuccess) {
-      _summaryCountModel = SummaryCountModel.fromJson(response.body!);
-    } else {
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: 'Summary data cannot be loaded');
-      }
-    }
-  }
-
-  Future<void> getCancelTask() async {
-    _getCancelTasksInProgress = true;
-
-    if (mounted) {
-      setState(() {});
-    }
-    final NetworkResponse response =
-        await NetworkCaller().getRequest(Urls.cancelListTasks);
-    if (response.isSuccess) {
-      _tasksListModel = TasksListModel.fromJson(response.body!);
-    } else {
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: 'Tasks cannot be loaded');
-      }
-    }
-    _getCancelTasksInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
   }
 
   Future<void> deleteTask(String taskId) async {
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.deleteListTasks(taskId));
     if (response.isSuccess) {
-      final TaskData taskToDelete = _tasksListModel.data!.firstWhere(
+      final TaskData taskToDelete =
+          _getCancelledTaskController.getTasksListModel.data!.firstWhere(
         (task) => task.sId == taskId,
         orElse: () => TaskData(category: 'Default'),
       );
       final String category = taskToDelete.status ?? 'Default';
 
-      _tasksListModel.data!.removeWhere((element) => element.sId == taskId);
+      _getCancelledTaskController.getTasksListModel.data!
+          .removeWhere((element) => element.sId == taskId);
 
       final Map<String, int> categoryCount = {};
-      _tasksListModel.data!.forEach((task) {
+      for (var task in _getCancelledTaskController.getTasksListModel.data!) {
         final category = task.status ?? 'Default';
         categoryCount[category] = (categoryCount[category] ?? 0) + 1;
-      });
+      }
 
-      _summaryCountModel.data!.forEach((countModel) {
+      for (var countModel
+          in _summaryCountController.getSummaryCountModel.data!) {
         if (countModel.sId == category) {
           countModel.sum = categoryCount[category] ?? 0;
         }
-      });
+      }
 
       if (mounted) {
         setState(() {});
@@ -122,97 +77,123 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    sortSummaryData();
+    _summaryCountController.sortSummaryData();
     return Scaffold(
-      appBar: ProfileAppBar(),
+      appBar: const ProfileAppBar(),
       body: ScreenBackground(
         child: RefreshIndicator(
           onRefresh: () async {
-            getCancelTask();
-            getSummaryCount();
+            _getCancelledTaskController.getCancelledTask();
+            _summaryCountController.sortSummaryData();
+            _summaryCountController.getSummaryCount();
           },
           child: SafeArea(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: _getSummaryCountInProgress
-                      ? LinearProgressIndicator()
-                      : SizedBox(
-                          height: 86,
-                          width: double.infinity,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              final reversedIndex =
-                                  _summaryCountModel.data!.length - 1 - index;
-                              return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 4.5),
-                                  child: SizedBox(
-                                    width: 93,
-                                    child: TaskSummaryCard(
-                                        tittle: _summaryCountModel
-                                                .data![reversedIndex].sId ??
-                                            'New',
-                                        number: _summaryCountModel
-                                                .data![reversedIndex].sum ??
-                                            0),
-                                  ));
-                            },
-                            itemCount: _summaryCountModel.data?.length ?? 0,
+                GetBuilder<SummaryCountController>(builder: (_) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    child: _summaryCountController.getSummaryCountInProgress
+                        ? const LinearProgressIndicator()
+                        : SizedBox(
+                            height: 86,
+                            width: double.infinity,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                final reversedIndex = _summaryCountController
+                                        .getSummaryCountModel.data!.length -
+                                    1 -
+                                    index;
+                                return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 4.5),
+                                    child: SizedBox(
+                                      width: 93,
+                                      child: TaskSummaryCard(
+                                          tittle: _summaryCountController
+                                                  .getSummaryCountModel
+                                                  .data![reversedIndex]
+                                                  .sId ??
+                                              'New',
+                                          number: _summaryCountController
+                                                  .getSummaryCountModel
+                                                  .data![reversedIndex]
+                                                  .sum ??
+                                              0),
+                                    ));
+                              },
+                              itemCount: _summaryCountController
+                                      .getSummaryCountModel.data?.length ??
+                                  0,
+                            ),
                           ),
-                        ),
-                ),
-                Expanded(
-                  child: _getCancelTasksInProgress
-                      ? Center(child: RefreshProgressIndicator())
-                      : ListView.builder(
-                          itemBuilder: (context, index) {
-                            final reversedIndex =
-                                _tasksListModel.data!.length - 1 - index;
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 10),
-                              child: TaskListTile(
-                                chipBackgroundColor: Colors.red,
-                                data: _tasksListModel.data![reversedIndex],
-                                onEditPress: () {
-                                  showEditBottomSheet(
-                                      _tasksListModel.data![reversedIndex]);
-                                },
-                                onDeletePress: () {
-                                  DialogBox.show(
-                                    context: context,
-                                    contentMessage: 'Do you want to delete the task?',
-                                    leftButtonText: 'Cancel',
-                                    rightButtonText: 'Delete',
-                                    onLeftButtonPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    onRightButtonPressed: () {
-                                      deleteTask(_tasksListModel
-                                          .data![reversedIndex].sId!);
-                                      Navigator.pop(context);
-                                      if (mounted) {
-                                        CustomSnackbar.show(
-                                            context: context,
-                                            message:
-                                                'Task successfully deleted');
-                                      }
-                                    },
-                                  );
-                                },
-                                onStatusChipPress: () {
-                                  showStatusUpdateBottomSheet(
-                                      _tasksListModel.data![reversedIndex]);
-                                },
-                              ),
-                            );
-                          },
-                          itemCount: _tasksListModel.data?.length ?? 0,
-                        ),
-                ),
+                  );
+                }),
+                GetBuilder<GetCancelledTaskController>(builder: (_) {
+                  return Expanded(
+                    child: _getCancelledTaskController
+                            .getCancelledTasksInProgress
+                        ? const Center(child: RefreshProgressIndicator())
+                        : ListView.builder(
+                            itemBuilder: (context, index) {
+                              final reversedIndex = _getCancelledTaskController
+                                      .getTasksListModel.data!.length -
+                                  1 -
+                                  index;
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 10),
+                                child: TaskListTile(
+                                  chipBackgroundColor: Colors.red,
+                                  data: _getCancelledTaskController
+                                      .getTasksListModel.data![reversedIndex],
+                                  onEditPress: () {
+                                    showEditBottomSheet(
+                                        _getCancelledTaskController
+                                            .getTasksListModel
+                                            .data![reversedIndex]);
+                                  },
+                                  onDeletePress: () {
+                                    DialogBox.show(
+                                      context: context,
+                                      contentMessage:
+                                          'Do you want to delete the task?',
+                                      leftButtonText: 'Cancel',
+                                      rightButtonText: 'Delete',
+                                      onLeftButtonPressed: () {
+                                        Get.back();
+                                      },
+                                      onRightButtonPressed: () {
+                                        deleteTask(_getCancelledTaskController
+                                            .getTasksListModel
+                                            .data![reversedIndex]
+                                            .sId!);
+                                        Get.back();
+                                        if (mounted) {
+                                          CustomSnackbar.show(
+                                              context: context,
+                                              message:
+                                                  'Task successfully deleted');
+                                        }
+                                      },
+                                    );
+                                  },
+                                  onStatusChipPress: () {
+                                    showStatusUpdateBottomSheet(
+                                        _getCancelledTaskController
+                                            .getTasksListModel
+                                            .data![reversedIndex]);
+                                  },
+                                ),
+                              );
+                            },
+                            itemCount: _getCancelledTaskController
+                                    .getTasksListModel.data?.length ??
+                                0,
+                          ),
+                  );
+                }),
               ],
             ),
           ),
@@ -229,10 +210,10 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
         return UpdateTaskBottomSheet(
           task: task,
           onUpdate: () {
-            getCancelTask();
+            _getCancelledTaskController.getCancelledTask();
           },
           onTaskAdded: () {
-            getCancelTask();
+            _getCancelledTaskController.getCancelledTask();
           },
         );
       },
@@ -247,8 +228,8 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
           return UpdateTaskStatusBottomSheet(
             task: task,
             onUpdate: () {
-              getCancelTask();
-              getSummaryCount();
+              _getCancelledTaskController.getCancelledTask();
+              _summaryCountController.getSummaryCount();
             },
           );
         });

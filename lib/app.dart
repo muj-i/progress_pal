@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:progress_pal/ui/getx_state_manager/controller_bindings/controller_bindings.dart';
 import 'package:progress_pal/ui/pages/splash_screen.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 
@@ -15,9 +17,10 @@ class ProgressPalApp extends StatefulWidget {
 class _ProgressPalAppState extends State<ProgressPalApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       navigatorKey: ProgressPalApp.navigatorKey,
       title: 'Progress Pal',
+      initialBinding: ControllerBinding(),
       theme: ThemeData(
           brightness: Brightness.light,
           primarySwatch: customSwatch,
@@ -28,17 +31,16 @@ class _ProgressPalAppState extends State<ProgressPalApp> {
                 vertical: 8,
               ),
               hintStyle: TextStyle(color: myColor),
-              //labelStyle: TextStyle(color: Colors.black),
               filled: true,
               fillColor: Colors.grey[50],
               focusColor: myColor,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0),
-                borderSide: BorderSide(color: Colors.white),
+                borderSide: const BorderSide(color: Colors.white),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0),
-                borderSide: BorderSide(color: Colors.white),
+                borderSide: const BorderSide(color: Colors.white),
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0),
@@ -51,7 +53,8 @@ class _ProgressPalAppState extends State<ProgressPalApp> {
                 borderSide:
                     const BorderSide(color: Color.fromARGB(255, 255, 0, 0)),
               ),
-              errorStyle: TextStyle(color: Color.fromARGB(255, 255, 0, 0))),
+              errorStyle:
+                  const TextStyle(color: Color.fromARGB(255, 255, 0, 0))),
           textTheme: const TextTheme(
             titleLarge: TextStyle(
                 fontSize: 24,
@@ -66,7 +69,7 @@ class _ProgressPalAppState extends State<ProgressPalApp> {
               ),
             ),
           ),
-          snackBarTheme: SnackBarThemeData(
+          snackBarTheme: const SnackBarThemeData(
             backgroundColor: Color.fromARGB(255, 10, 29, 66),
             contentTextStyle: TextStyle(color: Colors.white, fontSize: 16),
           )),
@@ -76,7 +79,27 @@ class _ProgressPalAppState extends State<ProgressPalApp> {
   }
 }
 
-Color customColor = Color.fromARGB(255, 10, 29, 66);
+// class ControllerBinding extends Bindings {
+//   @override
+//   void dependencies() {
+//     Get.put(LoginController());
+//     Get.put(SignupController());
+//     Get.put(EmailVerifyController());
+//     Get.put(PinVerifyController());
+//     Get.put(ResetPasswordController());
+//     Get.put(UpdateProfileController());
+//     Get.put(UpdatePassController());
+//     Get.put(SummaryCountController());
+//     //Get.put(DeleteTaskController());
+//     Get.put(GetNewTaskController());
+//     Get.put(GetInprogressTaskController());
+//     Get.put(GetCompletedTaskController());
+//     Get.put(GetCancelledTaskController());
+//     Get.put(AddNewTaskController());
+//   }
+// }
+
+Color customColor = const Color.fromARGB(255, 10, 29, 66);
 
 MaterialColor customSwatch = MaterialColor(
   customColor.value,

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:progress_pal/data/model/network_response.dart';
-import 'package:progress_pal/data/model/summary_count_model.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
+import 'package:progress_pal/ui/getx_state_manager/get_inprogress_task_controller.dart';
+import 'package:progress_pal/ui/getx_state_manager/summary_count_controller.dart';
 import 'package:progress_pal/ui/pages/update/update_task.dart';
 import 'package:progress_pal/ui/pages/update/update_task_status.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
@@ -21,95 +23,47 @@ class InProgressTaskPage extends StatefulWidget {
 }
 
 class _InProgressTaskPageState extends State<InProgressTaskPage> {
-  bool _getSummaryCountInProgress = false,
-      _getInProgressTasksInProgress = false;
-  SummaryCountModel _summaryCountModel = SummaryCountModel();
-  TasksListModel _tasksListModel = TasksListModel();
-
-  void sortSummaryData() {
-    _summaryCountModel.data?.sort((a, b) {
-      final aId = a.sId ?? '';
-      final bId = b.sId ?? '';
-      return aId.compareTo(bId);
-    });
-  }
+  final SummaryCountController _summaryCountController =
+      Get.find<SummaryCountController>();
+  final GetInprogressTaskController _getInprogressTaskController =
+      Get.find<GetInprogressTaskController>();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getSummaryCount();
-      getInProgressTask();
+      _summaryCountController.getSummaryCount();
+      _getInprogressTaskController.getInProgressTask();
     });
-  }
-
-  Future<void> getSummaryCount() async {
-    _getSummaryCountInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-    final NetworkResponse response =
-        await NetworkCaller().getRequest(Urls.summaryCardCount);
-    if (response.isSuccess) {
-      _summaryCountModel = SummaryCountModel.fromJson(response.body!);
-    } else {
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: 'Summary data cannot be loaded');
-      }
-    }
-    _getSummaryCountInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  Future<void> getInProgressTask() async {
-    _getInProgressTasksInProgress = true;
-
-    if (mounted) {
-      setState(() {});
-    }
-    final NetworkResponse response =
-        await NetworkCaller().getRequest(Urls.inProgressListTasks);
-    _getInProgressTasksInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (response.isSuccess) {
-      _tasksListModel = TasksListModel.fromJson(response.body!);
-    } else {
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: 'Tasks cannot be loaded');
-      }
-    }
   }
 
   Future<void> deleteTask(String taskId) async {
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.deleteListTasks(taskId));
     if (response.isSuccess) {
-      final TaskData taskToDelete = _tasksListModel.data!.firstWhere(
+      final TaskData taskToDelete =
+          _getInprogressTaskController.getTasksListModel.data!.firstWhere(
         (task) => task.sId == taskId,
         orElse: () => TaskData(category: 'Default'),
       );
       final String category = taskToDelete.status ?? 'Default';
 
-      _tasksListModel.data!.removeWhere((element) => element.sId == taskId);
+      _getInprogressTaskController.getTasksListModel.data!
+          .removeWhere((element) => element.sId == taskId);
 
       // Update the summary count
       final Map<String, int> categoryCount = {};
-      _tasksListModel.data!.forEach((task) {
+      for (var task in _getInprogressTaskController.getTasksListModel.data!) {
         final category = task.status ?? 'Default';
         categoryCount[category] = (categoryCount[category] ?? 0) + 1;
-      });
+      }
 
-      _summaryCountModel.data!.forEach((countModel) {
+      for (var countModel
+          in _summaryCountController.getSummaryCountModel.data!) {
         if (countModel.sId == category) {
           countModel.sum = categoryCount[category] ?? 0;
         }
-      });
+      }
 
       if (mounted) {
         setState(() {});
@@ -124,97 +78,123 @@ class _InProgressTaskPageState extends State<InProgressTaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    sortSummaryData();
+    _summaryCountController.sortSummaryData();
     return Scaffold(
-      appBar: ProfileAppBar(),
+      appBar: const ProfileAppBar(),
       body: ScreenBackground(
         child: RefreshIndicator(
           onRefresh: () async {
-            getInProgressTask();
-            getSummaryCount();
+            _getInprogressTaskController.getInProgressTask();
+            _summaryCountController.sortSummaryData();
+            _summaryCountController.getSummaryCount();
           },
           child: SafeArea(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: _getSummaryCountInProgress
-                      ? LinearProgressIndicator()
-                      : SizedBox(
-                          height: 86,
-                          width: double.infinity,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              final reversedIndex =
-                                  _summaryCountModel.data!.length - 1 - index;
-                              return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 4.5),
-                                  child: SizedBox(
-                                    width: 93,
-                                    child: TaskSummaryCard(
-                                        tittle: _summaryCountModel
-                                                .data![reversedIndex].sId ??
-                                            'New',
-                                        number: _summaryCountModel
-                                                .data![reversedIndex].sum ??
-                                            0),
-                                  ));
-                            },
-                            itemCount: _summaryCountModel.data?.length ?? 0,
+                GetBuilder<SummaryCountController>(builder: (_) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    child: _summaryCountController.getSummaryCountInProgress
+                        ? const LinearProgressIndicator()
+                        : SizedBox(
+                            height: 86,
+                            width: double.infinity,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                final reversedIndex = _summaryCountController
+                                        .getSummaryCountModel.data!.length -
+                                    1 -
+                                    index;
+                                return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 4.5),
+                                    child: SizedBox(
+                                      width: 93,
+                                      child: TaskSummaryCard(
+                                          tittle: _summaryCountController
+                                                  .getSummaryCountModel
+                                                  .data![reversedIndex]
+                                                  .sId ??
+                                              'New',
+                                          number: _summaryCountController
+                                                  .getSummaryCountModel
+                                                  .data![reversedIndex]
+                                                  .sum ??
+                                              0),
+                                    ));
+                              },
+                              itemCount: _summaryCountController
+                                      .getSummaryCountModel.data?.length ??
+                                  0,
+                            ),
                           ),
-                        ),
-                ),
-                Expanded(
-                  child: _getInProgressTasksInProgress
-                      ? Center(child: RefreshProgressIndicator())
-                      : ListView.builder(
-                          itemBuilder: (context, index) {
-                            final reversedIndex =
-                                _tasksListModel.data!.length - 1 - index;
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 10),
-                              child: TaskListTile(
-                                chipBackgroundColor: myColor,
-                                data: _tasksListModel.data![reversedIndex],
-                                onDeletePress: () {
-                                  DialogBox.show(
-                                    context: context,
-                                    contentMessage: 'Do you want to delete the task?',
-                                    leftButtonText: 'Cancel',
-                                    rightButtonText: 'Delete',
-                                    onLeftButtonPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    onRightButtonPressed: () {
-                                      deleteTask(_tasksListModel
-                                          .data![reversedIndex].sId!);
-                                      Navigator.pop(context);
-                                      if (mounted) {
-                                        CustomSnackbar.show(
-                                            context: context,
-                                            message:
-                                                'Task successfully deleted');
-                                      }
-                                    },
-                                  );
-                                },
-                                onEditPress: () {
-                                  showEditBottomSheet(
-                                      _tasksListModel.data![reversedIndex]);
-                                },
-                                onStatusChipPress: () {
-                                  showStatusUpdateBottomSheet(
-                                      _tasksListModel.data![reversedIndex]);
-                                },
-                              ),
-                            );
-                          },
-                          itemCount: _tasksListModel.data?.length ?? 0,
-                        ),
-                ),
+                  );
+                }),
+                GetBuilder<GetInprogressTaskController>(builder: (_) {
+                  return Expanded(
+                    child: _getInprogressTaskController
+                            .getInProgressTasksInProgress
+                        ? const Center(child: RefreshProgressIndicator())
+                        : ListView.builder(
+                            itemBuilder: (context, index) {
+                              final reversedIndex = _getInprogressTaskController
+                                      .getTasksListModel.data!.length -
+                                  1 -
+                                  index;
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 10),
+                                child: TaskListTile(
+                                  chipBackgroundColor: myColor,
+                                  data: _getInprogressTaskController
+                                      .getTasksListModel.data![reversedIndex],
+                                  onDeletePress: () {
+                                    DialogBox.show(
+                                      context: context,
+                                      contentMessage:
+                                          'Do you want to delete the task?',
+                                      leftButtonText: 'Cancel',
+                                      rightButtonText: 'Delete',
+                                      onLeftButtonPressed: () {
+                                        Get.back();
+                                      },
+                                      onRightButtonPressed: () {
+                                        deleteTask(_getInprogressTaskController
+                                            .getTasksListModel
+                                            .data![reversedIndex]
+                                            .sId!);
+                                        Get.back();
+                                        if (mounted) {
+                                          CustomSnackbar.show(
+                                              context: context,
+                                              message:
+                                                  'Task successfully deleted');
+                                        }
+                                      },
+                                    );
+                                  },
+                                  onEditPress: () {
+                                    showEditBottomSheet(
+                                        _getInprogressTaskController
+                                            .getTasksListModel
+                                            .data![reversedIndex]);
+                                  },
+                                  onStatusChipPress: () {
+                                    showStatusUpdateBottomSheet(
+                                        _getInprogressTaskController
+                                            .getTasksListModel
+                                            .data![reversedIndex]);
+                                  },
+                                ),
+                              );
+                            },
+                            itemCount: _getInprogressTaskController
+                                    .getTasksListModel.data?.length ??
+                                0,
+                          ),
+                  );
+                }),
               ],
             ),
           ),
@@ -231,10 +211,10 @@ class _InProgressTaskPageState extends State<InProgressTaskPage> {
         return UpdateTaskBottomSheet(
           task: task,
           onUpdate: () {
-            getInProgressTask();
+            _getInprogressTaskController.getInProgressTask();
           },
           onTaskAdded: () {
-            getInProgressTask();
+            _getInprogressTaskController.getInProgressTask();
           },
         );
       },
@@ -249,8 +229,8 @@ class _InProgressTaskPageState extends State<InProgressTaskPage> {
           return UpdateTaskStatusBottomSheet(
             task: task,
             onUpdate: () {
-              getInProgressTask();
-              getSummaryCount();
+              _getInprogressTaskController.getInProgressTask();
+              _summaryCountController.getSummaryCount();
             },
           );
         });

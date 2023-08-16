@@ -23,7 +23,7 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
     const CompletedTaskPage(),
     const CancelledTaskPage(),
   ];
-  
+
   @override
   void initState() {
     super.initState();
@@ -40,11 +40,11 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 17),
           child: GNav(
             tabBackgroundColor:
-                Color.fromARGB(255, 228, 231, 238).withOpacity(0.1),
+                const Color.fromARGB(255, 228, 231, 238).withOpacity(0.1),
             backgroundColor: myColor,
             color: Colors.white,
             iconSize: 24,
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
             activeColor: Colors.white,
             onTabChange: (int index) {
               _currentPageIndex = index;

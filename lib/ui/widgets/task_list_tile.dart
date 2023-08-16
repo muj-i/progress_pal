@@ -43,11 +43,12 @@ class TaskListTile extends StatelessWidget {
                   onTap: onStatusChipPress,
                   child: Chip(
                     label: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 2),
                       child: Text(
                         data.status ?? 'New',
-                        style: TextStyle(fontSize: 10, color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 10, color: Colors.white),
                       ),
                     ),
                     backgroundColor: chipBackgroundColor,

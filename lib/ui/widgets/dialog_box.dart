@@ -23,14 +23,14 @@ class DialogBox {
               onPressed: onLeftButtonPressed,
               child: Text(
                 leftButtonText,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
               ),
             ),
             TextButton(
               onPressed: onRightButtonPressed,
               child: Text(
                 rightButtonText,
-                style: TextStyle(color: Colors.redAccent),
+                style: const TextStyle(color: Colors.redAccent),
               ),
             ),
           ],
@@ -40,7 +40,7 @@ class DialogBox {
   }
 }
 
-class customDialogBox {
+class CustomDialogBox {
   static Future<void> show({
     required BuildContext context,
     required String contentMessage,
@@ -60,7 +60,7 @@ class customDialogBox {
               onPressed: onButtonPressed,
               child: Text(
                 buttonText,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
               ),
             ),
           ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:progress_pal/data/model/network_response.dart';
 import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
@@ -24,8 +25,9 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _tittleController;
   late TextEditingController _descriptionController;
-  bool _updateTaskInProgress = false, _addNewTaskInProgress = false;
-  TasksListModel _tasksListModel = TasksListModel();
+  final bool _updateTaskInProgress = false;
+  bool _addNewTaskInProgress = false;
+  final TasksListModel _tasksListModel = TasksListModel();
 
   @override
   void initState() {
@@ -35,7 +37,7 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
     super.initState();
   }
 
-  /**
+  ///
   // ! this method will work when the update task api is available
   // Future<void> updateTask(String taskId) async {
   //   _updateTaskInProgress = true;
@@ -73,7 +75,7 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
   //     }
   //   }
   // }
-  */
+  ///
   Future<void> deleteTask(String taskId) async {
     final NetworkResponse response =
         await NetworkCaller().getRequest(Urls.deleteListTasks(taskId));
@@ -113,7 +115,7 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
             context: context, message: 'Task successfully updated');
 
         widget.onTaskAdded();
-        Navigator.pop(context);
+        Get.back();
       }
     } else {
       if (mounted) {
@@ -141,7 +143,7 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
                   children: [
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           'Update task',
                           style: TextStyle(
                               fontSize: 32,
@@ -150,13 +152,13 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
                         ),
                         const Spacer(),
                         IconButton(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.close_rounded,
                             size: 32,
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            Navigator.pop(context);
+                            Get.back();
                           },
                         )
                       ],
@@ -167,7 +169,7 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
                     TextFormField(
                       controller: _tittleController,
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Tittle',
                       ),
                       validator: (String? value) {
@@ -184,7 +186,7 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
                       controller: _descriptionController,
                       maxLines: 10,
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Description',
                       ),
                     ),
@@ -201,7 +203,7 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
                         child: Visibility(
                           visible: _addNewTaskInProgress == false,
                           replacement:
-                              Center(child: const CircularProgressIndicator()),
+                              const Center(child: CircularProgressIndicator()),
                           child: ElevatedButton(
                               onPressed: () {
                                 deleteTask(widget.task.sId!);

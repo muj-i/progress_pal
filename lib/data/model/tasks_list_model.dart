@@ -9,14 +9,14 @@ class TasksListModel {
     if (json['data'] != null) {
       data = <TaskData>[];
       json['data'].forEach((v) {
-        data!.add(new TaskData.fromJson(v));
+        data!.add(TaskData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -48,12 +48,12 @@ class TaskData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['title'] = this.title;
-    data['description'] = this.description;
-    data['status'] = this.status;
-    data['createdDate'] = this.createdDate;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['title'] = title;
+    data['description'] = description;
+    data['status'] = status;
+    data['createdDate'] = createdDate;
     return data;
   }
 }

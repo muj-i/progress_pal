@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/ui/pages/about_page.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
@@ -21,30 +22,29 @@ class ProfileAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _ProfileAppBarState extends State<ProfileAppBar> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ProfilePage()));
-      },
-      child: AppBar(
-        elevation: 00,
-        leading: Column(
-          children: [
-            SizedBox(
-              height: 8,
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 10,
-                ),
-                CircleAvatar(
-                  radius: 23,
-                  backgroundColor: Colors.white,
+    return AppBar(
+      elevation: 00,
+      leading: Column(
+        children: [
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            children: [
+              const SizedBox(
+                width: 10,
+              ),
+              CircleAvatar(
+                radius: 23,
+                backgroundColor: Colors.white,
+                child: GestureDetector(
+                  onTap: () {
+                    Get.to(const ProfilePage());
+                  },
                   child: ClipOval(
-                    child: AuthUtils.userInfo.data?.photo != null
+                    child: AuthUtils.userInfo.value.data?.photo != null
                         ? Image.network(
-                            AuthUtils.userInfo.data!.photo!,
+                            AuthUtils.userInfo.value.data!.photo!,
                             errorBuilder: (context, error, stackTrace) {
                               return Icon(
                                 Icons.person,
@@ -58,67 +58,67 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                           ),
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
-        title: Column(
+              ),
+            ],
+          ),
+        ],
+      ),
+      title: GestureDetector(
+        onTap: () {
+          setState(() {});
+        },
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             Text(
-              (AuthUtils.userInfo.data?.firstName ?? 'No name found') +
-                  ' ' +
-                  (AuthUtils.userInfo.data?.lastName ?? ''),
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              '${AuthUtils.userInfo.value.data?.firstName ?? 'No name found'} ${AuthUtils.userInfo.value.data?.lastName ?? ''}',
+              style: const TextStyle(fontSize: 16, color: Colors.white),
             ),
             Text(
-              AuthUtils.userInfo.data?.email ?? 'No email found',
-              style: TextStyle(
+              AuthUtils.userInfo.value.data?.email ?? 'No email found',
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,
               ),
             ),
           ],
         ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AboutPage()),
-              );
-            },
-            icon: Icon(Icons.error_outline_rounded),
-          ),
-          IconButton(
-            onPressed: () {
-              DialogBox.show(
-                context: context,
-                contentMessage: 'Do you want to log out?',
-                leftButtonText: 'Cancel',
-                rightButtonText: 'Log out',
-                onLeftButtonPressed: () {
-                  Navigator.pop(context);
-                },
-                onRightButtonPressed: () async {
-                  await AuthUtils.clearUserInfo();
-
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()),
-                      (route) => false);
-                },
-              );
-            },
-            icon: Icon(Icons.logout_rounded),
-          ),
-        ],
       ),
+      centerTitle: false,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Get.to(
+              const AboutPage(),
+            );
+          },
+          icon: const Icon(Icons.error_outline_rounded),
+        ),
+        IconButton(
+          onPressed: () {
+            DialogBox.show(
+              context: context,
+              contentMessage: 'Do you want to log out?',
+              leftButtonText: 'Cancel',
+              rightButtonText: 'Log out',
+              onLeftButtonPressed: () {
+                Get.back();
+              },
+              onRightButtonPressed: () async {
+                await AuthUtils.clearUserInfo();
+
+                if (mounted) {
+                  Get.offAll(() => const LoginPage());
+                }
+              },
+            );
+          },
+          icon: const Icon(Icons.logout_rounded),
+        ),
+      ],
     );
   }
 }

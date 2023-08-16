@@ -13,12 +13,12 @@ class _AboutPageState extends State<AboutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('About Progress Pal'),
+        title: const Text('About Progress Pal'),
         centerTitle: true,
       ),
-      body: ScreenBackground(
+      body: const ScreenBackground(
           child: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: EdgeInsets.all(14.0),
         child: SingleChildScrollView(
           child: Column(
             children: [

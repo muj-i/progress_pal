@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:progress_pal/data/model/network_response.dart';
-import 'package:progress_pal/data/services/network_caller.dart';
-import 'package:progress_pal/data/utils/urls.dart';
+import 'package:get/get.dart';
+import 'package:progress_pal/ui/getx_state_manager/auth_controller/reset_password_controller.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
@@ -20,42 +19,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final TextEditingController _passWordController = TextEditingController();
   final TextEditingController _confirmPasseordController =
       TextEditingController();
-  bool _passwordResetInProgress = false, _obscurePassword = true;
-
-  Future<void> _passwordReset() async {
-    _passwordResetInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-    Map<String, dynamic> requestBody = {
-      "email": widget.email,
-      "OTP": widget.otp,
-      "password": _passWordController.text
-    };
-
-    final NetworkResponse response =
-        await NetworkCaller().postRequest(Urls.resetPassword, requestBody);
-
-    _passwordResetInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-
-    if (response.isSuccess) {
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: "Password reset successful.");
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LoginPage(),
-            ),
-            (route) => false);
-      }
-    } else {
-      CustomSnackbar.show(context: context, message: "Password reset failed.");
-    }
-  }
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +59,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
                       hintText: 'New Password',
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.lock_rounded,
                         size: 22,
                       ),
@@ -136,7 +100,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
                       hintText: 'Confirm Password',
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.lock_rounded,
                         size: 22,
                       ),
@@ -166,24 +130,47 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   const SizedBox(
                     height: 12,
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Visibility(
-                      visible: _passwordResetInProgress == false,
-                      replacement:
-                          Center(child: const CircularProgressIndicator()),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (!_formKey.currentState!.validate()) {
-                            return;
-                          }
-                          _passwordReset();
-                        },
-                        child: Text('Confirm Reset Password',
-                            style: myButtonTextColor),
+                  GetBuilder<ResetPasswordController>(
+                      builder: (resetPasswordController) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Visibility(
+                        visible:
+                            resetPasswordController.passwordResetInProgress ==
+                                false,
+                        replacement:
+                            const Center(child: CircularProgressIndicator()),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (!_formKey.currentState!.validate()) {
+                              return;
+                            }
+                            resetPasswordController
+                                .passwordReset(widget.email, widget.otp,
+                                    _passWordController.text)
+                                .then((resetPass) {
+                              if (resetPass == true) {
+                                CustomGetxSnackbar.showSnackbar(
+                                    title: "Password reset successful",
+                                    message: 'Log in with your new password',
+                                    iconData: Icons.error_rounded,
+                                    iconColor: Colors.green);
+                                Get.offAll(() => const LoginPage());
+                              } else {
+                                CustomGetxSnackbar.showSnackbar(
+                                    title: "Password reset failed",
+                                    message: 'Please try again',
+                                    iconData: Icons.error_rounded,
+                                    iconColor: Colors.red);
+                              }
+                            });
+                          },
+                          child: Text('Confirm Reset Password',
+                              style: myButtonTextColor),
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
                   const SizedBox(
                     height: 16,
                   ),
@@ -196,11 +183,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       ),
                       TextButton(
                           onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginPage()),
-                                (route) => false);
+                            Get.offAll(() => const LoginPage());
                           },
                           child: Text(
                             'Log in',

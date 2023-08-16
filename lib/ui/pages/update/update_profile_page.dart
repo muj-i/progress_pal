@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_pal/data/model/login_model.dart';
-import 'package:progress_pal/data/model/network_response.dart';
-import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/auth_utils.dart';
-import 'package:progress_pal/data/utils/urls.dart';
+import 'package:progress_pal/ui/getx_state_manager/update_controller/update_profile_controller.dart';
 import 'package:progress_pal/ui/pages/update/update_pass.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
@@ -27,8 +26,10 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   File? _imageFile;
-  bool _profileUpdateInProgress = false;
-  UserData userSharedperfData = AuthUtils.userInfo.data!;
+  UpdateProfileController updateProfileController =
+      Get.put(UpdateProfileController());
+
+  UserData userSharedperfData = AuthUtils.userInfo.value.data!;
 
   @override
   void initState() {
@@ -37,43 +38,6 @@ class _ProfilePageState extends State<ProfilePage> {
     _lastNameController.text = userSharedperfData.lastName ?? '';
     _mobileNumberController.text = userSharedperfData.mobile ?? '';
     _emailController.text = userSharedperfData.email ?? '';
-  }
-
-  Future<void> profileUpdate() async {
-    _profileUpdateInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-    final Map<String, dynamic> requestBody = {
-      "firstName": _firstNameController.text.trim(),
-      "lastName": _lastNameController.text.trim(),
-      "mobile": _mobileNumberController.text.trim(),
-      "photo": ""
-    };
-
-    final NetworkResponse response =
-        await NetworkCaller().postRequest(Urls.profileUpdate, requestBody);
-    _profileUpdateInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (response.isSuccess) {
-      userSharedperfData.firstName = _firstNameController.text.trim();
-      userSharedperfData.lastName = _lastNameController.text.trim();
-      userSharedperfData.mobile = _mobileNumberController.text.trim();
-      AuthUtils.updateUserInfo(userSharedperfData);
-
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: 'Profile updated successfully');
-      }
-      Navigator.pop(context);
-    } else {
-      if (mounted) {
-        CustomSnackbar.show(
-            context: context, message: 'Profile updated failed');
-      }
-    }
   }
 
   Future<void> _pickImage() async {
@@ -177,8 +141,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
                   inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly, // Only allow digits
-                    LengthLimitingTextInputFormatter(11), // Limit the length
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(11),
                   ],
                   decoration: const InputDecoration(
                     hintText: 'Mobile Number',
@@ -208,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                       hintText: 'Email Address',
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.email_rounded,
                         size: 22,
                       ),
@@ -218,7 +182,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 context: context,
                                 message: "Email can't be changed");
                           },
-                          child: Icon(
+                          child: const Icon(
                             FontAwesomeIcons.circleExclamation,
                             size: 20,
                           ))),
@@ -232,24 +196,56 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(
                   height: 12,
                 ),
-                
+                GetBuilder<UpdateProfileController>(
+                    builder: (updateProfileController) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: updateProfileController.profileUpdateInProgress
+                        ? const Center(child: CircularProgressIndicator())
+                        : ElevatedButton(
+                            onPressed: () {
+                              if (!_formKey.currentState!.validate()) {
+                                return;
+                              }
+
+                              updateProfileController
+                                  .profileUpdate(
+                                      _firstNameController.text.trim(),
+                                      _lastNameController.text.trim(),
+                                      _mobileNumberController.text.trim(),
+                                      userSharedperfData.email)
+                                  .then((updateProfile) {
+                                if (updateProfile == true) {
+                                  AuthUtils.updateUserInfo(UserData(
+                                    firstName: _firstNameController.text.trim(),
+                                    lastName: _lastNameController.text.trim(),
+                                    mobile: _mobileNumberController.text.trim(),
+                                    email: userSharedperfData.email,
+                                  ));
+                                  setState(() {});
+                                  CustomSnackbar.show(
+                                      context: context,
+                                      message: 'Profile updated successful');
+                                  Get.back();
+
+                                  if (mounted) {
+                                    Get.back();
+                                  } else {
+                                    CustomSnackbar.show(
+                                      context: context,
+                                      message: "Profile updated failed",
+                                    );
+                                  }
+                                }
+                              });
+                            },
+                            child: Text('Update Information',
+                                style: myButtonTextColor),
+                          ),
+                  );
+                }),
                 SizedBox(
                   width: double.infinity,
-                  child: _profileUpdateInProgress
-                      ? Center(child: CircularProgressIndicator())
-                      : ElevatedButton(
-                          onPressed: () {
-                            if (!_formKey.currentState!.validate()) {
-                              return;
-                            }
-                            profileUpdate();
-                          },
-                          child: Text('Update Information',
-                              style: myButtonTextColor),
-                        ),
-                ),
-                SizedBox(
-                  width:  double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
                       showUpdatePasswordBottomSheet();
@@ -273,7 +269,7 @@ class _ProfilePageState extends State<ProfilePage> {
           return Padding(
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: UpdatePasswordBottomSheet(),
+            child: const UpdatePasswordBottomSheet(),
           );
         });
   }
