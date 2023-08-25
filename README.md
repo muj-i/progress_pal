@@ -22,7 +22,7 @@
 
 
 
-## Presenting Progress Pal: Your Ultimate Task Manager in Flutter!
+## Progress Pal: The Ultimate Task Manager in Flutter!
 
 Elevate your productivity with Progress Pal, a meticulously crafted task manager application designed to streamline your journey towards achieving your goals. With its sleek design and intuitive user interface, Progress Pal redefines task management, making it an indispensable companion for both personal and professional endeavors.
 
