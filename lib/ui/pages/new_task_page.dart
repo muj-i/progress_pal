@@ -214,13 +214,13 @@ class _NewTaskPageState extends State<NewTaskPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: myColor,
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AddNewTaskPage(
+         // Navigator.push(
+             // context,
+             // MaterialPageRoute(
+                 Get.to( AddNewTaskPage(
                       getNewTask: _getNewTaskController.getNewTask,
                       getSummaryCount:
-                          _summaryCountController.getSummaryCount)));
+                          _summaryCountController.getSummaryCount));//);
         },
         //mini: true,
         child: const Icon(
