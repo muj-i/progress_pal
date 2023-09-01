@@ -11,6 +11,7 @@ import 'package:progress_pal/data/utils/base64image.dart';
 import 'package:progress_pal/ui/getx_state_manager/update_controller/update_profile_controller.dart';
 import 'package:progress_pal/ui/pages/update/update_pass.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
+import 'package:progress_pal/ui/widgets/image_picker_sheet.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -35,11 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    // _firstNameController.text = userSharedperfData.firstName ?? '';
-    // _lastNameController.text = userSharedperfData.lastName ?? '';
-    // _mobileNumberController.text = userSharedperfData.mobile ?? '';
-    // _emailController.text = userSharedperfData.email ?? '';
-    // UserData? userSharedperfData = AuthUtils.userInfo.value.data;
+    
     if (userSharedperfData != null) {
       _firstNameController.text = userSharedperfData?.firstName ?? '';
       _lastNameController.text = userSharedperfData?.lastName ?? '';
@@ -62,23 +59,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
       setState(() {});
     } on PlatformException catch (e) {
-    if (mounted) {
+      if (mounted) {
         CustomSnackbar.show(context: context, message: 'Error: $e');
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        //   content: ,
-        //   backgroundColor: Colors.red,
-        // ));
+        
       }
     }
 
-    // final picker = ImagePicker();
-    // final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    // setState(() {
-    //   if (pickedFile != null) {
-    //     _imageFile = File(pickedFile.path);
-    //   }
-    // });
+  
   }
 
   @override
@@ -98,50 +85,19 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 35),
-                      child: InkWell(
-                        onTap: () => _imageSelectBottomSheet(context),
-                        child: CircleAvatar(
-                          minRadius: 35,
-                          maxRadius: 65,
-                          foregroundImage: _imageFile != null
-                                ? FileImage(_imageFile!)
-                                : Base64Image.getBase64Image(userSharedperfData!.photo!),
-                          ),
-                      ),
+                Center(
+                  child: GestureDetector(
+                    onTap: () => _imageSelectBottomSheet(context),
+                    child: CircleAvatar(
+                      maxRadius: 50,
+                      foregroundImage: _imageFile != null
+                          ? FileImage(_imageFile!)
+                          : Base64Image.getBase64Image(
+                              userSharedperfData!.photo!),
                     ),
                   ),
-                 
-                ],
-              ),
-                // ClipRRect(
-                //   borderRadius: BorderRadius.circular(50),
-                //   child: GestureDetector(
-                //     onTap: () {
-                //       _pickImage();
-                //     },
-                //     child: Container(
-                //       height: 80,
-                //       width: 80,
-                //       color: Colors.white,
-                //       child: _imageFile == null
-                //           ? Icon(
-                //               Icons.person,
-                //               color: myColor,
-                //               size: 60,
-                //             )
-                //           : Image.file(
-                //               _imageFile!,
-                //               fit: BoxFit.cover,
-                //             ),
-                //     ),
-                //   ),
-                // ),
+                ),
+                
                 const SizedBox(
                   height: 16,
                 ),
@@ -265,7 +221,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                       _lastNameController.text.trim(),
                                       _mobileNumberController.text.trim(),
                                       userSharedperfData?.email,
-                                      base64String ?? AuthUtils.userInfo.value.data!.photo ?? "")
+                                      base64String ??
+                                          AuthUtils
+                                              .userInfo.value.data!.photo ??
+                                          "")
                                   .then((updateProfile) {
                                 if (updateProfile == true) {
                                   AuthUtils.updateUserInfo(UserData(
@@ -273,7 +232,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     lastName: _lastNameController.text.trim(),
                                     mobile: _mobileNumberController.text.trim(),
                                     email: userSharedperfData?.email,
-                                     //AuthUtils.updateUserInfo(userData)
+                                    //AuthUtils.updateUserInfo(userData)
                                   ));
                                   setState(() {});
                                   CustomSnackbar.show(
@@ -327,39 +286,18 @@ class _ProfilePageState extends State<ProfilePage> {
         });
   }
 
-
   void _imageSelectBottomSheet(BuildContext context) {
     showModalBottomSheet(
-     // barrierColor: mainColor.withOpacity(0.15),
       context: context,
       builder: (BuildContext context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Choose an action',
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: const Text('Gallery'),
-              onTap: () {
+        return ImagePickerSheet(onTap1: () {
                 _pickImage(ImageSource.gallery);
                 Get.back();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Camera'),
-              onTap: () {
+              }, onTap2: () {
                 _pickImage(ImageSource.camera);
                 Get.back();
-              },
-            ),
-          ],
-        );
+              },);
+      
       },
     );
   }

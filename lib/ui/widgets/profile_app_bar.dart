@@ -39,9 +39,10 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                 backgroundColor: Colors.white,
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(const ProfilePage());
+                    Get.to(() =>const ProfilePage());
                   },
-                  child: ClipOval(
+                  child: 
+                  ClipOval(
                     child: AuthUtils.userInfo.value.data?.photo != null
                         ? Image.network(
                             AuthUtils.userInfo.value.data!.photo!,
