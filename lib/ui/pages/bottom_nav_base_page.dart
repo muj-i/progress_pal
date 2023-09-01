@@ -6,6 +6,7 @@ import 'package:progress_pal/ui/pages/completed_task_page.dart';
 import 'package:progress_pal/ui/pages/inprogress_task_page.dart';
 import 'package:progress_pal/ui/pages/new_task_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
+import 'package:progress_pal/ui/widgets/profile_app_bar.dart';
 
 class BottomNavBasePage extends StatefulWidget {
   const BottomNavBasePage({super.key});
@@ -33,6 +34,7 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const ProfileAppBar(),
       body: _pages[_currentPageIndex],
       bottomNavigationBar: Container(
         color: myColor,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_pal/data/utils/auth_utils.dart';
+import 'package:progress_pal/data/utils/base64image.dart';
 import 'package:progress_pal/ui/pages/about_page.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/update/update_profile_page.dart';
-import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/dialog_box.dart';
 
 class ProfileAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -38,27 +38,16 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                 radius: 23,
                 backgroundColor: Colors.white,
                 child: GestureDetector(
-                  onTap: () {
-                    Get.to(() =>const ProfilePage());
-                  },
-                  child: 
-                  ClipOval(
-                    child: AuthUtils.userInfo.value.data?.photo != null
-                        ? Image.network(
-                            AuthUtils.userInfo.value.data!.photo!,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Icon(
-                                Icons.person,
-                                color: myColor,
-                              );
-                            },
-                          )
-                        : Icon(
-                            Icons.person,
-                            color: myColor,
-                          ),
-                  ),
-                ),
+                    onTap: () {
+                      Get.to(() => const ProfilePage());
+                    },
+                    child: CircleAvatar(
+                      radius: 25,
+                      foregroundImage: Base64Image.getBase64Image(
+                          AuthUtils.userInfo.value.data!.photo!),
+                    )
+                    
+                    ),
               ),
             ],
           ),
@@ -75,16 +64,16 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
               height: 8,
             ),
             Text(
-      '${AuthUtils.userInfo.value.data?.firstName ?? 'No name found'} ${AuthUtils.userInfo.value.data?.lastName ?? ''}',
-      style: const TextStyle(fontSize: 16, color: Colors.white),
-    ),
-    Text(
-      AuthUtils.userInfo.value.data?.email ?? 'No email found',
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 14,
-      ),
-    ),
+              '${AuthUtils.userInfo.value.data?.firstName ?? 'No name found'} ${AuthUtils.userInfo.value.data?.lastName ?? ''}',
+              style: const TextStyle(fontSize: 16, color: Colors.white),
+            ),
+            Text(
+              AuthUtils.userInfo.value.data?.email ?? 'No email found',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
+            ),
           ],
         ),
       ),
