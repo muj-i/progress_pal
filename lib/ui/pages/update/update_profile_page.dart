@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_pal/data/model/login_model.dart';
 import 'package:progress_pal/data/utils/auth_utils.dart';
+import 'package:progress_pal/data/utils/base64image.dart';
 import 'package:progress_pal/ui/getx_state_manager/update_controller/update_profile_controller.dart';
 import 'package:progress_pal/ui/pages/update/update_pass.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
@@ -25,30 +26,59 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  File? _imageFile;
+
   UpdateProfileController updateProfileController =
       Get.put(UpdateProfileController());
 
-  UserData userSharedperfData = AuthUtils.userInfo.value.data!;
+  UserData? userSharedperfData = AuthUtils.userInfo.value.data;
 
   @override
   void initState() {
     super.initState();
-    _firstNameController.text = userSharedperfData.firstName ?? '';
-    _lastNameController.text = userSharedperfData.lastName ?? '';
-    _mobileNumberController.text = userSharedperfData.mobile ?? '';
-    _emailController.text = userSharedperfData.email ?? '';
+    // _firstNameController.text = userSharedperfData.firstName ?? '';
+    // _lastNameController.text = userSharedperfData.lastName ?? '';
+    // _mobileNumberController.text = userSharedperfData.mobile ?? '';
+    // _emailController.text = userSharedperfData.email ?? '';
+    // UserData? userSharedperfData = AuthUtils.userInfo.value.data;
+    if (userSharedperfData != null) {
+      _firstNameController.text = userSharedperfData?.firstName ?? '';
+      _lastNameController.text = userSharedperfData?.lastName ?? '';
+      _mobileNumberController.text = userSharedperfData?.mobile ?? '';
+      _emailController.text = userSharedperfData?.email ?? '';
+    }
   }
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  File? _imageFile;
+  String? base64String;
+  Future<void> _pickImage(ImageSource imageSource) async {
+    try {
+      final pickedImage =
+          await ImagePicker().pickImage(source: imageSource, imageQuality: 30);
+      if (pickedImage == null) return;
 
-    setState(() {
-      if (pickedFile != null) {
-        _imageFile = File(pickedFile.path);
+      _imageFile = File(pickedImage.path);
+
+      base64String = await Base64Image.base64EncodedString(_imageFile);
+
+      setState(() {});
+    } on PlatformException catch (e) {
+    if (mounted) {
+        CustomSnackbar.show(context: context, message: 'Error: $e');
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //   content: ,
+        //   backgroundColor: Colors.red,
+        // ));
       }
-    });
+    }
+
+    // final picker = ImagePicker();
+    // final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    // setState(() {
+    //   if (pickedFile != null) {
+    //     _imageFile = File(pickedFile.path);
+    //   }
+    // });
   }
 
   @override
@@ -68,29 +98,50 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: GestureDetector(
-                    onTap: () {
-                      _pickImage();
-                    },
-                    child: Container(
-                      height: 80,
-                      width: 80,
-                      color: Colors.white,
-                      child: _imageFile == null
-                          ? Icon(
-                              Icons.person,
-                              color: myColor,
-                              size: 60,
-                            )
-                          : Image.file(
-                              _imageFile!,
-                              fit: BoxFit.cover,
-                            ),
+                Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 35),
+                      child: InkWell(
+                        onTap: () => _imageSelectBottomSheet(context),
+                        child: CircleAvatar(
+                          minRadius: 35,
+                          maxRadius: 65,
+                          foregroundImage: _imageFile != null
+                                ? FileImage(_imageFile!)
+                                : Base64Image.getBase64Image(userSharedperfData!.photo!),
+                          ),
+                      ),
                     ),
                   ),
-                ),
+                 
+                ],
+              ),
+                // ClipRRect(
+                //   borderRadius: BorderRadius.circular(50),
+                //   child: GestureDetector(
+                //     onTap: () {
+                //       _pickImage();
+                //     },
+                //     child: Container(
+                //       height: 80,
+                //       width: 80,
+                //       color: Colors.white,
+                //       child: _imageFile == null
+                //           ? Icon(
+                //               Icons.person,
+                //               color: myColor,
+                //               size: 60,
+                //             )
+                //           : Image.file(
+                //               _imageFile!,
+                //               fit: BoxFit.cover,
+                //             ),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -213,14 +264,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                       _firstNameController.text.trim(),
                                       _lastNameController.text.trim(),
                                       _mobileNumberController.text.trim(),
-                                      userSharedperfData.email)
+                                      userSharedperfData?.email,
+                                      base64String ?? AuthUtils.userInfo.value.data!.photo ?? "")
                                   .then((updateProfile) {
                                 if (updateProfile == true) {
                                   AuthUtils.updateUserInfo(UserData(
                                     firstName: _firstNameController.text.trim(),
                                     lastName: _lastNameController.text.trim(),
                                     mobile: _mobileNumberController.text.trim(),
-                                    email: userSharedperfData.email,
+                                    email: userSharedperfData?.email,
+                                     //AuthUtils.updateUserInfo(userData)
                                   ));
                                   setState(() {});
                                   CustomSnackbar.show(
@@ -272,5 +325,42 @@ class _ProfilePageState extends State<ProfilePage> {
             child: const UpdatePasswordBottomSheet(),
           );
         });
+  }
+
+
+  void _imageSelectBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+     // barrierColor: mainColor.withOpacity(0.15),
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Choose an action',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Gallery'),
+              onTap: () {
+                _pickImage(ImageSource.gallery);
+                Get.back();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Camera'),
+              onTap: () {
+                _pickImage(ImageSource.camera);
+                Get.back();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

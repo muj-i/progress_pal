@@ -74,16 +74,16 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
               height: 8,
             ),
             Text(
-              '${AuthUtils.userInfo.value.data?.firstName ?? 'No name found'} ${AuthUtils.userInfo.value.data?.lastName ?? ''}',
-              style: const TextStyle(fontSize: 16, color: Colors.white),
-            ),
-            Text(
-              AuthUtils.userInfo.value.data?.email ?? 'No email found',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-              ),
-            ),
+      '${AuthUtils.userInfo.value.data?.firstName ?? 'No name found'} ${AuthUtils.userInfo.value.data?.lastName ?? ''}',
+      style: const TextStyle(fontSize: 16, color: Colors.white),
+    ),
+    Text(
+      AuthUtils.userInfo.value.data?.email ?? 'No email found',
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 14,
+      ),
+    ),
           ],
         ),
       ),
