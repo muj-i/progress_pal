@@ -31,18 +31,21 @@ class _ProfilePageState extends State<ProfilePage> {
   UpdateProfileController updateProfileController =
       Get.put(UpdateProfileController());
 
-  UserData? userSharedperfData = AuthUtils.userInfo.value.data;
-
+  //UserData? userSharedperfData = AuthUtils.userInfo.value.data;
+UserData userSharedperfData = AuthUtils.userInfo.value.data!;
   @override
   void initState() {
     super.initState();
-    
-    if (userSharedperfData != null) {
-      _firstNameController.text = userSharedperfData?.firstName ?? '';
-      _lastNameController.text = userSharedperfData?.lastName ?? '';
-      _mobileNumberController.text = userSharedperfData?.mobile ?? '';
-      _emailController.text = userSharedperfData?.email ?? '';
-    }
+     _firstNameController.text = userSharedperfData.firstName ?? '';
+    _lastNameController.text = userSharedperfData.lastName ?? '';
+    _mobileNumberController.text = userSharedperfData.mobile ?? '';
+    _emailController.text = userSharedperfData.email ?? '';
+    // if (userSharedperfData != null) {
+    //   _firstNameController.text = userSharedperfData?.firstName ?? '';
+    //   _lastNameController.text = userSharedperfData?.lastName ?? '';
+    //   _mobileNumberController.text = userSharedperfData?.mobile ?? '';
+    //   _emailController.text = userSharedperfData?.email ?? '';
+    // }
   }
 
   File? _imageFile;
@@ -93,7 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       foregroundImage: _imageFile != null
                           ? FileImage(_imageFile!)
                           : Base64Image.getBase64Image(
-                              userSharedperfData!.photo!),
+                              userSharedperfData.photo!),
                     ),
                   ),
                 ),
@@ -220,18 +223,21 @@ class _ProfilePageState extends State<ProfilePage> {
                                       _firstNameController.text.trim(),
                                       _lastNameController.text.trim(),
                                       _mobileNumberController.text.trim(),
-                                      userSharedperfData?.email,
-                                      base64String ??
-                                          AuthUtils
-                                              .userInfo.value.data!.photo ??
-                                          "")
+                                      userSharedperfData.email,
+                                      userSharedperfData.email,
+                                      // base64String ??
+                                      //     AuthUtils
+                                      //         .userInfo.value.data!.photo ??
+                                      //     "",
+                                          )
                                   .then((updateProfile) {
                                 if (updateProfile == true) {
                                   AuthUtils.updateUserInfo(UserData(
                                     firstName: _firstNameController.text.trim(),
                                     lastName: _lastNameController.text.trim(),
                                     mobile: _mobileNumberController.text.trim(),
-                                    email: userSharedperfData?.email,
+                                    email: userSharedperfData.email,
+                                   // photo: base64String
                                     //AuthUtils.updateUserInfo(userData)
                                   ));
                                   setState(() {});

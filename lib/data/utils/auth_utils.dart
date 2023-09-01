@@ -20,12 +20,47 @@ class AuthUtils {
     await box.write('user-data', jsonEncode(loginModel.toJson()));
     userInfo(loginModel);
   }
+// static Future<void> updateUserInfo(UserData userData, {
+//   String? firstName,
+//   String? lastName,
+//   String? mobile,
+//   String? email,
+  
+// }) async {
+//   final box = GetStorage();
+//   final updatedData = {
+//     if (firstName != null) 'firstName': firstName,
+//     if (lastName != null) 'lastName': lastName,
+//     if (mobile != null) 'mobile': mobile,
+//     if (email != null) 'email': email,
+  
+//   };
+//   userInfo.value.data = UserData(
+//     firstName: firstName ?? userInfo.value.data?.firstName,
+//     lastName: lastName ?? userInfo.value.data?.lastName,
+//     mobile: mobile ?? userInfo.value.data?.mobile,
+//     email: email ?? userInfo.value.data?.email,
+  
+//   );
+//   await box.write('user-data', jsonEncode(updatedData));
+// }
 
-
-  static Future<void> updateUserInfo(UserData userData) async {
+   static Future<void> updateUserInfo(UserData userData) async {
     final box = GetStorage();
-    await box.write('user-data', jsonEncode(userData.toJson()));
-  }
+    final updatedData = {
+      if (userData.firstName != null) 'firstName': userData.firstName,
+      if (userData.lastName != null) 'lastName': userData.lastName,
+      if (userData.mobile != null) 'mobile': userData.mobile,
+      if (userData.email != null) 'email': userData.email, // Retain the email
+    };
+    userInfo.value.data = userData; // Update the user data
+    await box.write('user-data', jsonEncode(updatedData));
+   }
+
+  // static Future<void> updateUserInfo(UserData userData) async {
+  //   final box = GetStorage();
+  //   await box.write('user-data', jsonEncode(userData.toJson()));
+  // }
 
   static Future<void> clearUserInfo() async {
     final box = GetStorage();

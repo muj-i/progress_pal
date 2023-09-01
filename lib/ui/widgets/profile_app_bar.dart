@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/data/utils/base64image.dart';
+
 import 'package:progress_pal/ui/pages/about_page.dart';
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/update/update_profile_page.dart';
+import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/dialog_box.dart';
 
 class ProfileAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -38,16 +40,34 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                 radius: 23,
                 backgroundColor: Colors.white,
                 child: GestureDetector(
-                    onTap: () {
-                      Get.to(() => const ProfilePage());
-                    },
-                    child: CircleAvatar(
-                      radius: 25,
-                      foregroundImage: Base64Image.getBase64Image(
-                          AuthUtils.userInfo.value.data!.photo!),
-                    )
-                    
-                    ),
+                  onTap: () {
+                    Get.to(() => const ProfilePage());
+                  },
+                  child:
+                      CircleAvatar(
+                        radius: 25,
+                        foregroundImage: Base64Image.getBase64Image(
+                            AuthUtils.userInfo.value.data!.photo!),
+                      )
+
+                  //     ClipOval(
+                  //   child: AuthUtils.userInfo.value.data!.photo != null
+                  //       ? Image.network(
+                  //           AuthUtils.userInfo.value.data!.photo!,
+                  //           errorBuilder: (context, error, stackTrace) {
+                  //             return CircleAvatar(
+                  //               radius: 25,
+                  //               foregroundImage: Base64Image.getBase64Image(
+                  //                   AuthUtils.userInfo.value.data!.photo!),
+                  //             );
+                  //           },
+                  //         )
+                  //       : Icon(
+                  //           Icons.person,
+                  //           color: myColor,
+                  //         ),
+                  // ),
+                ),
               ),
             ],
           ),

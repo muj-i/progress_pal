@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:progress_pal/data/model/login_model.dart';
+import 'package:progress_pal/data/utils/auth_utils.dart';
 import 'package:progress_pal/ui/pages/cancelled_task_page.dart';
 import 'package:progress_pal/ui/pages/completed_task_page.dart';
 import 'package:progress_pal/ui/pages/inprogress_task_page.dart';
@@ -31,6 +33,7 @@ class _BottomNavBasePageState extends State<BottomNavBasePage> {
     setState(() {});
   }
 
+  UserData? userSharedperfData = AuthUtils.userInfo.value.data;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
