@@ -82,7 +82,6 @@ class _NewTaskPageState extends State<NewTaskPage> {
   Widget build(BuildContext context) {
     _summaryCountController.sortSummaryData();
     return Scaffold(
-      
       body: ScreenBackground(
         child: RefreshIndicator(
           onRefresh: () async {
@@ -213,11 +212,9 @@ class _NewTaskPageState extends State<NewTaskPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: myColor,
         onPressed: () {
-        
-                 Get.to( AddNewTaskPage(
-                      getNewTask: _getNewTaskController.getNewTask,
-                      getSummaryCount:
-                          _summaryCountController.getSummaryCount));//);
+          Get.to(AddNewTaskPage(
+              getNewTask: _getNewTaskController.getNewTask,
+              getSummaryCount: _summaryCountController.getSummaryCount)); //);
         },
         //mini: true,
         child: const Icon(

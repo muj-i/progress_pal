@@ -21,8 +21,7 @@ class AuthUtils {
     userInfo(loginModel);
   }
 
-
-   static Future<void> updateUserInfo(UserData userData) async {
+  static Future<void> updateUserInfo(UserData userData) async {
     final box = GetStorage();
     final updatedData = {
       if (userData.firstName != null) 'firstName': userData.firstName,
@@ -32,9 +31,7 @@ class AuthUtils {
     };
     userInfo.value.data = userData; // Update the user data
     await box.write('user-data', jsonEncode(updatedData));
-   }
-
-  
+  }
 
   static Future<void> clearUserInfo() async {
     final box = GetStorage();

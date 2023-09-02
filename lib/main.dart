@@ -7,13 +7,6 @@ void main() async {
   runApp(const ProgressPalApp());
 }
 
-//? GetX integration
-
-
-//!! GetX - update_task_status
-//!! GetX - delete task
-//!! Less API hits
-
 
 
 

@@ -20,7 +20,6 @@ class ProfileAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _ProfileAppBarState extends State<ProfileAppBar> {
-
   String? getUserFullName() {
     final data = AuthUtils.userInfo.value.data;
     if (data != null) {
@@ -31,7 +30,7 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
     return 'No name found';
   }
 
-String? getUserEmail() {
+  String? getUserEmail() {
     final data = AuthUtils.userInfo.value.data;
     return data?.email ?? 'No email found';
   }
@@ -60,16 +59,14 @@ String? getUserEmail() {
                 backgroundColor: Colors.white,
                 child: GestureDetector(
                     onTap: () {
-                      Get.to(() => const ProfilePage());
+                      Get.to(() => const UpdateProfilePage());
                     },
                     child: CircleAvatar(
                       radius: 25,
                       foregroundImage: Base64Image.getBase64Image(
-                          getUserPhoto() ?? '',),
-                    )
-
-                  
-                    ),
+                        getUserPhoto() ?? '',
+                      ),
+                    )),
               ),
             ],
           ),

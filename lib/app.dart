@@ -79,26 +79,6 @@ class _ProgressPalAppState extends State<ProgressPalApp> {
   }
 }
 
-// class ControllerBinding extends Bindings {
-//   @override
-//   void dependencies() {
-//     Get.put(LoginController());
-//     Get.put(SignupController());
-//     Get.put(EmailVerifyController());
-//     Get.put(PinVerifyController());
-//     Get.put(ResetPasswordController());
-//     Get.put(UpdateProfileController());
-//     Get.put(UpdatePassController());
-//     Get.put(SummaryCountController());
-//     //Get.put(DeleteTaskController());
-//     Get.put(GetNewTaskController());
-//     Get.put(GetInprogressTaskController());
-//     Get.put(GetCompletedTaskController());
-//     Get.put(GetCancelledTaskController());
-//     Get.put(AddNewTaskController());
-//   }
-// }
-
 Color customColor = const Color.fromARGB(255, 10, 29, 66);
 
 MaterialColor customSwatch = MaterialColor(
