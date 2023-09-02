@@ -6,8 +6,3 @@ void main() async {
   await GetStorage.init();
   runApp(const ProgressPalApp());
 }
-
-
-
-
-
