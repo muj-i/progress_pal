@@ -209,7 +209,7 @@ class _SignupPageState extends State<SignupPage> {
                             if (signUp == true) {
                               CustomGetxSnackbar.showSnackbar(
                                   title: "Sign up successful",
-                                  message: 'Navigating to home page',
+                                  message: 'Welcome to Progress Pal',
                                   iconData: Icons.error_rounded,
                                   iconColor: Colors.green);
                               Get.offAll(() => const BottomNavBasePage());

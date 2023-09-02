@@ -31,21 +31,14 @@ class _ProfilePageState extends State<ProfilePage> {
   UpdateProfileController updateProfileController =
       Get.put(UpdateProfileController());
 
-  //UserData? userSharedperfData = AuthUtils.userInfo.value.data;
-UserData userSharedperfData = AuthUtils.userInfo.value.data!;
+  UserData userSharedperfData = AuthUtils.userInfo.value.data!;
   @override
   void initState() {
     super.initState();
-     _firstNameController.text = userSharedperfData.firstName ?? '';
+    _firstNameController.text = userSharedperfData.firstName ?? '';
     _lastNameController.text = userSharedperfData.lastName ?? '';
     _mobileNumberController.text = userSharedperfData.mobile ?? '';
     _emailController.text = userSharedperfData.email ?? '';
-    // if (userSharedperfData != null) {
-    //   _firstNameController.text = userSharedperfData?.firstName ?? '';
-    //   _lastNameController.text = userSharedperfData?.lastName ?? '';
-    //   _mobileNumberController.text = userSharedperfData?.mobile ?? '';
-    //   _emailController.text = userSharedperfData?.email ?? '';
-    // }
   }
 
   File? _imageFile;
@@ -58,17 +51,16 @@ UserData userSharedperfData = AuthUtils.userInfo.value.data!;
 
       _imageFile = File(pickedImage.path);
 
-      base64String = await Base64Image.base64EncodedString(_imageFile);
+      if (_imageFile != null) {
+        base64String = await Base64Image.base64EncodedString(_imageFile);
+      }
 
       setState(() {});
     } on PlatformException catch (e) {
       if (mounted) {
         CustomSnackbar.show(context: context, message: 'Error: $e');
-        
       }
     }
-
-  
   }
 
   @override
@@ -100,7 +92,6 @@ UserData userSharedperfData = AuthUtils.userInfo.value.data!;
                     ),
                   ),
                 ),
-                
                 const SizedBox(
                   height: 16,
                 ),
@@ -217,29 +208,30 @@ UserData userSharedperfData = AuthUtils.userInfo.value.data!;
                               if (!_formKey.currentState!.validate()) {
                                 return;
                               }
-
+                              final newProfileImage =
+                                  base64String ?? userSharedperfData.photo;
                               updateProfileController
                                   .profileUpdate(
-                                      _firstNameController.text.trim(),
-                                      _lastNameController.text.trim(),
-                                      _mobileNumberController.text.trim(),
-                                      userSharedperfData.email,
-                                      userSharedperfData.email,
-                                      // base64String ??
-                                      //     AuthUtils
-                                      //         .userInfo.value.data!.photo ??
-                                      //     "",
-                                          )
+                                _firstNameController.text.trim(),
+                                _lastNameController.text.trim(),
+                                _mobileNumberController.text.trim(),
+                                userSharedperfData.email,
+                                newProfileImage ?? "",
+                              )
                                   .then((updateProfile) {
                                 if (updateProfile == true) {
-                                  AuthUtils.updateUserInfo(UserData(
-                                    firstName: _firstNameController.text.trim(),
-                                    lastName: _lastNameController.text.trim(),
-                                    mobile: _mobileNumberController.text.trim(),
-                                    email: userSharedperfData.email,
-                                   // photo: base64String
-                                    //AuthUtils.updateUserInfo(userData)
-                                  ));
+                                  userSharedperfData.firstName =
+                                      _firstNameController.text.trim();
+                                  userSharedperfData.lastName =
+                                      _lastNameController.text.trim();
+                                  userSharedperfData.mobile =
+                                      _mobileNumberController.text.trim();
+                                  userSharedperfData.email =
+                                      userSharedperfData.email;
+                                  userSharedperfData.photo = newProfileImage;
+
+                                  AuthUtils.updateUserInfo(userSharedperfData);
+
                                   setState(() {});
                                   CustomSnackbar.show(
                                       context: context,
@@ -296,14 +288,16 @@ UserData userSharedperfData = AuthUtils.userInfo.value.data!;
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return ImagePickerSheet(onTap1: () {
-                _pickImage(ImageSource.gallery);
-                Get.back();
-              }, onTap2: () {
-                _pickImage(ImageSource.camera);
-                Get.back();
-              },);
-      
+        return ImagePickerSheet(
+          onTap1: () {
+            _pickImage(ImageSource.gallery);
+            Get.back();
+          },
+          onTap2: () {
+            _pickImage(ImageSource.camera);
+            Get.back();
+          },
+        );
       },
     );
   }
