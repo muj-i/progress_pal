@@ -10,11 +10,16 @@ class UpdateProfileController extends GetxController {
   bool get profileUpdateInProgress => _profileUpdateInProgress;
   UserData? userSharedperfData = AuthUtils.userInfo.value.data;
 
-  Future<bool> profileUpdate(String  firstName, lastName, mobile,email,photo, ) async {
+  Future<bool> profileUpdate(
+    String firstName,
+    lastName,
+    mobile,
+    email,
+    photo,
+  ) async {
     _profileUpdateInProgress = true;
     update();
     final Map<String, dynamic> requestBody = {
-
       "firstName": firstName,
       "lastName": lastName,
       "mobile": mobile,

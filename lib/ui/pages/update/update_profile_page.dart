@@ -14,14 +14,14 @@ import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/image_picker_sheet.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class UpdateProfilePage extends StatefulWidget {
+  const UpdateProfilePage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<UpdateProfilePage> createState() => _UpdateProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _UpdateProfilePageState extends State<UpdateProfilePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
