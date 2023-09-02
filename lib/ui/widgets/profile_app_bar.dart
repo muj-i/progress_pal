@@ -20,8 +20,6 @@ class ProfileAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _ProfileAppBarState extends State<ProfileAppBar> {
-<<<<<<< Updated upstream
-=======
   String? getUserFullName() {
     final data = AuthUtils.userInfo.value.data;
     if (data != null) {
@@ -42,7 +40,6 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
     return data?.photo;
   }
 
->>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -61,45 +58,15 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                 radius: 23,
                 backgroundColor: Colors.white,
                 child: GestureDetector(
-<<<<<<< Updated upstream
                     onTap: () {
-                      Get.to(() => const ProfilePage());
+                      Get.to(() => const UpdateProfilePage());
                     },
                     child: CircleAvatar(
                       radius: 25,
                       foregroundImage: Base64Image.getBase64Image(
-                          AuthUtils.userInfo.value.data!.photo!),
-                    )
-
-                    //     ClipOval(
-                    //   child: AuthUtils.userInfo.value.data!.photo != null
-                    //       ? Image.network(
-                    //           AuthUtils.userInfo.value.data!.photo!,
-                    //           errorBuilder: (context, error, stackTrace) {
-                    //             return CircleAvatar(
-                    //               radius: 25,
-                    //               foregroundImage: Base64Image.getBase64Image(
-                    //                   AuthUtils.userInfo.value.data!.photo!),
-                    //             );
-                    //           },
-                    //         )
-                    //       : Icon(
-                    //           Icons.person,
-                    //           color: myColor,
-                    //         ),
-                    // ),
-=======
-                  onTap: () {
-                    Get.to(() => const UpdateProfilePage());
-                  },
-                  child: CircleAvatar(
-                    radius: 25,
-                    foregroundImage: Base64Image.getBase64Image(
-                      getUserPhoto() ?? '',
->>>>>>> Stashed changes
-                    ),
-                  ),
-                ),
+                        getUserPhoto() ?? '',
+                      ),
+                    )),
               ),
             ],
           ),
@@ -116,11 +83,11 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
               height: 8,
             ),
             Text(
-              '${AuthUtils.userInfo.value.data?.firstName ?? 'No name found'} ${AuthUtils.userInfo.value.data?.lastName ?? ''}',
+              getUserFullName() ?? '',
               style: const TextStyle(fontSize: 16, color: Colors.white),
             ),
             Text(
-              AuthUtils.userInfo.value.data?.email ?? 'No email found',
+              getUserEmail() ?? '',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,

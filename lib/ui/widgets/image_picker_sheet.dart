@@ -26,34 +26,42 @@ class ImagePickerSheet extends StatelessWidget {
                     'Choose an action',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
-                ),const Spacer(),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.close_rounded,
-                            size: 32,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            Get.back();
-                          },
-                        )
+                ),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(
+                    Icons.close_rounded,
+                    size: 32,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Get.back();
+                  },
+                )
               ],
             ),
             ListTile(
-              leading: const Icon(Icons.photo_library_rounded, size: 28, color: Colors.white,),
+              leading: const Icon(
+                Icons.photo_library_rounded,
+                size: 28,
+                color: Colors.white,
+              ),
               title: const Text(
                 'Gallery',
-                style: TextStyle(
-                  color: Colors.white, fontSize: 20
-                ),
+                style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               onTap: onTap1,
             ),
             ListTile(
-              leading: const Icon(Icons.photo_camera_rounded, size: 28, color: Colors.white,),
-              title: const Text('Camera', style: TextStyle(
-                  color: Colors.white,fontSize: 20
-                ),),
+              leading: const Icon(
+                Icons.photo_camera_rounded,
+                size: 28,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Camera',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
               onTap: onTap2,
             ),
           ],

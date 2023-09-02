@@ -6,19 +6,3 @@ void main() async {
   await GetStorage.init();
   runApp(const ProgressPalApp());
 }
-
-<<<<<<< Updated upstream
-//? GetX integration
-
-//* GetX - update_profile_image
-
-//!! GetX - update_task_status
-//!! GetX - delete task
-//!! Less API hits
-
-=======
->>>>>>> Stashed changes
-
-
-
-

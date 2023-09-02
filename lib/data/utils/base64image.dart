@@ -14,7 +14,10 @@ class Base64Image {
   //decode base64 before showing on UI
   static ImageProvider<Object> imageFromBase64String(String str) {
     List<int> imageBytes = base64Decode(str);
-    return Image.memory(Uint8List.fromList(imageBytes), fit: BoxFit.cover,).image;
+    return Image.memory(
+      Uint8List.fromList(imageBytes),
+      fit: BoxFit.cover,
+    ).image;
   }
 
   //check if the received string is in base64 or not
@@ -30,7 +33,7 @@ class Base64Image {
   //get the image for UI
   static ImageProvider<Object> getBase64Image(String base64String) {
     if (base64String.isNotEmpty) {
-      if(isBase64String(base64String)) {
+      if (isBase64String(base64String)) {
         return imageFromBase64String(base64String);
       } else {
         return Image.network(base64String).image;

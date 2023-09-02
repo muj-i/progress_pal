@@ -150,12 +150,12 @@ class _LoginPageState extends State<LoginPage> {
                     GestureDetector(
                       onTap: () {
                         //Navigator.push(
-                         // context,
-                         // MaterialPageRoute(
-                          //  builder: (context) {
-                          Get.to  (const EmailVerifyPage());
-                         //   },
-                      //    ),
+                        // context,
+                        // MaterialPageRoute(
+                        //  builder: (context) {
+                        Get.to(const EmailVerifyPage());
+                        //   },
+                        //    ),
                         //);
                       },
                       child: Text(

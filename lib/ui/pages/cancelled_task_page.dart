@@ -78,7 +78,6 @@ class _CancelledTaskPageState extends State<CancelledTaskPage> {
   Widget build(BuildContext context) {
     _summaryCountController.sortSummaryData();
     return Scaffold(
-      
       body: ScreenBackground(
         child: RefreshIndicator(
           onRefresh: () async {
