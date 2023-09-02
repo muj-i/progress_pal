@@ -1,0 +1,90 @@
+import 'dart:convert';
+
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:progress_pal/data/model/login_model.dart';
+
+class AuthUtils {
+  AuthUtils._();
+  static Rx<LoginModel> userInfo = Rx(LoginModel());
+
+  static Future<LoginModel> getUserInfo() async {
+    final box = GetStorage();
+    final value = box.read('user-data');
+    userInfo(LoginModel.fromJson(jsonDecode(value)));
+    return userInfo.value;
+  }
+
+  static Future<void> saveUserInfo(LoginModel loginModel) async {
+    final box = GetStorage();
+    await box.write('user-data', jsonEncode(loginModel.toJson()));
+    userInfo(loginModel);
+  }
+<<<<<<< Updated upstream
+// static Future<void> updateUserInfo(UserData userData, {
+//   String? firstName,
+//   String? lastName,
+//   String? mobile,
+//   String? email,
+  
+// }) async {
+//   final box = GetStorage();
+//   final updatedData = {
+//     if (firstName != null) 'firstName': firstName,
+//     if (lastName != null) 'lastName': lastName,
+//     if (mobile != null) 'mobile': mobile,
+//     if (email != null) 'email': email,
+  
+//   };
+//   userInfo.value.data = UserData(
+//     firstName: firstName ?? userInfo.value.data?.firstName,
+//     lastName: lastName ?? userInfo.value.data?.lastName,
+//     mobile: mobile ?? userInfo.value.data?.mobile,
+//     email: email ?? userInfo.value.data?.email,
+  
+//   );
+//   await box.write('user-data', jsonEncode(updatedData));
+// }
+
+   static Future<void> updateUserInfo(UserData userData) async {
+=======
+
+  static Future<void> updateUserInfo(UserData userData) async {
+>>>>>>> Stashed changes
+    final box = GetStorage();
+    final updatedData = {
+      if (userData.firstName != null) 'firstName': userData.firstName,
+      if (userData.lastName != null) 'lastName': userData.lastName,
+      if (userData.mobile != null) 'mobile': userData.mobile,
+      if (userData.email != null) 'email': userData.email, // Retain the email
+    };
+    userInfo.value.data = userData; // Update the user data
+    await box.write('user-data', jsonEncode(updatedData));
+<<<<<<< Updated upstream
+   }
+
+  // static Future<void> updateUserInfo(UserData userData) async {
+  //   final box = GetStorage();
+  //   await box.write('user-data', jsonEncode(userData.toJson()));
+  // }
+=======
+  }
+>>>>>>> Stashed changes
+
+  static Future<void> clearUserInfo() async {
+    final box = GetStorage();
+    await box.remove('user-data');
+    userInfo(LoginModel());
+  }
+
+  static RxBool isLoggedIn = RxBool(false);
+
+  static Future<bool> checkIfUserLoggedIn() async {
+    final box = GetStorage();
+    isLoggedIn.value = box.hasData('user-data');
+    if (isLoggedIn.value) {
+      await getUserInfo(); // Update userInfo
+    }
+    return isLoggedIn.value;
+  }
+}
