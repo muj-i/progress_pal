@@ -9,7 +9,6 @@ void main() async {
 
 //? GetX integration
 
-//* GetX - update_profile_image
 
 //!! GetX - update_task_status
 //!! GetX - delete task
