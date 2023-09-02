@@ -7,9 +7,11 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_pal/data/model/login_model.dart';
 import 'package:progress_pal/data/utils/auth_utils.dart';
+import 'package:progress_pal/data/utils/base64image.dart';
 import 'package:progress_pal/ui/getx_state_manager/update_controller/update_profile_controller.dart';
 import 'package:progress_pal/ui/pages/update/update_pass.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
+import 'package:progress_pal/ui/widgets/image_picker_sheet.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -25,12 +27,11 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  File? _imageFile;
+
   UpdateProfileController updateProfileController =
       Get.put(UpdateProfileController());
 
   UserData userSharedperfData = AuthUtils.userInfo.value.data!;
-
   @override
   void initState() {
     super.initState();
@@ -40,15 +41,26 @@ class _ProfilePageState extends State<ProfilePage> {
     _emailController.text = userSharedperfData.email ?? '';
   }
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  File? _imageFile;
+  String? base64String;
+  Future<void> _pickImage(ImageSource imageSource) async {
+    try {
+      final pickedImage =
+          await ImagePicker().pickImage(source: imageSource, imageQuality: 30);
+      if (pickedImage == null) return;
 
-    setState(() {
-      if (pickedFile != null) {
-        _imageFile = File(pickedFile.path);
+      _imageFile = File(pickedImage.path);
+
+      if (_imageFile != null) {
+        base64String = await Base64Image.base64EncodedString(_imageFile);
       }
-    });
+
+      setState(() {});
+    } on PlatformException catch (e) {
+      if (mounted) {
+        CustomSnackbar.show(context: context, message: 'Error: $e');
+      }
+    }
   }
 
   @override
@@ -68,26 +80,15 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
+                Center(
                   child: GestureDetector(
-                    onTap: () {
-                      _pickImage();
-                    },
-                    child: Container(
-                      height: 80,
-                      width: 80,
-                      color: Colors.white,
-                      child: _imageFile == null
-                          ? Icon(
-                              Icons.person,
-                              color: myColor,
-                              size: 60,
-                            )
-                          : Image.file(
-                              _imageFile!,
-                              fit: BoxFit.cover,
-                            ),
+                    onTap: () => _imageSelectBottomSheet(context),
+                    child: CircleAvatar(
+                      maxRadius: 50,
+                      foregroundImage: _imageFile != null
+                          ? FileImage(_imageFile!)
+                          : Base64Image.getBase64Image(
+                              userSharedperfData.photo!),
                     ),
                   ),
                 ),
@@ -207,21 +208,30 @@ class _ProfilePageState extends State<ProfilePage> {
                               if (!_formKey.currentState!.validate()) {
                                 return;
                               }
-
+                              final newProfileImage =
+                                  base64String ?? userSharedperfData.photo;
                               updateProfileController
                                   .profileUpdate(
-                                      _firstNameController.text.trim(),
-                                      _lastNameController.text.trim(),
-                                      _mobileNumberController.text.trim(),
-                                      userSharedperfData.email)
+                                _firstNameController.text.trim(),
+                                _lastNameController.text.trim(),
+                                _mobileNumberController.text.trim(),
+                                userSharedperfData.email,
+                                newProfileImage ?? "",
+                              )
                                   .then((updateProfile) {
                                 if (updateProfile == true) {
-                                  AuthUtils.updateUserInfo(UserData(
-                                    firstName: _firstNameController.text.trim(),
-                                    lastName: _lastNameController.text.trim(),
-                                    mobile: _mobileNumberController.text.trim(),
-                                    email: userSharedperfData.email,
-                                  ));
+                                  userSharedperfData.firstName =
+                                      _firstNameController.text.trim();
+                                  userSharedperfData.lastName =
+                                      _lastNameController.text.trim();
+                                  userSharedperfData.mobile =
+                                      _mobileNumberController.text.trim();
+                                  userSharedperfData.email =
+                                      userSharedperfData.email;
+                                  userSharedperfData.photo = newProfileImage;
+
+                                  AuthUtils.updateUserInfo(userSharedperfData);
+
                                   setState(() {});
                                   CustomSnackbar.show(
                                       context: context,
@@ -272,5 +282,23 @@ class _ProfilePageState extends State<ProfilePage> {
             child: const UpdatePasswordBottomSheet(),
           );
         });
+  }
+
+  void _imageSelectBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return ImagePickerSheet(
+          onTap1: () {
+            _pickImage(ImageSource.gallery);
+            Get.back();
+          },
+          onTap2: () {
+            _pickImage(ImageSource.camera);
+            Get.back();
+          },
+        );
+      },
+    );
   }
 }

@@ -10,7 +10,6 @@ import 'package:progress_pal/ui/pages/update/update_task.dart';
 import 'package:progress_pal/ui/pages/update/update_task_status.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
 import 'package:progress_pal/ui/widgets/dialog_box.dart';
-import 'package:progress_pal/ui/widgets/profile_app_bar.dart';
 import 'package:progress_pal/ui/widgets/sceen_background.dart';
 import 'package:progress_pal/ui/widgets/task_list_tile.dart';
 import 'package:progress_pal/ui/widgets/task_summary_card.dart';
@@ -80,7 +79,7 @@ class _InProgressTaskPageState extends State<InProgressTaskPage> {
   Widget build(BuildContext context) {
     _summaryCountController.sortSummaryData();
     return Scaffold(
-      appBar: const ProfileAppBar(),
+    
       body: ScreenBackground(
         child: RefreshIndicator(
           onRefresh: () async {

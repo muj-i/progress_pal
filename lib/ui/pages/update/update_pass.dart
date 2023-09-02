@@ -162,10 +162,10 @@ class _UpdatePasswordBottomSheetState extends State<UpdatePasswordBottomSheet> {
                               if (updatePass == true) {
                                 CustomGetxSnackbar.showSnackbar(
                                     title: 'Password update successful',
-                                    message: "Navigate to home page",
+                                    message: "Keep your password safe",
                                     iconData: Icons.error_rounded,
                                     iconColor: Colors.green);
-                                Get.back();
+                                Navigator.pop(context);
                               } else {
                                 CustomGetxSnackbar.showSnackbar(
                                     title: 'Password update failed',
