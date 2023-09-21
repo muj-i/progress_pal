@@ -15,8 +15,8 @@ Elevate your productivity with Progress Pal, a meticulously crafted task manager
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss7.png" width="200" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss8.png" width="200" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss9.png" width="200" />
-    <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss10.png" width="200" />
-    <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss11.png" width="200" height="330" />
+    <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss10.png" width="200" height="365" />
+    <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss11.png" width="200" height="387" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss12.png" width="205" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss13.png" width="200" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss14.png" width="200" />
