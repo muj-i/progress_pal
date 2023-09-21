@@ -178,12 +178,12 @@ The Progress Pal directory structure is organized as follows:
 
 ## Special Thanks
 
-### A heartfelt thank you to my mentors:
+### A heartfelt thanks to my mentors:
 
 [Rabbil Hasan](https://github.com/rupomsoft) for his enlightening prerecorded class and [Md Rafat J. M.](https://github.com/RafatMeraz) for teaching me how to make UI like this and the API integration seamless.
 
 
-### A heartfelt thank you to my classmate:
+### A heartfelt thanks to my classmate:
 
 [Nabil Akhunjee](https://github.com/nbakh16) for his invaluable guidance on implementing upload profile picture to API & get the image from API using base64.
 
