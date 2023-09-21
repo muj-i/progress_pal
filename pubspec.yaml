@@ -49,13 +49,13 @@ flutter_launcher_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/images/logo.png"
+  image_path: "assets/logo/logo.png"
   web:
     generate: true
-    image_path: "assets/images/logo.png"
+    image_path: "assets/logo/logo.png"
   macos:
     generate: true
-    image_path: "assets/images/logo.png"
+    image_path: "assets/logo/logo.png"
     icon_size: 48
 
 
@@ -85,6 +85,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/logo/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
