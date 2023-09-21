@@ -106,6 +106,8 @@ The Progress Pal directory structure is organized as follows:
   │   │   ├── logo3.svg
   │   │   ├── placeHolderPP.png
   │   │   ├── rainbow-vortex1.svg
+  │   ├── logo/
+  │   │   ├── logo.png
   ├── lib/
   │   ├── data/
   │   │   ├── model/
