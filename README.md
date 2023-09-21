@@ -182,7 +182,7 @@ The Progress Pal directory structure is organized as follows:
 
 ### A heartfelt thanks to my mentors:
 
-[Rabbil Hasan](https://github.com/rupomsoft) for his enlightening prerecorded class and [Md Rafat J. M.](https://github.com/RafatMeraz) for teaching me how to make UI like this and the API integration seamless.
+[Rabbil Hasan](https://github.com/rupomsoft) for his enlightening prerecorded classes and [Md Rafat J. M.](https://github.com/RafatMeraz) for teaching me how to make UI like this and the API integration seamless.
 
 
 ### A heartfelt thanks to my classmate:
