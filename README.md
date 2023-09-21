@@ -5,7 +5,7 @@ Elevate your productivity with Progress Pal, a meticulously crafted task manager
 ## Progress Pal UI
 
 <div style="display: flex; flex-wrap: wrap;">
-    <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss0.png" width="200" height="380" />
+    <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss0.png" width="200" height="360" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss1.png" width="200" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss2.png" width="200" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss3.png" width="200" />
@@ -17,7 +17,7 @@ Elevate your productivity with Progress Pal, a meticulously crafted task manager
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss9.png" width="200" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss10.png" width="200" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss11.png" width="200" />
-    <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss12.png" width="200" />
+    <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss12.png" width="200" height="380" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss13.png" width="200" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss14.png" width="200" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss15.png" width="200" />
