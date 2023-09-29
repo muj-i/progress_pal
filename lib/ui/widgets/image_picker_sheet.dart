@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:progress_pal/ui/widgets/sceen_background.dart';
+import 'package:progress_pal/ui/widgets/constraints.dart';
+import 'package:progress_pal/ui/widgets/sceen_backgrounds.dart';
 
 class ImagePickerSheet extends StatelessWidget {
   final VoidCallback onTap1;
@@ -13,7 +14,7 @@ class ImagePickerSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
-      child: ScreenBackground(
+      child: InsideScreenBackground(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -24,15 +25,17 @@ class ImagePickerSheet extends StatelessWidget {
                   padding: const EdgeInsets.all(12.0),
                   child: Text(
                     'Choose an action',
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: myColor
+                    ),
                   ),
                 ),
                 const Spacer(),
                 IconButton(
-                  icon: const Icon(
+                  icon:  Icon(
                     Icons.close_rounded,
                     size: 32,
-                    color: Colors.white,
+                    color: myColor,
                   ),
                   onPressed: () {
                     Get.back();
@@ -41,26 +44,26 @@ class ImagePickerSheet extends StatelessWidget {
               ],
             ),
             ListTile(
-              leading: const Icon(
+              leading:  Icon(
                 Icons.photo_library_rounded,
                 size: 28,
-                color: Colors.white,
+                color: myColor,
               ),
-              title: const Text(
+              title:  Text(
                 'Gallery',
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: TextStyle(color: myColor, fontSize: 20),
               ),
               onTap: onTap1,
             ),
             ListTile(
-              leading: const Icon(
+              leading:  Icon(
                 Icons.photo_camera_rounded,
                 size: 28,
-                color: Colors.white,
+                color: myColor,
               ),
-              title: const Text(
+              title:  Text(
                 'Camera',
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: TextStyle(color: myColor, fontSize: 20),
               ),
               onTap: onTap2,
             ),

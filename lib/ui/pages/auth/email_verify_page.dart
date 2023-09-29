@@ -4,7 +4,7 @@ import 'package:progress_pal/ui/getx_state_manager/auth_controller/email_verify_
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/auth/pin_verify_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
-import 'package:progress_pal/ui/widgets/sceen_background.dart';
+import 'package:progress_pal/ui/widgets/sceen_backgrounds.dart';
 
 class EmailVerifyPage extends StatefulWidget {
   const EmailVerifyPage({super.key});

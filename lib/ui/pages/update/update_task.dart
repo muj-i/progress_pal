@@ -5,7 +5,7 @@ import 'package:progress_pal/data/model/tasks_list_model.dart';
 import 'package:progress_pal/data/services/network_caller.dart';
 import 'package:progress_pal/data/utils/urls.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
-import 'package:progress_pal/ui/widgets/sceen_background.dart';
+import 'package:progress_pal/ui/widgets/sceen_backgrounds.dart';
 
 class UpdateTaskBottomSheet extends StatefulWidget {
   final TaskData task;
@@ -129,7 +129,7 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 600,
-      child: ScreenBackground(
+      child: InsideScreenBackground(
         child: Padding(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -143,19 +143,19 @@ class _UpdateTaskSheetState extends State<UpdateTaskBottomSheet> {
                   children: [
                     Row(
                       children: [
-                        const Text(
+                         Text(
                           'Update task',
                           style: TextStyle(
                               fontSize: 32,
-                              color: Colors.white,
+                              color: myColor,
                               fontWeight: FontWeight.bold),
                         ),
                         const Spacer(),
                         IconButton(
-                          icon: const Icon(
+                          icon:  Icon(
                             Icons.close_rounded,
                             size: 32,
-                            color: Colors.white,
+                            color: myColor,
                           ),
                           onPressed: () {
                             Get.back();

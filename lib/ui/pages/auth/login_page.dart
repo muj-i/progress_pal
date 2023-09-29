@@ -5,7 +5,7 @@ import 'package:progress_pal/ui/pages/auth/email_verify_page.dart';
 import 'package:progress_pal/ui/pages/auth/signup_page.dart';
 import 'package:progress_pal/ui/pages/bottom_nav_base_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
-import 'package:progress_pal/ui/widgets/sceen_background.dart';
+import 'package:progress_pal/ui/widgets/sceen_backgrounds.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

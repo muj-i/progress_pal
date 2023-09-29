@@ -5,7 +5,7 @@ import 'package:progress_pal/ui/getx_state_manager/auth_controller/pin_verify_co
 import 'package:progress_pal/ui/pages/auth/login_page.dart';
 import 'package:progress_pal/ui/pages/auth/reset_password_page.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
-import 'package:progress_pal/ui/widgets/sceen_background.dart';
+import 'package:progress_pal/ui/widgets/sceen_backgrounds.dart';
 
 class PinVerifyPage extends StatefulWidget {
   final String email;

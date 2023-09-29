@@ -21,3 +21,22 @@ class ScreenBackground extends StatelessWidget {
     ]);
   }
 }
+class InsideScreenBackground extends StatelessWidget {
+  final Widget child;
+  const InsideScreenBackground({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: [
+      SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: SvgPicture.asset(
+          AssetUtils.insideBackgroundSVG,
+          fit: BoxFit.cover,
+        ),
+      ),
+      SafeArea(child: child),
+    ]);
+  }
+}

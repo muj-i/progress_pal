@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_pal/ui/getx_state_manager/add_new_task_controller.dart';
 import 'package:progress_pal/ui/widgets/constraints.dart';
-import 'package:progress_pal/ui/widgets/sceen_background.dart';
+import 'package:progress_pal/ui/widgets/sceen_backgrounds.dart';
 
 class AddNewTaskPage extends StatefulWidget {
   final Function() getNewTask;
@@ -28,7 +28,7 @@ class _AddNewTaskPageState extends State<AddNewTaskPage> {
         tittle: 'Add New Task',
         style: Theme.of(context).textTheme.titleLarge,
       ),
-      body: ScreenBackground(
+      body: InsideScreenBackground(
           child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24.0),

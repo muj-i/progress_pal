@@ -32,15 +32,15 @@ class _ProgressPalAppState extends State<ProgressPalApp> {
               ),
               hintStyle: TextStyle(color: myColor),
               filled: true,
-              fillColor: Colors.grey[50],
+              fillColor: Colors.grey[100],
               focusColor: myColor,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0),
-                borderSide: const BorderSide(color: Colors.white),
+                borderSide:  BorderSide(color: Colors.grey.shade400),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0),
-                borderSide: const BorderSide(color: Colors.white),
+                borderSide:  BorderSide(color: Colors.grey.shade400),
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0),
