@@ -4,6 +4,8 @@ Elevate your productivity with Progress Pal, a meticulously crafted task manager
 
 ## Progress Pal UI
 
+### [Video demonstration of Progress Pal](https://www.linkedin.com/posts/muj-i_taskmanagerapp-appdevelopment-getxframwork-activity-7103689900159377408-TUT7?utm_source=share&utm_medium=member_desktop)
+
 <div style="display: flex; flex-wrap: wrap;">
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss0.png" width="200" />
     <img src="https://github.com/muj-i/progress_pal/blob/main/screenshots/ss1.png" width="200" />
